@@ -19,6 +19,8 @@ var skin_index:
 
 func _ready():
 	$VBoxContainer/Identity/Name.text = '' if WebSocket.local_player_name == null else WebSocket.local_player_name
+	$VBoxContainer/Identity/Name.caret_column = $VBoxContainer/Identity/Name.text.length()
+	$VBoxContainer/Identity/Name.grab_focus()
 	
 	skin_index = (randi() % skins.size()) if WebSocket.local_player_skin == null else skins.find(WebSocket.local_player_skin)
 	
@@ -30,10 +32,13 @@ func _ready():
 	$VBoxContainer/Connection/Port.text = '9412' if WebSocket.local_player_port == null else WebSocket.local_player_port
 
 func _unhandled_key_input(event):
-	if event.keycode == KEY_ENTER:
-		_on_join_pressed()
-	elif event.keycode == KEY_ESCAPE && event.pressed && !event.echo:
-		get_tree().quit()
+	match event.keycode:
+		KEY_ESCAPE:
+			if event.pressed && !event.echo:
+				get_tree().quit()
+		KEY_ENTER:
+			if $VBoxContainer/Identity/Name.has_focus():
+				_on_join_pressed()
 
 func _on_previous_pressed():
 	skin_index = (skins.size() if skin_index == 0 else skin_index) - 1

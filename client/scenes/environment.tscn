@@ -1,12 +1,12 @@
 [gd_scene load_steps=8 format=3 uid="uid://4eknfuxsf3q3"]
 
-[ext_resource type="Texture2D" uid="uid://buwuh68nvwh0b" path="res://assets/World/Stone_pebbles_2.png" id="1_vlu05"]
+[ext_resource type="Texture2D" uid="uid://c1hyn26uppex2" path="res://assets/World/Stone_pebbles_2.png" id="1_vlu05"]
 [ext_resource type="PackedScene" uid="uid://ctas0hp1umgpj" path="res://scenes/World/Swordstone.tscn" id="3_4pqil"]
-[ext_resource type="Texture2D" uid="uid://0qdj5bj6r5bo" path="res://assets/World/Stone_Boulder_Obstacle_1.png" id="3_ddi1t"]
-[ext_resource type="Texture2D" uid="uid://b5ybi11v6wd2b" path="res://assets/World/Stone_boulder_1.png" id="4_o3iq3"]
-[ext_resource type="Texture2D" uid="uid://dxrt5fc0uc6w3" path="res://assets/World/Grass_1.png" id="5_mnuof"]
-[ext_resource type="Texture2D" uid="uid://cqr2u5h068407" path="res://assets/World/Grass_2.png" id="6_bbn5i"]
-[ext_resource type="Texture2D" uid="uid://dsagowx61wflc" path="res://assets/World/Grass_3.png" id="7_1sh2w"]
+[ext_resource type="Texture2D" uid="uid://bn4rkk3thd68u" path="res://assets/World/Stone_Boulder_Obstacle_1.png" id="3_ddi1t"]
+[ext_resource type="Texture2D" uid="uid://b7bmnhdvauq2v" path="res://assets/World/Stone_boulder_1.png" id="4_o3iq3"]
+[ext_resource type="Texture2D" uid="uid://ci8ny1m2ghkky" path="res://assets/World/Grass_1.png" id="5_mnuof"]
+[ext_resource type="Texture2D" uid="uid://b8iqvl63wl1jt" path="res://assets/World/Grass_2.png" id="6_bbn5i"]
+[ext_resource type="Texture2D" uid="uid://j5ui01uejjff" path="res://assets/World/Grass_3.png" id="7_1sh2w"]
 
 [node name="Environment" type="Node2D"]
 
