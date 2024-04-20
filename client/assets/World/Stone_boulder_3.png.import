@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b4rvge7ungiug"
-path="res://.godot/imported/Gobble_Minigun.png-d3ff1299ed95e4bdfa3e7e6be2804052.ctex"
+uid="uid://cf0nwvknrlra5"
+path="res://.godot/imported/Stone_boulder_3.png-9b9db357550f29971382a4e533f61178.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Gobbles/Weapons/Gobble_Minigun.png"
-dest_files=["res://.godot/imported/Gobble_Minigun.png-d3ff1299ed95e4bdfa3e7e6be2804052.ctex"]
+source_file="res://assets/World/Stone_boulder_3.png"
+dest_files=["res://.godot/imported/Stone_boulder_3.png-9b9db357550f29971382a4e533f61178.ctex"]
 
 [params]
 
