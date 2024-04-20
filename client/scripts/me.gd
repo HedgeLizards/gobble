@@ -7,7 +7,10 @@ const Bullet = preload("res://scenes/bullet.tscn")
 
 func _physics_process(delta):
 	cooldown -= delta
+	var previous_position = position
 	move_and_collide(Input.get_vector("west", "east", "north", "south") * delta * speed)
+	if not is_equal_approx(position.x, previous_position.x):
+		$Sprite2D.flip_h = (position.x < previous_position.x)
 	
 	%Gun.look_at(get_global_mouse_position())
 	if Input.is_action_pressed("shoot") && cooldown < 0:
