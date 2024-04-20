@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://cjyg5va5mxhdn"]
+
+[ext_resource type="Texture2D" uid="uid://crr2cbddnk7uo" path="res://assets/Knights/Knight_arrow.png" id="1_wpxqt"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vurhs"]
+
+[node name="Arrow" type="Area2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_vurhs")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_wpxqt")
