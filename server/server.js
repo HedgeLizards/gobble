@@ -48,6 +48,8 @@ class Serv {
 					let err = this.game.addPlayer(new Player(name, new Vec2(...data.pos)));
 					if (err) {
 						send_error(socket, err);
+					} else {
+						// socket.send(JSON.stringify(this.game.viewWorld()));
 					}
 				} else if (data.type === "updatePlayer") {
 					let name = this.playerIds.get(id);
@@ -67,6 +69,7 @@ class Serv {
 
 
 	update() {
+		this.game.update();
 		let data = this.game.view();
 		this.broadcast(data);
 	}
