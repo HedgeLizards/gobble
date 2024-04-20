@@ -6,8 +6,12 @@ import { Player } from './player.js';
 const tickDuration = 0.1
 
 function main() {
+	let port = 9412
+	if (process.argv.length >= 3) {
+		port = Number.parseInt(process.argv[2]);
+	}
 	let game = new Game()
-	let server = new Serv(game, 8080);
+	let server = new Serv(game, port);
 	setInterval(() => server.update(tickDuration), tickDuration * 1000);
 }
 

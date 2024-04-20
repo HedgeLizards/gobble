@@ -22,7 +22,7 @@ func _ready():
 	
 	skin_index = (randi() % skins.size()) if WebSocket.local_player_skin == null else skins.find(WebSocket.local_player_skin)
 	
-	$VBoxContainer/Connection/Host.text = 'localhost:8080' if WebSocket.local_player_host == null else WebSocket.local_player_host
+	$VBoxContainer/Connection/Host.text = 'localhost:9412' if WebSocket.local_player_host == null else WebSocket.local_player_host
 
 func _unhandled_key_input(event):
 	if event.keycode == KEY_ENTER:
