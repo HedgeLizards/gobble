@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://vu7ccsrh7p5x"
-path="res://.godot/imported/Gobble_body1.png-2bc091d9f254917cec47fabac6f0dd46.ctex"
+uid="uid://dtw1bts7isr1l"
+path="res://.godot/imported/Gobble_body10.png-68c94e20ff96303ecb2c4917c13d2f27.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Gobbles/Skins/Gobble_body1.png"
-dest_files=["res://.godot/imported/Gobble_body1.png-2bc091d9f254917cec47fabac6f0dd46.ctex"]
+source_file="res://assets/Gobbles/Skins/Gobble_body10.png"
+dest_files=["res://.godot/imported/Gobble_body10.png-68c94e20ff96303ecb2c4917c13d2f27.ctex"]
 
 [params]
 
