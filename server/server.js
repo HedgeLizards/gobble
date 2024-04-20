@@ -1,4 +1,7 @@
 import { WebSocketServer } from 'ws';
+import { Vec2 } from './vec2.js';
+import { Game } from './game.js';
+import { Player } from './player.js';
 
 
 function main() {
@@ -9,41 +12,6 @@ function main() {
 }
 
 
-class Game {
-
-	constructor(){
-		this.players = new Map();
-	}
-
-	addPlayer(player) {
-		if (this.players.has(player.name)){
-			return "name " + player.name + " is already taken";
-		}
-		console.log("new player", player.name, player);
-
-		this.players.set(player.name, player);
-		return null;
-	}
-
-	updatePlayer(player) {
-		if (!this.players.has(player.name)){
-			return "unknown player " + player.name;
-		}
-		this.players.set(player.name, player);
-	}
-
-	removePlayer(name) {
-		this.players.delete(name);
-	}
-
-	view() {
-		let players = {}
-		for (let player of this.players.values()){
-			players[player.name] = player.view();
-		}
-		return {type: "state", players: players};
-	}
-}
 
 class Serv {
 
@@ -91,7 +59,6 @@ class Serv {
 					let err = this.game.updatePlayer(player);
 					if (err) {
 						send_error(socket, err);
-						console.log(err);
 					}
 				}
 			});
@@ -101,7 +68,6 @@ class Serv {
 
 	update() {
 		let data = this.game.view();
-		// console.log(data.players);
 		this.broadcast(data);
 	}
 
@@ -117,99 +83,6 @@ function send_error(socket, msg) {
 	socket.send(JSON.stringify({type: "error", msg: msg}));
 }
 
-class Player {
-
-	constructor(name, pos) {
-		this.name = name;
-		this.pos = pos;
-	}
-
-	view() {
-		return {name: this.name, pos: this.pos.arr()};
-	}
-
-}
-
-
-class Vec2 {
-
-	constructor(x, y) {
-		this.x = x;
-		this.y = y;
-	}
-
-	// static parse(obj) {
-	// 	return new Vec2(obj.x, obj.y);
-	// }
-
-	equals(other) {
-		return this.x === other.x && this.y === other.y;
-	}
-
-	surface() {
-		return this.x * this.y;
-	}
-
-	length() {
-		return Math.hypot(this.x, this.y);
-	}
-
-	mLength() {
-		return Math.abs(this.x) + Math.abs(this.y);
-	}
-
-	add(v) {
-		return new Vec2(this.x + v.x, this.y + v.y);
-	}
-
-	sub(v) {
-		return new Vec2(this.x - v.x, this.y - v.y);
-	}
-
-	mul(n) {
-		return new Vec2(this.x * n, this.y * n);
-	}
-
-	div(n) {
-		return new Vec2(this.x / n, this.y / n);
-	}
-
-	floor() {
-		return new Vec2(Math.floor(this.x), Math.floor(this.y));
-	}
-
-	round() {
-		return new Vec2(Math.round(this.x), Math.round(this.y));
-	}
-
-	ceil() {
-		return new Vec2(Math.ceil(this.x), Math.ceil(this.y));
-	}
-
-	normalize() {
-		return this.div(this.length());
-	}
-
-	lerp(to, d) {
-		return new Vec2(this.x*(1-d) + to.x*d, this.y*(1-d) + to.y*d);
-	}
-
-	distanceTo(other) {
-		return this.sub(other).length();
-	}
-
-	mDistanceTo(other) {
-		return this.sub(other).mLength();
-	}
-
-	clone() {
-		return new Vec2(this.x, this.y);
-	}
-
-	arr() {
-		return [this.x, this.y];
-	}
-}
 
 main();
 
