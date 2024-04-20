@@ -2,5 +2,8 @@
     "compilerOptions": {
         "module": "ESNext",
         "target": "ESNext"
+    },
+    "ts-node": {
+        "transpileOnly": true
     }
 }
