@@ -25,7 +25,7 @@ class Serv {
 		this.connections = new Map();
 		this.nextId = 1;
 		this.wss = new WebSocketServer({port: port});
-		this.wss.once('listening', () => console.log(`Listening on :${this.wss.address().port}`));
+		this.wss.once('listening', () => console.log(`Listening on ${this.wss.address().address}:${this.wss.address().port}`));
 		this.wss.on("connection", socket => {
 			let id = this.nextId++;
 			this.connections.set(id, socket);
