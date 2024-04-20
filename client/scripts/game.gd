@@ -41,6 +41,9 @@ func process_data(data):
 		world_tile_size = Vector2(s[0], s[1])
 		world_size = world_tile_size * 16
 		%Me.position = world_size / 2
+		var camera = %Me.get_node("Camera2D")
+		camera.limit_right = world_size.x
+		camera.limit_bottom = world_size.y
 		%Environment.position = world_size / 2
 		tick_duration = data["tickDuration"]
 		
