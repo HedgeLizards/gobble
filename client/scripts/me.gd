@@ -13,7 +13,10 @@ func _physics_process(delta):
 		$Sprite2D.flip_h = (position.x < previous_position.x)
 	
 	%Gun.look_at(get_global_mouse_position())
+	%Gun.rotation = fposmod(%Gun.rotation, TAU)
+	%Gun.scale.y = -1 if %Gun.rotation > 0.5 * PI && %Gun.rotation < 1.5 * PI else 1
 	if Input.is_action_pressed("shoot") && cooldown < 0:
+		$Shoot.play()
 		shoot()
 
 func shoot():
