@@ -1,3 +1,46 @@
-[gd_scene format=3 uid="uid://4eknfuxsf3q3"]
+[gd_scene load_steps=8 format=3 uid="uid://4eknfuxsf3q3"]
+
+[ext_resource type="Texture2D" uid="uid://buwuh68nvwh0b" path="res://assets/World/Stone_pebbles_2.png" id="1_vlu05"]
+[ext_resource type="PackedScene" uid="uid://ctas0hp1umgpj" path="res://scenes/World/Swordstone.tscn" id="3_4pqil"]
+[ext_resource type="Texture2D" uid="uid://0qdj5bj6r5bo" path="res://assets/World/Stone_Boulder_Obstacle_1.png" id="3_ddi1t"]
+[ext_resource type="Texture2D" uid="uid://b5ybi11v6wd2b" path="res://assets/World/Stone_boulder_1.png" id="4_o3iq3"]
+[ext_resource type="Texture2D" uid="uid://dxrt5fc0uc6w3" path="res://assets/World/Grass_1.png" id="5_mnuof"]
+[ext_resource type="Texture2D" uid="uid://cqr2u5h068407" path="res://assets/World/Grass_2.png" id="6_bbn5i"]
+[ext_resource type="Texture2D" uid="uid://dsagowx61wflc" path="res://assets/World/Grass_3.png" id="7_1sh2w"]
 
 [node name="Environment" type="Node2D"]
+
+[node name="StonePebbles2" type="Sprite2D" parent="."]
+position = Vector2(-47, 33)
+texture = ExtResource("1_vlu05")
+
+[node name="StoneBoulderObstacle1" type="Sprite2D" parent="."]
+position = Vector2(48, 49)
+texture = ExtResource("3_ddi1t")
+
+[node name="Node2D" parent="." instance=ExtResource("3_4pqil")]
+position = Vector2(0, 1)
+
+[node name="StoneBoulder1" type="Sprite2D" parent="."]
+position = Vector2(-98, -35)
+texture = ExtResource("4_o3iq3")
+
+[node name="Grass1" type="Sprite2D" parent="."]
+position = Vector2(85, -28)
+texture = ExtResource("5_mnuof")
+
+[node name="Grass2" type="Sprite2D" parent="."]
+position = Vector2(132, 37)
+texture = ExtResource("6_bbn5i")
+
+[node name="Grass3" type="Sprite2D" parent="Grass2"]
+position = Vector2(-167, 25)
+texture = ExtResource("7_1sh2w")
+
+[node name="Grass3" type="Sprite2D" parent="."]
+position = Vector2(-100, 3)
+texture = ExtResource("6_bbn5i")
+
+[node name="Grass4" type="Sprite2D" parent="."]
+position = Vector2(-17, -58)
+texture = ExtResource("5_mnuof")
