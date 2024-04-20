@@ -5,6 +5,7 @@ var local_player_name
 var local_player_skin
 var local_player_error
 var local_player_host
+var local_player_port
 var connecting = false
 
 func _ready():
@@ -14,7 +15,7 @@ func connect_to_host(error):
 	if connecting:
 		return
 	
-	var result = socket.connect_to_url('ws://' + local_player_host)
+	var result = socket.connect_to_url('ws://%s:%s' % [local_player_host, local_player_port])
 	
 	if result == OK:
 		error.text = ''

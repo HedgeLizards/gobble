@@ -7,7 +7,7 @@ const tickDuration = 0.1
 
 function main() {
 	let game = new Game()
-	let server = new Serv(game, 8080);
+	let server = new Serv(game, 9412);
 	setInterval(() => server.update(tickDuration), tickDuration * 1000);
 }
 

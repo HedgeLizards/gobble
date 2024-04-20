@@ -26,7 +26,8 @@ func _ready():
 		$VBoxContainer/Error.text = WebSocket.local_player_error
 		$VBoxContainer/Error.visible = true
 	
-	$VBoxContainer/Connection/Host.text = 'localhost:8080' if WebSocket.local_player_host == null else WebSocket.local_player_host
+	$VBoxContainer/Connection/Host.text = 'localhost' if WebSocket.local_player_host == null else WebSocket.local_player_host
+	$VBoxContainer/Connection/Port.text = '9412' if WebSocket.local_player_port == null else WebSocket.local_player_port
 
 func _unhandled_key_input(event):
 	if event.keycode == KEY_ENTER:
@@ -49,5 +50,6 @@ func _on_join_pressed():
 	WebSocket.local_player_name = local_player_name
 	WebSocket.local_player_skin = skins[skin_index]
 	WebSocket.local_player_host = $VBoxContainer/Connection/Host.text
+	WebSocket.local_player_port = $VBoxContainer/Connection/Port.text
 	
 	WebSocket.connect_to_host($VBoxContainer/Error)
