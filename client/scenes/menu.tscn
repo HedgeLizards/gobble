@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=3 uid="uid://iosc17jma51k"]
+
+[ext_resource type="Script" path="res://scripts/menu.gd" id="1_fc1m7"]
+[ext_resource type="Texture2D" uid="uid://ujhf7x4lgmp0" path="res://assets/UI/Arrow.png" id="2_cw6uy"]
+[ext_resource type="Texture2D" uid="uid://d3ke8yigymepn" path="res://icon.svg" id="2_otxh6"]
+[ext_resource type="FontFile" uid="uid://mo6xk7y1horc" path="res://assets/UI/Quicksand-Bold.otf" id="5_dh7dy"]
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fc1m7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -145.0
+offset_top = -25.0
+offset_right = 145.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Identity" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Name" type="LineEdit" parent="VBoxContainer/Identity"]
+layout_mode = 2
+theme_override_constants/minimum_character_width = 12
+theme_override_fonts/font = ExtResource("5_dh7dy")
+theme_override_font_sizes/font_size = 32
+placeholder_text = "Enter your name..."
+
+[node name="Previous" type="TextureButton" parent="VBoxContainer/Identity"]
+texture_filter = 1
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture_normal = ExtResource("2_cw6uy")
+stretch_mode = 0
+
+[node name="Sprite" type="TextureRect" parent="VBoxContainer/Identity"]
+layout_mode = 2
+texture = ExtResource("2_otxh6")
+
+[node name="Next" type="TextureButton" parent="VBoxContainer/Identity"]
+texture_filter = 1
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture_normal = ExtResource("2_cw6uy")
+stretch_mode = 0
+flip_h = true
+
+[node name="Connection" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Host" type="LineEdit" parent="VBoxContainer/Connection"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("5_dh7dy")
+theme_override_font_sizes/font_size = 32
+text = "localhost:8080"
+
+[node name="Join" type="Button" parent="VBoxContainer/Connection"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_dh7dy")
+theme_override_font_sizes/font_size = 32
+text = "Join"
+
+[connection signal="pressed" from="VBoxContainer/Connection/Join" to="." method="_on_join_pressed"]

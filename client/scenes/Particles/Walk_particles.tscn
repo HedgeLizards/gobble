@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://dqykjc8vecs0m"]
+
+[ext_resource type="Texture2D" uid="uid://c3wtu072uqxg0" path="res://assets/Gobbles/Particle_grass.png" id="1_etrai"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+texture_filter = 1
+amount = 30
+lifetime = 0.5
+texture = ExtResource("1_etrai")
+direction = Vector2(2.08165e-12, -1)
+gravity = Vector2(2.08165e-12, 200)
+initial_velocity_min = 10.0
+initial_velocity_max = 100.0
