@@ -80,7 +80,7 @@ class Serv {
 
 function send_error(socket, msg) {
 	console.warn(msg);
-	socket.send(JSON.stringify({type: "error", msg: msg}));
+	socket.close(1002, JSON.stringify(msg));
 }
 
 
