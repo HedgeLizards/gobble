@@ -67,7 +67,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("5_dh7dy")
 theme_override_font_sizes/font_size = 32
-text = "localhost:8080"
 
 [node name="Join" type="Button" parent="VBoxContainer/Connection"]
 layout_mode = 2

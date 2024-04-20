@@ -1,4 +1,4 @@
-import { WebSocketServer } from 'ws';
+import WebSocket, { WebSocketServer } from 'ws';
 import { Vec2 } from './vec2.js';
 import { Game } from './game.js';
 import { Player } from './player.js';
@@ -33,6 +33,9 @@ class Serv {
 				}
 			});
 			socket.on("message", msg => {
+				if (socket.readyState === WebSocket.CLOSING) {
+					return;
+				}
 				let data = JSON.parse(msg);
 				if (data.type === "createPlayer") {
 					if (this.playerIds.has(id)) {
