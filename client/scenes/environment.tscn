@@ -9,38 +9,47 @@
 [ext_resource type="Texture2D" uid="uid://j5ui01uejjff" path="res://assets/World/Grass_3.png" id="7_1sh2w"]
 
 [node name="Environment" type="Node2D"]
+y_sort_enabled = true
 
 [node name="StonePebbles2" type="Sprite2D" parent="."]
-position = Vector2(-47, 33)
+position = Vector2(-47, 41)
 texture = ExtResource("1_vlu05")
+offset = Vector2(0, -8)
 
 [node name="StoneBoulderObstacle1" type="Sprite2D" parent="."]
-position = Vector2(48, 49)
+position = Vector2(48, 57)
 texture = ExtResource("3_ddi1t")
+offset = Vector2(0, -8)
 
 [node name="Node2D" parent="." instance=ExtResource("3_4pqil")]
-position = Vector2(0, 1)
+position = Vector2(0, 8)
 
 [node name="StoneBoulder1" type="Sprite2D" parent="."]
-position = Vector2(-98, -35)
+position = Vector2(-98, -27)
 texture = ExtResource("4_o3iq3")
+offset = Vector2(0, -8)
 
 [node name="Grass1" type="Sprite2D" parent="."]
-position = Vector2(85, -28)
+position = Vector2(85, -20)
 texture = ExtResource("5_mnuof")
+offset = Vector2(0, -8)
 
 [node name="Grass2" type="Sprite2D" parent="."]
-position = Vector2(132, 37)
+position = Vector2(132, 45)
 texture = ExtResource("6_bbn5i")
-
-[node name="Grass3" type="Sprite2D" parent="Grass2"]
-position = Vector2(-167, 25)
-texture = ExtResource("7_1sh2w")
+offset = Vector2(0, -8)
 
 [node name="Grass3" type="Sprite2D" parent="."]
-position = Vector2(-100, 3)
+position = Vector2(-100, 11)
 texture = ExtResource("6_bbn5i")
+offset = Vector2(0, -8)
 
 [node name="Grass4" type="Sprite2D" parent="."]
-position = Vector2(-17, -58)
+position = Vector2(-17, -50)
 texture = ExtResource("5_mnuof")
+offset = Vector2(0, -8)
+
+[node name="Grass5" type="Sprite2D" parent="."]
+position = Vector2(-35, 70)
+texture = ExtResource("7_1sh2w")
+offset = Vector2(0, -8)
