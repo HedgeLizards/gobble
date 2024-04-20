@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://crqi3ntvnamm4"
-path="res://.godot/imported/Gobble_body2.png-0ccf678362dc49c882c2f40a57b6b88f.ctex"
+uid="uid://bfngdl8iylxqw"
+path="res://.godot/imported/Stone_boulder_2.png-e3bd8c9b576a55c6763ff0f92532abc8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Gobbles/Gobble_body2.png"
-dest_files=["res://.godot/imported/Gobble_body2.png-0ccf678362dc49c882c2f40a57b6b88f.ctex"]
+source_file="res://assets/World/Stone_boulder_2.png"
+dest_files=["res://.godot/imported/Stone_boulder_2.png-e3bd8c9b576a55c6763ff0f92532abc8.ctex"]
 
 [params]
 

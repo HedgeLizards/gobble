@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cspnms52878pd"
-path="res://.godot/imported/Gobble_body6.png-9ee42d9d8a15a355d0c3196706eaf6cc.ctex"
+uid="uid://j5ui01uejjff"
+path="res://.godot/imported/Grass_3.png-89be2486250389814e4c97bc28969909.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Gobbles/Gobble_body6.png"
-dest_files=["res://.godot/imported/Gobble_body6.png-9ee42d9d8a15a355d0c3196706eaf6cc.ctex"]
+source_file="res://assets/World/Grass_3.png"
+dest_files=["res://.godot/imported/Grass_3.png-89be2486250389814e4c97bc28969909.ctex"]
 
 [params]
 

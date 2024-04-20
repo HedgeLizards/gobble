@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://buayqqecww3pa"
-path="res://.godot/imported/Stone_pebbles_1.png-30a9d7a0ea1a7ee90efbf3c9b40e1844.ctex"
+uid="uid://b8iqvl63wl1jt"
+path="res://.godot/imported/Grass_2.png-48d65b8e877217fc2062085a30c84e36.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/World/Stone_pebbles_1.png"
-dest_files=["res://.godot/imported/Stone_pebbles_1.png-30a9d7a0ea1a7ee90efbf3c9b40e1844.ctex"]
+source_file="res://assets/World/Grass_2.png"
+dest_files=["res://.godot/imported/Grass_2.png-48d65b8e877217fc2062085a30c84e36.ctex"]
 
 [params]
 

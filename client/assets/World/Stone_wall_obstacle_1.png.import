@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d16e8wud1fe0d"
-path="res://.godot/imported/Gobble_body4.png-4262221d0609a17dcaa9b3496876f8ed.ctex"
+uid="uid://b16dqm3w83g0v"
+path="res://.godot/imported/Stone_wall_obstacle_1.png-1b29cb1fe621c9922c5dae9c80d5581e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Gobbles/Gobble_body4.png"
-dest_files=["res://.godot/imported/Gobble_body4.png-4262221d0609a17dcaa9b3496876f8ed.ctex"]
+source_file="res://assets/World/Stone_wall_obstacle_1.png"
+dest_files=["res://.godot/imported/Stone_wall_obstacle_1.png-1b29cb1fe621c9922c5dae9c80d5581e.ctex"]
 
 [params]
 
