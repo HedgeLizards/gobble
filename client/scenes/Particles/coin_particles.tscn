@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://nmer27egbyfv"]
+
+[ext_resource type="Texture2D" uid="uid://c4x7fow6nrs15" path="res://assets/Building/resource_coin.png" id="1_eno6m"]
+
+[sub_resource type="Gradient" id="Gradient_vospc"]
+offsets = PackedFloat32Array(0.536667, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="Node2D" type="Node2D"]
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 10
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.85
+texture = ExtResource("1_eno6m")
+particle_flag_align_y = true
+direction = Vector2(2.08165e-12, -1)
+spread = 30.0
+gravity = Vector2(2.08165e-12, 300)
+initial_velocity_min = 80.0
+initial_velocity_max = 180.0
+color_ramp = SubResource("Gradient_vospc")
