@@ -1,10 +1,11 @@
 extends Node2D
 
 const SKINS_PATH = "res://assets/Gobbles/Skins"
-const Player = preload("res://scenes/player.tscn")
-const Enemy = preload("res://scenes/enemy.tscn")
-var players = {}
-var enemies = {}
+#const Player = preload("res://scenes/player.tscn")
+const Entity = preload("res://scenes/entity.tscn")
+const RemoteBullet = preload("res://scenes/remote_bullet.tscn")
+var entities = {}
+var remote_projectiles = {}
 var time = 0
 var tick = 0
 var drawnTick = 0
@@ -51,38 +52,64 @@ func process_data(data):
 func update(actions):
 	for action in actions:
 		var type = action["type"]
-		if type == "playerUpdated":
+		if type == "entityUpdated":
 			var id = action["id"]
-			if id == WebSocket.local_player_name:
+			if typeof(id) == typeof(WebSocket.local_player_name) &&  id == WebSocket.local_player_name:
 				continue
-			var player
+			var entity
 			var pos = parse_pos(action["pos"])
-			if players.has(id):
-				player = players[id]
+			if entities.has(id):
+				entity = entities[id]
 			else:
-				player = Player.instantiate()
-				players[id] = player
-				player.get_node("Sprite2D").texture = load("%s/%s" % [SKINS_PATH, action["skin"]])
-				%Players.add_child(player)
-				player.position = pos
-			player.positions.push_back(PositionSnapshot.new(pos, tick))
-		elif type == "playerDeleted":
+				entity = Entity.instantiate()
+				entities[id] = entity
+				entity.enemy = action["isEnemy"]
+				if entity.enemy:
+					entity.get_node("Sprite2D").texture = load("res://assets/Knights/Knight_body.png")
+				else:
+					entity.get_node("Sprite2D").texture = load("%s/%s" % [SKINS_PATH, action["skin"]])
+				entity.skin = action["skin"]
+				%Entities.add_child(entity)
+				entity.position = pos
+			entity.positions.push_back(PositionSnapshot.new(pos, tick))
+		elif type == "entityDeleted":
 			var id = action["id"]
-			players[id].queue_free()
-			players.erase(id)
-		elif type == "enemyUpdated":
-			var id = action["id"]
-			var enemy
-			var pos = parse_pos(action["pos"])
-			if enemies.has(id):
-				enemy = enemies[id]
-			else:
-				enemy = Enemy.instantiate()
-				enemies[id] = enemy
-				%Enemies.add_child(enemy)
-				enemy.position = pos
-			enemy.positions.push_back(PositionSnapshot.new(pos, tick))
-			#enemy.position = pos
+			entities[id].queue_free()
+			entities.erase(id)
+		elif type == "projectileCreated":
+			var playerId = action["playerId"]
+			if typeof(playerId) == typeof(WebSocket.local_player_name) &&  playerId == WebSocket.local_player_name:
+				continue
+			var bullet = RemoteBullet.instantiate()
+			bullet.position = parse_pos(action["pos"])
+			bullet.rotation = action["rotation"]
+			bullet.speed = action["speed"]
+			%Projectiles.add_child(bullet)
+			print("new bullet ", bullet.position)
+			remote_projectiles[action["id"]] =  bullet
+		elif type == "projectileRemoved":
+			var playerId = action["playerId"]
+			if typeof(playerId) == typeof(WebSocket.local_player_name) &&  playerId == WebSocket.local_player_name:
+				continue
+			var p = remote_projectiles.get(action["id"])
+			if p:
+				p.queue_free()
+			remote_projectiles.erase(action["id"])
+		else:
+			print("unknown action ", action)
+		#elif type == "enemyUpdated":
+			#var id = action["id"]
+			#var enemy
+			#var pos = parse_pos(action["pos"])
+			#if enemies.has(id):
+				#enemy = enemies[id]
+			#else:
+				#enemy = Enemy.instantiate()
+				#enemies[id] = enemy
+				#%Enemies.add_child(enemy)
+				#enemy.position = pos
+			#enemy.positions.push_back(PositionSnapshot.new(pos, tick))
+			##enemy.position = pos
 	
 
 func parse_pos(serverpos):
@@ -96,7 +123,7 @@ func _process(delta):
 		catchup *= 0.8
 	drawnTick += delta / tick_duration * catchup
 	
-	for entity in enemies.values() + players.values():
+	for entity in entities.values():
 		if entity.positions.size() < 2:
 			continue
 		if entity.positions.size() >= 2 && drawnTick >= entity.positions[1].tick:

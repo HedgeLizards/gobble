@@ -69,6 +69,22 @@ class Serv {
 					if (err) {
 						send_error(socket, err);
 					}
+				} else if (data.type === "createProjectile") {
+					let response = {};
+					Object.assign(response, data);
+					response.type = "projectileCreated";
+					this.broadcast({type: "update", actions: [response]});
+				} else if (data.type === "impactProjectile") {
+					// todo: damage/kill enemy
+					let response = {};
+					Object.assign(response, data);
+					response.type = "projectileRemoved";
+					this.broadcast({type: "update", actions: [response]});
+				} else if (data.type === "removeProjectile") {
+					let response = {};
+					Object.assign(response, data);
+					response.type = "projectileRemoved";
+					this.broadcast({type: "update", actions: [response]});
 				}
 			});
 		});

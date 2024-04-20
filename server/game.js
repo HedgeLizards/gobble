@@ -34,6 +34,7 @@ export class Game {
 	removePlayer(name) {
 		this.removed.push(name);
 		this.players.delete(name);
+		console.log("Player left ", name);
 	}
 
 	spawnEnemy(pos) {
@@ -61,7 +62,7 @@ export class Game {
 	view() {
 		let actions = [];
 		for (let removed of this.removed) {
-			actions.push({type: "playerDeleted", id: removed});
+			actions.push({type: "entityDeleted", id: removed});
 		}
 		this.removed = [];
 		for (let player of this.players.values()){

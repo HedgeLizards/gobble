@@ -8,7 +8,7 @@ export class Enemy {
 	}
 
 	view() {
-		return {type: "enemyUpdated", id: this.id, pos: this.pos.arr()};
+		return {type: "entityUpdated", id: this.id, skin: "knight", pos: this.pos.arr(), isEnemy: true};
 	}
 
 }
