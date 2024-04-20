@@ -8,3 +8,4 @@ script = ExtResource("1_jrekx")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_t54hd")
+offset = Vector2(0, -8)

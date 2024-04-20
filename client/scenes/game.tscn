@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://4eknfuxsf3q3" path="res://scenes/environment.tscn" id="3_aa5wh"]
 
 [node name="Game" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("1_uuqp6")
 
 [node name="Environment" parent="." instance=ExtResource("3_aa5wh")]
@@ -12,11 +13,14 @@ unique_name_in_owner = true
 
 [node name="Enemies" type="Node2D" parent="."]
 unique_name_in_owner = true
+y_sort_enabled = true
 
 [node name="Players" type="Node2D" parent="."]
 unique_name_in_owner = true
+y_sort_enabled = true
 
 [node name="Me" parent="." instance=ExtResource("2_m0nq5")]
 unique_name_in_owner = true
 
 [node name="Projectiles" type="Node2D" parent="."]
+y_sort_enabled = true

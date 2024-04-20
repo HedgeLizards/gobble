@@ -6,8 +6,8 @@
 [node name="Node2D" type="Node2D"]
 
 [node name="StoneSword" type="Sprite2D" parent="."]
-position = Vector2(0, -11)
+position = Vector2(0, -17)
 texture = ExtResource("1_6loey")
 
 [node name="SparkleParticles" parent="." instance=ExtResource("2_4pr4c")]
-position = Vector2(2.08165e-12, -13.05)
+position = Vector2(0, -19)
