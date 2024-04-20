@@ -7,7 +7,7 @@ import { Player } from './player.js';
 function main() {
 	let game = new Game()
 	let server = new Serv(game, 8080);
-	game.addPlayer(new Player("Satan", new Vec2(666, 666)));
+	game.addPlayer(new Player("Satan", "Gobble_body3.png", new Vec2(666, 666)));
 	setInterval(() => server.update(0.05), 50);
 }
 
@@ -45,7 +45,7 @@ class Serv {
 						return
 					}
 					this.playerIds.set(id, name);
-					let err = this.game.addPlayer(new Player(name, new Vec2(...data.pos)));
+					let err = this.game.addPlayer(new Player(name, data.skin, new Vec2(...data.pos)));
 					if (err) {
 						send_error(socket, err);
 					} else {
@@ -57,7 +57,7 @@ class Serv {
 						send_error(socket, "Who the fuck are you?");
 						return
 					}
-					let player = new Player(name, new Vec2(...data.pos))
+					let player = new Player(name, this.game.players.get(name).skin, new Vec2(...data.pos))
 					let err = this.game.updatePlayer(player);
 					if (err) {
 						send_error(socket, err);
@@ -88,4 +88,3 @@ function send_error(socket, msg) {
 
 
 main();
-

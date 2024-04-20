@@ -1,5 +1,6 @@
 extends Node2D
 
+const SKINS_PATH = "res://assets/Gobbles/Skins"
 const Player = preload("res://scenes/player.tscn")
 const Enemy = preload("res://scenes/enemy.tscn")
 var players = {}
@@ -10,17 +11,24 @@ var drawnTick = 0
 var tps = 20
 
 func _ready():
+	%Me.get_node("Sprite2D").texture = load("%s/%s" % [SKINS_PATH, WebSocket.local_player_skin])
+	
 	WebSocket.send({
 		"type": "createPlayer",
 		"id": WebSocket.local_player_name,
-		"pos": [%Me.position.x, %Me.position.y]
+		"skin": WebSocket.local_player_skin,
+		"pos": [%Me.position.x / 16, %Me.position.y / 16]
 	})
 
 func _physics_process(delta):
 	WebSocket.send({
 		"type": "updatePlayer",
-		"pos": [%Me.position.x, %Me.position.y]
+		"pos": [%Me.position.x / 16, %Me.position.y / 16]
 	})
+
+func _unhandled_key_input(event):
+	if event.keycode == KEY_ESCAPE and event.pressed and not event.echo:
+		WebSocket.socket.close()
 
 func process_data(data):
 	tick += 1
@@ -37,13 +45,14 @@ func process_data(data):
 			else:
 				player = Player.instantiate()
 				players[id] = player
+				player.get_node("Sprite2D").texture = load("%s/%s" % [SKINS_PATH, action["skin"]])
 				%Players.add_child(player)
 				player.position = pos
-			player.position = parse_pos(action["pos"])
+			player.positions.push_back(PositionSnapshot.new(pos, tick))
 		elif type == "playerDeleted":
 			var id = action["id"]
 			players[id].queue_free()
-			players.erase[id]
+			players.erase(id)
 		elif type == "enemyUpdated":
 			var id = action["id"]
 			var enemy
@@ -64,9 +73,9 @@ func parse_pos(serverpos):
 
 func _process(delta):
 	var catchup = 1
-	if tick - drawnTick > 2:
+	if tick - drawnTick > 3:
 		catchup *= 1.2
-	elif tick - drawnTick < 1:
+	elif tick - drawnTick < 2:
 		catchup *= 0.8
 	drawnTick += delta * tps * catchup
 	
