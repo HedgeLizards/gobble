@@ -7,6 +7,9 @@
 [node name="Game" type="Node2D"]
 script = ExtResource("1_uuqp6")
 
+[node name="Environment" parent="." instance=ExtResource("3_aa5wh")]
+unique_name_in_owner = true
+
 [node name="Enemies" type="Node2D" parent="."]
 unique_name_in_owner = true
 
@@ -15,5 +18,3 @@ unique_name_in_owner = true
 
 [node name="Me" parent="." instance=ExtResource("2_m0nq5")]
 unique_name_in_owner = true
-
-[node name="Environment" parent="." instance=ExtResource("3_aa5wh")]

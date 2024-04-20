@@ -3,12 +3,12 @@ import { Vec2 } from './vec2.js';
 import { Game } from './game.js';
 import { Player } from './player.js';
 
+const tickDuration = 0.1
 
 function main() {
 	let game = new Game()
 	let server = new Serv(game, 8080);
-	game.addPlayer(new Player("Satan", "Gobble_body3.png", new Vec2(666, 666)));
-	setInterval(() => server.update(0.05), 50);
+	setInterval(() => server.update(tickDuration), tickDuration * 1000);
 }
 
 
@@ -47,13 +47,13 @@ class Serv {
 						send_error(socket, "invalid name " + name);
 						return
 					}
-					this.playerIds.set(id, name);
 					let err = this.game.addPlayer(new Player(name, data.skin, new Vec2(...data.pos)));
 					if (err) {
 						send_error(socket, err);
-					} else {
-						// socket.send(JSON.stringify(this.game.viewWorld()));
+						return
 					}
+					this.playerIds.set(id, name);
+					socket.send(JSON.stringify({type: "welcome", tickDuration: tickDuration, world: this.game.viewWorld()}));
 				} else if (data.type === "updatePlayer") {
 					let name = this.playerIds.get(id);
 					if (!name) {
@@ -74,7 +74,7 @@ class Serv {
 	update(delta) {
 		this.game.update(delta);
 		let data = this.game.view();
-		this.broadcast(data);
+		this.broadcast({type: "update", actions: data});
 	}
 
 	broadcast(data) {
