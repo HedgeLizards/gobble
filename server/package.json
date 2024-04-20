@@ -1,9 +1,6 @@
 {
     "description": "gobble",
     "author": "HedgeLizards",
-    "scripts": {
-        "_start": "node --loader ts-node/esm server.ts"
-    },
     "dependencies": {
         "bufferutil": "latest",
         "ws": "latest"
