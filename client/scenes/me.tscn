@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://ck2q3henidk1g"]
+
+[ext_resource type="Script" path="res://scripts/me.gd" id="1_emed8"]
+[ext_resource type="Script" path="res://scripts/camera.gd" id="2_0fe2v"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g3144"]
+size = Vector2(32, 32)
+
+[node name="Me" type="CharacterBody2D"]
+position = Vector2(200, 200)
+script = ExtResource("1_emed8")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_g3144")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(4, 4)
+script = ExtResource("2_0fe2v")
