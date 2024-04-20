@@ -1,0 +1,17 @@
+[gd_scene load_steps=5 format=3 uid="uid://ctxa2np5m35ul"]
+
+[ext_resource type="Script" path="res://scripts/entity.gd" id="1_j510w"]
+[ext_resource type="Texture2D" uid="uid://deyn7f3hkh2hf" path="res://assets/Gobbles/Skins/Gobble_body2.png" id="2_kbsa2"]
+[ext_resource type="Script" path="res://scripts/animate.gd" id="3_uem7m"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f7u7y"]
+
+[node name="Entity" type="Area2D"]
+script = ExtResource("1_j510w")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_kbsa2")
+script = ExtResource("3_uem7m")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_f7u7y")

@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://pjgpf0vfiru5"]
+
+[ext_resource type="Texture2D" uid="uid://crr2cbddnk7uo" path="res://assets/Knights/Knight_arrow.png" id="1_3hqio"]
+[ext_resource type="Script" path="res://scripts/remote_bullet.gd" id="1_cym4v"]
+
+[node name="RemoteBullet" type="Sprite2D"]
+texture = ExtResource("1_3hqio")
+script = ExtResource("1_cym4v")

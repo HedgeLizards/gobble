@@ -9,7 +9,7 @@ export class Player {
 	}
 
 	view() {
-		return {type: "playerUpdated", id: this.name, skin: this.skin, pos: this.pos.arr()};
+		return {type: "entityUpdated", id: this.name, skin: this.skin, pos: this.pos.arr(), isEnemy: false};
 	}
 
 }

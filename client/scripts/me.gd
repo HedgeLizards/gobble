@@ -21,6 +21,15 @@ func _physics_process(delta):
 func shoot():
 	cooldown = 0.5
 	var bullet = Bullet.instantiate()
+	bullet.id = "@bullet_"+WebSocket.local_player_name + str(randi())
 	bullet.position = %Muzzle.global_position
 	bullet.rotation = %Muzzle.global_rotation
 	$'../Projectiles'.add_child(bullet)
+	WebSocket.send({
+		"type": "createProjectile",
+		"id": bullet.id,
+		"playerId": WebSocket.local_player_name,
+		"pos": [bullet.position.x / 16, bullet.position.y / 16],
+		"rotation": bullet.rotation,
+		"speed": bullet.speed
+	})

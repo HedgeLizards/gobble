@@ -1,8 +1,7 @@
 extends Sprite2D
 
-@export var wobble_speed = 15.0
-@export var wobble_amplitude = 2.0
-
+var wobble_amplitude = 2.0
+var wobble_speed = 15.0
 var wobble_phase = 0.0
 
 @onready var base_offset_y = offset.y
