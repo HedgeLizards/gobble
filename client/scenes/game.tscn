@@ -1,11 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://011l66vx15oa"]
+[gd_scene load_steps=4 format=3 uid="uid://011l66vx15oa"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_uuqp6"]
-[ext_resource type="Script" path="res://scripts/me.gd" id="2_17hio"]
+[ext_resource type="PackedScene" uid="uid://ck2q3henidk1g" path="res://scenes/me.tscn" id="2_m0nq5"]
 [ext_resource type="PackedScene" uid="uid://4eknfuxsf3q3" path="res://scenes/environment.tscn" id="3_aa5wh"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_g3144"]
-size = Vector2(32, 32)
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_uuqp6")
@@ -16,17 +13,7 @@ unique_name_in_owner = true
 [node name="Players" type="Node2D" parent="."]
 unique_name_in_owner = true
 
-[node name="Me" type="CharacterBody2D" parent="."]
+[node name="Me" parent="." instance=ExtResource("2_m0nq5")]
 unique_name_in_owner = true
-position = Vector2(200, 200)
-script = ExtResource("2_17hio")
-
-[node name="Sprite2D" type="Sprite2D" parent="Me"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Me"]
-shape = SubResource("RectangleShape2D_g3144")
-
-[node name="Camera2D" type="Camera2D" parent="Me"]
-zoom = Vector2(4, 4)
 
 [node name="Environment" parent="." instance=ExtResource("3_aa5wh")]
