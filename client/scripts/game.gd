@@ -18,6 +18,10 @@ func _physics_process(delta):
 		"pos": [%Me.position.x, %Me.position.y]
 	})
 
+func _unhandled_key_input(event):
+	if event.keycode == KEY_ESCAPE and event.pressed and not event.echo:
+		WebSocket.socket.close()
+
 func process_data(data):
 	for action in data:
 		var type = action["type"]
@@ -36,7 +40,7 @@ func process_data(data):
 		elif type == "playerDeleted":
 			var id = action["id"]
 			players[id].queue_free()
-			players.erase[id]
+			players.erase(id)
 		elif type == "enemyUpdated":
 			var id = action["id"]
 			var enemy
