@@ -18,6 +18,8 @@ var skin_index:
 		$VBoxContainer/Identity/Skin.texture = load('%s/%s' % [SKINS_PATH, skins[skin_index]])
 
 func _ready():
+	scale *= DisplayServer.screen_get_scale()
+
 	$VBoxContainer/Identity/Name.text = '' if WebSocket.local_player_name == null else WebSocket.local_player_name
 	$VBoxContainer/Identity/Name.caret_column = $VBoxContainer/Identity/Name.text.length()
 	$VBoxContainer/Identity/Name.grab_focus()

@@ -17,6 +17,8 @@ shape = SubResource("RectangleShape2D_g3144")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(4, 4)
+limit_left = 0
+limit_top = 0
 script = ExtResource("2_0fe2v")
 
 [node name="Gun" type="Node2D" parent="."]
