@@ -1,14 +1,18 @@
 extends Node2D
 
+const SKINS_PATH = "res://assets/Gobbles/Skins"
 const Player = preload("res://scenes/player.tscn")
 const Enemy = preload("res://scenes/enemy.tscn")
 var players = {}
 var enemies = {}
 
 func _ready():
+	%Me.get_node("Sprite2D").texture = load("%s/%s" % [SKINS_PATH, WebSocket.local_player_skin])
+	
 	WebSocket.send({
 		"type": "createPlayer",
 		"id": WebSocket.local_player_name,
+		"skin": WebSocket.local_player_skin,
 		"pos": [%Me.position.x, %Me.position.y]
 	})
 
@@ -35,6 +39,7 @@ func process_data(data):
 			else:
 				player = Player.instantiate()
 				players[id] = player
+				player.get_node("Sprite2D").texture = load("%s/%s" % [SKINS_PATH, action["skin"]])
 				%Players.add_child(player)
 			player.position = parse_pos(action["pos"])
 		elif type == "playerDeleted":
