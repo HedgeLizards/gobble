@@ -109,8 +109,7 @@ func _process(delta):
 			var p1 = entity.positions[1]
 			var t = (drawnTick - p0.tick) / (p1.tick - p0.tick)
 			entity.position = p0.pos * (1-t) + p1.pos * t
-		if not is_equal_approx(entity.position.x, previous_position.x):
-			entity.get_node("Sprite2D").flip_h = (entity.position.x < previous_position.x)
+		entity.get_node("Sprite2D").animate(entity.position, previous_position, delta)
 
 class PositionSnapshot:
 	var pos: Vector2
