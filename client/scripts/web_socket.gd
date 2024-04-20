@@ -3,16 +3,17 @@ extends Node
 var socket = WebSocketPeer.new()
 var local_player_name
 var local_player_skin
+var local_player_host
 var connecting = false
 
 func _ready():
 	set_physics_process(false)
 
-func connect_to_host(host):
+func connect_to_host():
 	if connecting:
 		return
 	
-	var result = socket.connect_to_url('ws://' + host)
+	var result = socket.connect_to_url('ws://' + local_player_host)
 	
 	if result != Error.OK:
 		print(result)

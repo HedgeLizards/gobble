@@ -21,6 +21,8 @@ func _ready():
 	$VBoxContainer/Identity/Name.text = '' if WebSocket.local_player_name == null else WebSocket.local_player_name
 	
 	skin_index = (randi() % skins.size()) if WebSocket.local_player_skin == null else skins.find(WebSocket.local_player_skin)
+	
+	$VBoxContainer/Connection/Host.text = 'localhost:8080' if WebSocket.local_player_host == null else WebSocket.local_player_host
 
 func _unhandled_key_input(event):
 	if event.keycode == KEY_ENTER:
@@ -42,5 +44,6 @@ func _on_join_pressed():
 	
 	WebSocket.local_player_name = local_player_name
 	WebSocket.local_player_skin = skins[skin_index]
+	WebSocket.local_player_host = $VBoxContainer/Connection/Host.text
 	
-	WebSocket.connect_to_host($VBoxContainer/Connection/Host.text)
+	WebSocket.connect_to_host()
