@@ -90,7 +90,7 @@ class Serv {
 
 function send_error(socket, msg) {
 	console.warn(msg);
-	socket.close(1002, JSON.stringify(msg));
+	socket.close(1002, msg);
 }
 
 
