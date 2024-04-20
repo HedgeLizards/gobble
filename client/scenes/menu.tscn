@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://iosc17jma51k"]
 
 [ext_resource type="Script" path="res://scripts/menu.gd" id="1_fc1m7"]
-[ext_resource type="Texture2D" uid="uid://ujhf7x4lgmp0" path="res://assets/UI/Arrow.png" id="2_cw6uy"]
+[ext_resource type="Texture2D" uid="uid://d23jlntk3kgxp" path="res://assets/UI/Arrow.png" id="2_cw6uy"]
 [ext_resource type="Texture2D" uid="uid://d3ke8yigymepn" path="res://icon.svg" id="2_otxh6"]
-[ext_resource type="FontFile" uid="uid://mo6xk7y1horc" path="res://assets/UI/Quicksand-Bold.otf" id="5_dh7dy"]
+[ext_resource type="FontFile" uid="uid://chhjx2uirpf3r" path="res://assets/UI/Quicksand-Bold.otf" id="5_dh7dy"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
