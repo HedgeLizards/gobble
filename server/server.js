@@ -34,12 +34,12 @@ class Serv {
 			});
 			socket.on("message", msg => {
 				let data = JSON.parse(msg);
-				if (data.type === "introduction") {
+				if (data.type === "createPlayer") {
 					if (this.playerIds.has(id)) {
 						send_error(socket, "Can only introduce once");
 						return;
 					}
-					let name = data.player;
+					let name = data.id;
 					if (!name) {
 						send_error(socket, "invalid name " + name);
 						return
@@ -49,7 +49,7 @@ class Serv {
 					if (err) {
 						send_error(socket, err);
 					}
-				} else if (data.type === "player") {
+				} else if (data.type === "updatePlayer") {
 					let name = this.playerIds.get(id);
 					if (!name) {
 						send_error(socket, "Who the fuck are you?");

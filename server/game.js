@@ -1,9 +1,11 @@
 
+import { Player } from "./player.js";
 
 export class Game {
 
 	constructor(){
 		this.players = new Map();
+		this.removed = [];
 	}
 
 	addPlayer(player) {
@@ -11,7 +13,6 @@ export class Game {
 			return "name " + player.name + " is already taken";
 		}
 		console.log("new player", player.name, player);
-
 		this.players.set(player.name, player);
 		return null;
 	}
@@ -24,14 +25,19 @@ export class Game {
 	}
 
 	removePlayer(name) {
+		this.removed.push(name);
 		this.players.delete(name);
 	}
 
 	view() {
-		let players = {}
-		for (let player of this.players.values()){
-			players[player.name] = player.view();
+		let actions = [];
+		for (let removed of this.removed) {
+			actions.push({type: "playerDeleted", id: removed});
 		}
-		return {type: "state", players: players};
+		this.removed = []
+		for (let player of this.players.values()){
+			actions.push(player.view());
+		}
+		return actions;
 	}
 }

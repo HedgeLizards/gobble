@@ -8,7 +8,7 @@ export class Player {
 	}
 
 	view() {
-		return {name: this.name, pos: this.pos.arr()};
+		return {type: "playerUpdated", id: this.name, pos: this.pos.arr()};
 	}
 
 }
