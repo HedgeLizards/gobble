@@ -22,6 +22,10 @@ func _ready():
 	
 	skin_index = (randi() % skins.size()) if WebSocket.local_player_skin == null else skins.find(WebSocket.local_player_skin)
 	
+	if WebSocket.local_player_error != null:
+		$VBoxContainer/Error.text = WebSocket.local_player_error
+		$VBoxContainer/Error.visible = true
+	
 	$VBoxContainer/Connection/Host.text = 'localhost:8080' if WebSocket.local_player_host == null else WebSocket.local_player_host
 
 func _unhandled_key_input(event):
@@ -46,4 +50,4 @@ func _on_join_pressed():
 	WebSocket.local_player_skin = skins[skin_index]
 	WebSocket.local_player_host = $VBoxContainer/Connection/Host.text
 	
-	WebSocket.connect_to_host()
+	WebSocket.connect_to_host($VBoxContainer/Error)
