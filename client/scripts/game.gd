@@ -21,16 +21,7 @@ func _physics_process(delta):
 func process_data(data):
 	for action in data:
 		var type = action["type"]
-		if type == "playerCreated":
-			var id = action["id"]
-			if id == WebSocket.local_player_name:
-				continue
-			var player = Player.instantiate()
-			players[id] = player
-			player.position.x = action["pos"][0]
-			player.position.y = action["pos"][1]
-			%Players.add_child(player)
-		elif type == "playerUpdated":
+		if type == "playerUpdated":
 			var id = action["id"]
 			if id == WebSocket.local_player_name:
 				continue
@@ -41,8 +32,7 @@ func process_data(data):
 				player = Player.instantiate()
 				players[id] = player
 				%Players.add_child(player)
-			player.position.x = action["pos"][0]
-			player.position.y = action["pos"][1]
+			player.position = parse_pos(action["pos"])
 		elif type == "playerDeleted":
 			var id = action["id"]
 			players[id].queue_free()
@@ -56,5 +46,7 @@ func process_data(data):
 				enemy = Enemy.instantiate()
 				enemies[id] = enemy
 				%Enemies.add_child(enemy)
-			enemy.position.x = action["pos"][0]
-			enemy.position.y = action["pos"][1]
+			enemy.position = parse_pos(action["pos"])
+
+func parse_pos(serverpos):
+	return Vector2(serverpos[0], serverpos[1]) * 16

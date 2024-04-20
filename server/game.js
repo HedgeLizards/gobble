@@ -41,13 +41,13 @@ export class Game {
 		this.enemies.set(enemy.id, enemy);
 	}
 
-	update() {
+	update(delta) {
 		++this.tick;
 		if (this.tick%100 === 2) {
 			this.spawnEnemy(new Vec2(0, 0));
 		}
 		for (let enemy of this.enemies.values()) {
-			enemy.pos = enemy.pos.add(this.center().sub(enemy.pos).normalize().mul(0.5));
+			enemy.pos = enemy.pos.add(this.center().sub(enemy.pos).normalize().mul(2 * delta));
 		}
 	}
 

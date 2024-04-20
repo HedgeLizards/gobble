@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://dawx1xavdy1ps"]
 
-[ext_resource type="Texture2D" uid="uid://d3ke8yigymepn" path="res://icon.svg" id="1_vuyqw"]
+[ext_resource type="Texture2D" uid="uid://c0f7ylbq730yq" path="res://assets/Gobbles/Skins/Gobble_body2.png" id="1_t54hd"]
 
 [node name="Player" type="Node2D"]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_vuyqw")
+texture = ExtResource("1_t54hd")

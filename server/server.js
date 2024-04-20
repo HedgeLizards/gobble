@@ -8,7 +8,7 @@ function main() {
 	let game = new Game()
 	let server = new Serv(game, 8080);
 	game.addPlayer(new Player("Satan", new Vec2(666, 666)));
-	setInterval(() => server.update(), 50);
+	setInterval(() => server.update(0.05), 50);
 }
 
 
@@ -68,8 +68,8 @@ class Serv {
 	}
 
 
-	update() {
-		this.game.update();
+	update(delta) {
+		this.game.update(delta);
 		let data = this.game.view();
 		this.broadcast(data);
 	}
