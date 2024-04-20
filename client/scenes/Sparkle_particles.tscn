@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=3 uid="uid://bf1821fcydr00"]
+
+[ext_resource type="Texture2D" uid="uid://dswfxsoorcvyp" path="res://assets/World/Particles/Sparkle1.png" id="1_vritr"]
+[ext_resource type="Texture2D" uid="uid://mhxw3awbtjv3" path="res://assets/World/Particles/Sparkle2.png" id="2_03nf4"]
+[ext_resource type="Texture2D" uid="uid://cpghkoih5dx0n" path="res://assets/World/Particles/Sparkle3.png" id="3_2lrhx"]
+[ext_resource type="Texture2D" uid="uid://bfxjkao6gpoye" path="res://assets/World/Particles/Sparkle4.png" id="4_8j7ew"]
+[ext_resource type="Texture2D" uid="uid://bw3t4wgpphx0i" path="res://assets/World/Particles/Sparkle5.png" id="5_ulo5i"]
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_wbuf6"]
+frames = 5
+frame_0/texture = ExtResource("1_vritr")
+frame_0/duration = 0.1
+frame_1/texture = ExtResource("2_03nf4")
+frame_1/duration = 0.1
+frame_2/texture = ExtResource("3_2lrhx")
+frame_2/duration = 0.1
+frame_3/texture = ExtResource("4_8j7ew")
+frame_3/duration = 0.1
+frame_4/texture = ExtResource("5_ulo5i")
+frame_4/duration = 0.1
+
+[node name="SparkleParticles" type="Node2D"]
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+texture_filter = 1
+amount = 3
+lifetime = 0.5
+explosiveness = 0.3
+lifetime_randomness = 0.1
+draw_order = 1
+texture = SubResource("AnimatedTexture_wbuf6")
+emission_shape = 1
+emission_sphere_radius = 30.0
+particle_flag_align_y = true
+direction = Vector2(2.08165e-12, 2.08165e-12)
+gravity = Vector2(2.08165e-12, 1)
+orbit_velocity_min = -0.1
+orbit_velocity_max = 0.1
+anim_offset_max = 1.0
