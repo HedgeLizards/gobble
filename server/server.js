@@ -3,7 +3,7 @@ import { Vec2 } from './vec2.js';
 import { Game } from './game.js';
 import { Player } from './player.js';
 
-const tickDuration = 0.05
+const tickDuration = 0.1
 
 function main() {
 	let game = new Game()

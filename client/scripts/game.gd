@@ -87,9 +87,9 @@ func parse_pos(serverpos):
 
 func _process(delta):
 	var catchup = 1
-	if tick - drawnTick > 3:
+	if tick - drawnTick > 2:
 		catchup *= 1.2
-	elif tick - drawnTick < 2:
+	elif tick - drawnTick < 1:
 		catchup *= 0.8
 	drawnTick += delta / tick_duration * catchup
 	
