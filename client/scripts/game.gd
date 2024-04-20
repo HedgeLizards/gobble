@@ -13,13 +13,13 @@ func _ready():
 		"type": "createPlayer",
 		"id": WebSocket.local_player_name,
 		"skin": WebSocket.local_player_skin,
-		"pos": [%Me.position.x, %Me.position.y]
+		"pos": [%Me.position.x / 16, %Me.position.y / 16]
 	})
 
 func _physics_process(delta):
 	WebSocket.send({
 		"type": "updatePlayer",
-		"pos": [%Me.position.x, %Me.position.y]
+		"pos": [%Me.position.x / 16, %Me.position.y / 16]
 	})
 
 func _unhandled_key_input(event):
