@@ -18,3 +18,5 @@ unique_name_in_owner = true
 
 [node name="Me" parent="." instance=ExtResource("2_m0nq5")]
 unique_name_in_owner = true
+
+[node name="Projectiles" type="Node2D" parent="."]
