@@ -8,6 +8,7 @@
 script = ExtResource("1_uuqp6")
 
 [node name="Environment" parent="." instance=ExtResource("3_aa5wh")]
+unique_name_in_owner = true
 
 [node name="Enemies" type="Node2D" parent="."]
 unique_name_in_owner = true

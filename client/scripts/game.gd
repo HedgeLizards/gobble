@@ -8,7 +8,9 @@ var enemies = {}
 var time = 0
 var tick = 0
 var drawnTick = 0
-var tps = 20
+var tick_duration = 0.5
+var world_size = Vector2(1, 1)
+var world_tile_size = Vector2(1, 1)
 
 func _ready():
 	%Me.get_node("Sprite2D").texture = load("%s/%s" % [SKINS_PATH, WebSocket.local_player_skin])
@@ -32,7 +34,19 @@ func _unhandled_key_input(event):
 
 func process_data(data):
 	tick += 1
-	for action in data:
+	if data["type"] == "update":
+		update(data["actions"])
+	elif data["type"] == "welcome":
+		var s = data["world"]["size"]
+		world_tile_size = Vector2(s[0], s[1])
+		world_size = world_tile_size * 16
+		%Me.position = world_size / 2
+		%Environment.position = world_size / 2
+		tick_duration = data["tickDuration"]
+		
+
+func update(actions):
+	for action in actions:
 		var type = action["type"]
 		if type == "playerUpdated":
 			var id = action["id"]
@@ -77,7 +91,7 @@ func _process(delta):
 		catchup *= 1.2
 	elif tick - drawnTick < 2:
 		catchup *= 0.8
-	drawnTick += delta * tps * catchup
+	drawnTick += delta / tick_duration * catchup
 	
 	for entity in enemies.values() + players.values():
 		if entity.positions.size() < 2:

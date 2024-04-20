@@ -12,6 +12,7 @@ export class Game {
 		this.removed = [];
 		this.size = new Vec2(128, 128);
 		this.tick = 0;
+		this.timeToSpawn = 2;
 	}
 
 	addPlayer(player) {
@@ -43,8 +44,10 @@ export class Game {
 
 	update(delta) {
 		++this.tick;
-		if (this.tick%100 === 2) {
+		this.timeToSpawn -= delta;
+		if (this.timeToSpawn <= 0) {
 			this.spawnEnemy(new Vec2(0, 0));
+			this.timeToSpawn += 2;
 		}
 		for (let enemy of this.enemies.values()) {
 			enemy.pos = enemy.pos.add(this.center().sub(enemy.pos).normalize().mul(2 * delta));
