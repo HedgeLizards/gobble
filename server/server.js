@@ -1,20 +1,35 @@
-import { type AddressInfo, WebSocketServer } from 'ws';
+import { WebSocketServer } from 'ws';
 
 const wss = new WebSocketServer({ port: 8080 });
 let connections = []
 
-wss.once('listening', () => console.log(`Listening on :${(wss.address() as AddressInfo).port}`));
+wss.once('listening', () => console.log(`Listening on :${wss.address().port}`));
 
 wss.on('connection', (socket) => {
-	socket.send('Hello World');
+	socket.send(JSON.stringify({type: "Hello world"}));
 	connections.push(new Connection(socket));
 });
 
 
+setInterval(update, 50);
+
+
+function update() {
+
+	let players = {};
+	for (let connection of connections) {
+		let player = connection.player;
+		if (!player) { continue; }
+		players[player.name] = player.view();
+	}
+	console.log(players);
+	for (let connection of connections) {
+		connection.send({type: "state", players: players});
+	}
+}
+
 class Connection {
 
-	socket: WebSocket
-	player: Player
 
 	constructor(socket) {
 		this.socket = socket;
@@ -22,15 +37,13 @@ class Connection {
 		this.player = null;
 	}
 
-
 	onMessage(m) {
 		let data = JSON.parse(m);
 		if (data.type === "introduction") {
-			this.player = Player.fromMsg(data);
+			this.player = new Player(data.player, new Vec2(...data.pos));
 		} else if (data.type === "player") {
-			this.player.pos = data.pos;
+			this.player.pos = new Vec2(...data.pos);
 		}
-		console.log(this.player.pos)
 	}
 
 	send(data) {
@@ -41,28 +54,29 @@ class Connection {
 
 
 class Player {
-	name: string
-	pos: Vec2
 
-	constructor(name: string, pos: Vec2) {
+	constructor(name, pos) {
 		this.name = name;
 		this.pos = pos;
 	}
 
-	static fromMsg(data) {
-		return new Player(data.name, data.pos);
+	view() {
+		return {name: this.name, pos: this.pos.arr()};
 	}
+
 }
 
 
 class Vec2 {
-	x: number
-	y: number
 
-	constructor(x: number, y: number) {
+	constructor(x, y) {
 		this.x = x;
 		this.y = y;
 	}
+
+	// static parse(obj) {
+	// 	return new Vec2(obj.x, obj.y);
+	// }
 
 	equals(other) {
 		return this.x === other.x && this.y === other.y;
@@ -132,4 +146,6 @@ class Vec2 {
 		return [this.x, this.y];
 	}
 }
+
+connections.push({send: () => {}, player: new Player("God", new Vec2(100, 200))});
 

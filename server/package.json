@@ -2,15 +2,14 @@
     "description": "gobble",
     "author": "HedgeLizards",
     "scripts": {
-        "start": "node --loader ts-node/esm server.ts"
+        "_start": "node --loader ts-node/esm server.ts"
     },
     "dependencies": {
         "bufferutil": "latest",
         "ws": "latest"
     },
     "devDependencies": {
-        "@types/ws": "^8.5.10",
-        "ts-node": "^10.9.2"
+        "@types/ws": "^8.5.10"
     },
     "type": "module"
 }

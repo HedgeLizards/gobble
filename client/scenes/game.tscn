@@ -10,13 +10,16 @@ size = Vector2(32, 32)
 [node name="Game" type="Node2D"]
 script = ExtResource("1_qupka")
 
-[node name="Player" type="CharacterBody2D" parent="."]
+[node name="Me" type="CharacterBody2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(200, 200)
 script = ExtResource("2_jvx6t")
 
-[node name="Sprite2D" type="Sprite2D" parent="Player"]
+[node name="Sprite2D" type="Sprite2D" parent="Me"]
 texture = ExtResource("3_6ff4g")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Me"]
 shape = SubResource("RectangleShape2D_g3144")
+
+[node name="Players" type="Node2D" parent="."]
+unique_name_in_owner = true
