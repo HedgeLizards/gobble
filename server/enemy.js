@@ -2,17 +2,24 @@
 
 export class Enemy {
 
-	constructor(id, pos) {
+	constructor(id, pos, kind) {
 		this.id = id;
 		this.pos = pos;
-		this.health = 10;
+		this.health = kind.health;
 		this.cooldown = 0;
 		this.isAttacking = false;
 		this.target = null;
+		this.kind = kind;
 	}
 
 	view() {
-		return {type: "entityUpdated", id: this.id, skin: "knight", pos: this.pos.arr(), isEnemy: true};
+		return {
+			type: "entityUpdated",
+			id: this.id,
+			skin: this.kind.skin,
+			pos: this.pos.arr(),
+			isEnemy: true
+		};
 	}
 
 	targetPos() {
@@ -33,11 +40,12 @@ export class Enemy {
 			rotation: this.pos.directionTo(target.pos),
 			speed: 10,
 			distance: 10,
+			isEnemy: true
 		}];
 	}
 
 	range() {
-		return 2;
+		return this.kind.range;
 	}
 
 }

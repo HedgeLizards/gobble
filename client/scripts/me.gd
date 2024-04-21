@@ -87,4 +87,9 @@ func shoot():
 		"rotation": bullet.rotation,
 		"speed": bullet.speed / 16,
 		"distance": bullet.distance / 16,
+		"isEnemy": false
 	})
+
+func is_me():
+	return true
+

@@ -2,6 +2,7 @@
 import { Player } from "./player.js";
 import { Enemy } from "./enemy.js";
 import { Vec2 } from "./vec2.js";
+import { EnemyKind } from "./enemykind.js";
 
 export class Game {
 
@@ -36,8 +37,10 @@ export class Game {
 		this.players.delete(name);
 	}
 
-	spawnEnemy(pos) {
-		let enemy = new Enemy(this.nextEnemyId++, pos);
+	spawnEnemy() {
+		let pos = pick_random([new Vec2(0, 0), new Vec2(this.size.x, 0), new Vec2(this.size.x, this.size.y), new Vec2(0, this.size.y)]);
+		let kind = pick_random([EnemyKind.Knight, EnemyKind.Archer])
+		let enemy = new Enemy(this.nextEnemyId++, pos, kind);
 		this.enemies.set(enemy.id, enemy);
 	}
 
@@ -57,7 +60,7 @@ export class Game {
 		++this.tick;
 		this.timeToSpawn -= delta;
 		if (this.timeToSpawn <= 0 && this.enemies.size < 100) {
-			this.spawnEnemy(new Vec2(0, 0));
+			this.spawnEnemy();
 			this.timeToSpawn = 2;
 		}
 		for (let enemy of this.enemies.values()) {
@@ -115,4 +118,9 @@ export class Game {
 	viewWorld() {
 		return {type: "world", size: this.size.arr()};
 	}
+}
+
+
+function pick_random(arr) {
+	return arr[Math.random() * arr.length | 0];
 }

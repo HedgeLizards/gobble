@@ -25,5 +25,4 @@ func _on_area_entered(area: Area2D) -> void:
 			"pos": [position.x / 16, position.y / 16],
 			"damage": damage,
 		})
-		area.health -= 5
 		queue_free()

@@ -19,14 +19,14 @@ stream_0/weight = 1.0
 [node name="Me" type="CharacterBody2D"]
 script = ExtResource("1_emed8")
 
-[node name="walk_particles" parent="." instance=ExtResource("3_8tf3d")]
-unique_name_in_owner = true
-process_priority = -1
-position = Vector2(2.08165e-12, 1)
-
 [node name="Sprite2D" type="Sprite2D" parent="."]
 offset = Vector2(0, -8)
 script = ExtResource("2_jbt7i")
+
+[node name="walk_particles" parent="Sprite2D" instance=ExtResource("3_8tf3d")]
+unique_name_in_owner = true
+process_priority = -1
+position = Vector2(2.08165e-12, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -8)
