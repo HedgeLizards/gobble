@@ -10,6 +10,9 @@ var weapon:
 		weapon = value
 		
 		$Weapon/Sprite2D.texture = weapon.texture
+		
+		$Shoot.stream.set_stream(0, weapon.stream)
+		$Shoot.volume_db = weapon.volume_db
 
 
 func is_enemy():
@@ -24,6 +27,6 @@ func aim(toward):
 func _on_label_resized():
 	$Label.position.x = (-$Label.size.x / 2.0 + 0.5) * $Label.scale.x
 
+
 func shoot():
-	# TO DO: Add weapon selection logic; sound needs to match the weapon.
 	$Shoot.play()

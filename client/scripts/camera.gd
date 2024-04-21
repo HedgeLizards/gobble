@@ -1,8 +1,6 @@
 extends Camera2D
 
 const SCREEN_SIZE_RATIO = 256
-const RECOIL_STRENGTH = 1.5
-const RECOIL_DURATION = 0.2
 
 @onready var base_offset = offset
 
@@ -17,7 +15,7 @@ func zoom_dynamically():
 	
 	zoom = Vector2(z, z) * DisplayServer.screen_get_scale()
 
-func recoil(toward):
-	offset = base_offset + Vector2(-cos(toward), sin(toward)) * RECOIL_STRENGTH
+func recoil(toward, strength):
+	offset = base_offset + Vector2(-cos(toward), sin(toward)) * strength
 	
-	create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT).tween_property(self, 'offset', base_offset, RECOIL_DURATION)
+	create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT).tween_property(self, 'offset', base_offset, strength / 6)
