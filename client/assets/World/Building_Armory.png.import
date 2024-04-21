@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b6s43weiyi617"
-path="res://.godot/imported/Building_Armory.png-2627edbd4fea859bdd613863104fc2eb.ctex"
+path="res://.godot/imported/building_armory.png-7998949c36d71a75e327f081990deefe.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/World/Building_Armory.png"
-dest_files=["res://.godot/imported/Building_Armory.png-2627edbd4fea859bdd613863104fc2eb.ctex"]
+source_file="res://assets/World/building_armory.png"
+dest_files=["res://.godot/imported/building_armory.png-7998949c36d71a75e327f081990deefe.ctex"]
 
 [params]
 
