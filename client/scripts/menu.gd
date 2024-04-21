@@ -19,9 +19,11 @@ var skin_index:
 
 func _ready():
 	scale *= DisplayServer.screen_get_scale()
-
-	$VBoxContainer/Identity/Name.text = generate_random_name() if WebSocket.local_player_name == null else WebSocket.local_player_name
-	$VBoxContainer/Identity/Name.caret_column = $VBoxContainer/Identity/Name.text.length()
+ 	
+	if WebSocket.local_player_name != null:
+		$VBoxContainer/Identity/Name.text = WebSocket.local_player_name
+		$VBoxContainer/Identity/Name.caret_column = WebSocket.local_player_name.length()
+	
 	$VBoxContainer/Identity/Name.grab_focus()
 	
 	skin_index = (randi() % skins.size()) if WebSocket.local_player_skin == null else skins.find(WebSocket.local_player_skin)
@@ -58,10 +60,7 @@ func _on_join_pressed():
 	var local_player_name = $VBoxContainer/Identity/Name.text
 	$"UI Audio/AudioStreamPlayer Join Click".play()
 	
-	if local_player_name.is_empty():
-		return
-	
-	WebSocket.local_player_name = local_player_name
+	WebSocket.local_player_name = generate_random_name() if local_player_name.is_empty() else local_player_name
 	WebSocket.local_player_skin = skins[skin_index]
 	WebSocket.local_player_host = $VBoxContainer/Connection/Host.text
 	WebSocket.local_player_port = $VBoxContainer/Connection/Port.text
