@@ -106,9 +106,8 @@ class Serv {
 
 
 	update(delta) {
-		this.game.update(delta);
-		let data = this.game.view();
-		this.broadcast({type: "update", actions: data});
+		let actions = this.game.update(delta);
+		this.broadcast({type: "update", actions: actions});
 	}
 
 	broadcast(data) {

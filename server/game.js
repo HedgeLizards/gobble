@@ -53,26 +53,29 @@ export class Game {
 	}
 
 	update(delta) {
+		let actions = [];
 		++this.tick;
 		this.timeToSpawn -= delta;
-		if (this.timeToSpawn <= 0) {
+		if (this.timeToSpawn <= 0 && this.enemies.size < 100) {
 			this.spawnEnemy(new Vec2(0, 0));
-			this.timeToSpawn += 2;
-		}
-		if (this.enemies.size > 100) {
-			this.enemies.delete(this.enemies.keys()[Math.random()]);
+			this.timeToSpawn = 2;
 		}
 		for (let enemy of this.enemies.values()) {
-			enemy.pos = enemy.pos.add(this.center().sub(enemy.pos).normalize().mul(2 * delta));
+			if (enemy.cooldown < 0) {
+				enemy.isAttacking = false;
+				let [nearest, target, dist] = this.findNearestTarget(enemy.pos);
+				enemy.target = target;
+				if (dist < enemy.range()) {
+					enemy.attack(target);
+				}
+				enemy.cooldown = 0.5;
+			}
+			enemy.cooldown -= delta;
+			if (!enemy.isAttacking) {
+				enemy.pos = enemy.pos.add(enemy.targetPos().sub(enemy.pos).normalize().mul(2 * delta));
+			}
 		}
-	}
 
-	center() {
-		return this.size.div(2);
-	}
-
-	view() {
-		let actions = [];
 		for (let removed of this.removed) {
 			actions.push({type: "entityDeleted", id: removed});
 		}
@@ -84,6 +87,28 @@ export class Game {
 			actions.push(enemy.view());
 		}
 		return actions;
+	}
+
+	findNearestTarget(pos) {
+		let nearest = this.center();
+		let nearestDist = pos.distanceTo(nearest);
+		let target = {pos: this.center()};
+		for (let player of this.players.values()) {
+			let dist = pos.distanceTo(player.pos) < nearestDist;
+			if (dist) {
+				nearest = player.pos;
+				nearestDist = dist;
+				target = player;
+			}
+		}
+		return [nearest, target, nearestDist];
+	}
+
+	center() {
+		return this.size.div(2);
+	}
+
+	view() {
 	}
 
 	viewWorld() {

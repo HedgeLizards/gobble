@@ -81,8 +81,9 @@ func update(actions):
 			entity.positions.push_back(PositionSnapshot.new(pos, action.get("aim", 0.0), time))
 		elif type == "entityDeleted":
 			var id = action["id"]
-			entities[id].queue_free()
-			entities.erase(id)
+			if entities.has(id):
+				entities[id].queue_free()
+				entities.erase(id)
 		elif type == "projectileCreated":
 			var playerId = action["playerId"]
 			if typeof(playerId) == typeof(WebSocket.local_player_name) &&  playerId == WebSocket.local_player_name:
