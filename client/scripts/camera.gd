@@ -1,7 +1,7 @@
 extends Camera2D
 
 const SCREEN_SIZE_RATIO = 256
-const RECOIL_STRENGTH = 1.5
+const RECOIL_STRENGTH = 3.5
 const RECOIL_DURATION = 0.2
 
 @onready var base_offset = offset
