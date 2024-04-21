@@ -18,6 +18,8 @@ export class Enemy {
 			id: this.id,
 			skin: this.kind.skin,
 			pos: this.pos.arr(),
+			aim: this.pos.directionTo(this.targetPos()),
+			weapon: this.kind.weapon,
 			isEnemy: true
 		};
 	}
@@ -34,12 +36,12 @@ export class Enemy {
 		this.isAttacking = true;
 		return [{
 			type: "projectileCreated",
-			pos: this.pos.arr(),
+			pos: [this.pos.x, this.pos.y - 0.5],
 			id: "@bullet_" + this.id + "_" + ((Math.random() * 1e6) | 0),
 			playerId: this.id,
 			rotation: this.pos.directionTo(target.pos),
 			speed: 10,
-			distance: 10,
+			distance: this.range(),
 			isEnemy: true
 		}];
 	}

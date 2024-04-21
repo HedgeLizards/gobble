@@ -61,6 +61,18 @@ const weapons = [
 		"spread": 0.0,
 		"recoil_strength": 15.0,
 	},
+	{
+		"id": "Bow",
+		"texture": preload("res://assets/Knights/knight_bow.png"),
+		"stream": preload("res://sounds/SFX_HandGun_Fire.wav"), # TO DO: Replace with weapon-specific sound
+		"volume_db": 0.0,
+	},
+	{
+		"id": "Sword",
+		"texture": preload("res://assets/Knights/Knight_sword.png"),
+		"stream": preload("res://sounds/SFX_HandGun_Fire.wav"), # TO DO: Replace with weapon-specific sound
+		"volume_db": 0.0,
+	},
 ]
 var weapon_index:
 	set(value):
@@ -90,9 +102,9 @@ func _unhandled_input(event):
 	if event is InputEventMouseButton:
 		match event.button_index:
 			MOUSE_BUTTON_WHEEL_UP:
-				weapon_index = (-1 if weapon_index == weapons.size() - 1 else weapon_index) + 1
+				weapon_index = (-1 if weapon_index == (weapons.size() - 2) - 1 else weapon_index) + 1
 			MOUSE_BUTTON_WHEEL_DOWN:
-				weapon_index = (weapons.size() if weapon_index == 0 else weapon_index) - 1
+				weapon_index = ((weapons.size() - 2) if weapon_index == 0 else weapon_index) - 1
 	elif event is InputEventKey:
 		if event.keycode >= KEY_1 and event.keycode <= KEY_6 and event.pressed and not event.echo:
 			weapon_index = event.keycode - KEY_1

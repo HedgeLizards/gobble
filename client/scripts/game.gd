@@ -60,7 +60,7 @@ func update(actions):
 			var pos = parse_pos(action["pos"])
 			if entities.has(id):
 				entity = entities[id]
-				if not entity.enemy and entity.weapon.id != action["weapon"]:
+				if entity.weapon.id != action["weapon"]:
 					for weapon in %Me.weapons:
 						if weapon.id == action["weapon"]:
 							entity.weapon = weapon
@@ -77,15 +77,15 @@ func update(actions):
 					sprite.texture = load("%s/%s.png" % [ENEMY_SKINS_PATH, action["skin"]])
 				else:
 					sprite.texture = load("%s/%s" % [SKINS_PATH, action["skin"]])
-					for weapon in %Me.weapons:
-						if weapon.id == action["weapon"]:
-							entity.weapon = weapon
-							break
-					entity.get_node("Weapon").visible = true
-					entity.aim(action["aim"])
 					var label = entity.get_node("Label")
 					label.text = id
 					label.visible = true
+				for weapon in %Me.weapons:
+					if weapon.id == action["weapon"]:
+						entity.weapon = weapon
+						break
+				entity.get_node("Weapon").visible = true
+				entity.aim(action["aim"])
 				entity.skin = action["skin"]
 				%Entities.add_child(entity)
 				entity.position = pos
@@ -149,8 +149,7 @@ func _process(delta):
 			var p1 = entity.positions[1]
 			var t = (drawnTime - p0.time) / (p1.time - p0.time)
 			entity.position = p0.pos * (1-t) + p1.pos * t
-			if not entity.enemy:
-				entity.aim(lerp_angle(p0.aim, p1.aim, t))
+			entity.aim(lerp_angle(p0.aim, p1.aim, t))
 		entity.get_node("Sprite2D").animate(entity.position, previous_position, delta)
 
 class PositionSnapshot:
