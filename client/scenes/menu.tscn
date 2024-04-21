@@ -1,8 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://iosc17jma51k"]
+[gd_scene load_steps=10 format=3 uid="uid://iosc17jma51k"]
 
 [ext_resource type="Script" path="res://scripts/menu.gd" id="1_fc1m7"]
 [ext_resource type="Texture2D" uid="uid://d23jlntk3kgxp" path="res://assets/UI/Arrow.png" id="2_cw6uy"]
+[ext_resource type="AudioStream" uid="uid://dj60qq16rovbe" path="res://sounds/MUS_LOW_01.ogg" id="4_brhn7"]
+[ext_resource type="AudioStream" uid="uid://cfgof6jfllj37" path="res://sounds/UI_Arrow.wav" id="5_1ep5v"]
+[ext_resource type="AudioStream" uid="uid://dai8wwpv6umpn" path="res://sounds/UI_Typing.wav" id="5_a6wd8"]
 [ext_resource type="FontFile" uid="uid://chhjx2uirpf3r" path="res://assets/UI/Quicksand-Bold.otf" id="5_dh7dy"]
+[ext_resource type="AudioStream" uid="uid://q1lha6nklqno" path="res://sounds/UI_Enter.wav" id="7_fhamf"]
+
+[sub_resource type="AudioStreamInteractive" id="AudioStreamInteractive_1ww8b"]
+clip_count = 1
+clip_0/name = &"Low 01"
+clip_0/stream = ExtResource("4_brhn7")
+clip_0/auto_advance = 0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_tlmvn"]
+streams_count = 1
+stream_0/stream = ExtResource("5_a6wd8")
+stream_0/weight = 1.0
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -90,6 +105,25 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("5_dh7dy")
 theme_override_font_sizes/font_size = 32
 text = "Join"
+
+[node name="AudioStreamPlayer Music" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamInteractive_1ww8b")
+autoplay = true
+bus = &"Music"
+
+[node name="UI Audio" type="Node" parent="."]
+
+[node name="AudioStreamPlayer Arrow Click" type="AudioStreamPlayer" parent="UI Audio"]
+stream = ExtResource("5_1ep5v")
+bus = &"UI"
+
+[node name="AudioStreamPlayer Typing" type="AudioStreamPlayer" parent="UI Audio"]
+stream = SubResource("AudioStreamRandomizer_tlmvn")
+bus = &"UI"
+
+[node name="AudioStreamPlayer Join Click" type="AudioStreamPlayer" parent="UI Audio"]
+stream = ExtResource("7_fhamf")
+bus = &"UI"
 
 [connection signal="pressed" from="VBoxContainer/Identity/Previous" to="." method="_on_previous_pressed"]
 [connection signal="pressed" from="VBoxContainer/Identity/Next" to="." method="_on_next_pressed"]

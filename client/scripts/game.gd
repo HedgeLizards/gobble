@@ -59,10 +59,13 @@ func update(actions):
 				entity = Entity.instantiate()
 				entities[id] = entity
 				entity.enemy = action["isEnemy"]
+				var sprite = entity.get_node("Sprite2D")
 				if entity.enemy:
-					entity.get_node("Sprite2D").texture = load("res://assets/Knights/Knight_body.png")
+					sprite.wobble_amplitude = 1.0
+					sprite.wobble_speed = 10.0
+					sprite.texture = preload("res://assets/Knights/Knight_body.png")
 				else:
-					entity.get_node("Sprite2D").texture = load("%s/%s" % [SKINS_PATH, action["skin"]])
+					sprite.texture = load("%s/%s" % [SKINS_PATH, action["skin"]])
 				entity.skin = action["skin"]
 				%Entities.add_child(entity)
 				entity.position = pos
@@ -139,8 +142,7 @@ func _process(delta):
 			var p1 = entity.positions[1]
 			var t = (drawnTime - p0.time) / (p1.time - p0.time)
 			entity.position = p0.pos * (1-t) + p1.pos * t
-		if not is_equal_approx(entity.position.x, previous_position.x):
-			entity.get_node("Sprite2D").flip_h = (entity.position.x < previous_position.x)
+		entity.get_node("Sprite2D").animate(entity.position, previous_position, delta)
 
 class PositionSnapshot:
 	var pos: Vector2
