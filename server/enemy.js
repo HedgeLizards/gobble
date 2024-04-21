@@ -33,6 +33,7 @@ export class Enemy {
 			rotation: this.pos.directionTo(target.pos),
 			speed: 10,
 			distance: 10,
+			isEnemy: true
 		}];
 	}
 

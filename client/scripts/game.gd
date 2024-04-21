@@ -97,6 +97,10 @@ func update(actions):
 			bullet.rotation = action["rotation"]
 			bullet.speed = action["speed"]
 			bullet.distance = action["distance"]
+			bullet.is_enemy = action.get("isEnemy", false)
+			bullet.damage = action.get("damage", 0)
+			bullet.id = action["id"]
+			bullet.playerId = action.get("playerId")
 			%Projectiles.add_child(bullet)
 			remote_projectiles[action["id"]] =  bullet
 		elif type == "projectileRemoved":
