@@ -25,6 +25,14 @@ const weapons = [
 		"id": "Grenade Launcher",
 		"texture": preload("res://assets/Gobbles/Weapons/Gobble_Assault_Rifle.png")
 	},
+	{
+		"id": "Bow",
+		"texture": preload("res://assets/Knights/knight_bow.png")
+	},
+	{
+		"id": "Sword",
+		"texture": preload("res://assets/Knights/Knight_sword.png")
+	},
 ]
 
 var weapon_index:
