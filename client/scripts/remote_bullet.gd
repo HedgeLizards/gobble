@@ -21,7 +21,7 @@ const kinds = {
 }
 
 func _physics_process(delta):
-	move_local_x(speed * delta * 16)
+	move_local_x(speed * delta * 10)
 	distance -= speed * delta
 	if distance < 0:
 		queue_free()
