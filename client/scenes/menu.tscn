@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://iosc17jma51k"]
 
 [ext_resource type="Script" path="res://scripts/menu.gd" id="1_fc1m7"]
-[ext_resource type="Texture2D" uid="uid://ujhf7x4lgmp0" path="res://assets/UI/Arrow.png" id="2_cw6uy"]
+[ext_resource type="Texture2D" uid="uid://d23jlntk3kgxp" path="res://assets/UI/Arrow.png" id="2_cw6uy"]
 [ext_resource type="AudioStream" uid="uid://dj60qq16rovbe" path="res://sounds/MUS_LOW_01.ogg" id="4_brhn7"]
 [ext_resource type="AudioStream" uid="uid://cfgof6jfllj37" path="res://sounds/UI_Arrow.wav" id="5_1ep5v"]
 [ext_resource type="AudioStream" uid="uid://dai8wwpv6umpn" path="res://sounds/UI_Typing.wav" id="5_a6wd8"]
@@ -122,9 +122,11 @@ stream = SubResource("AudioStreamRandomizer_tlmvn")
 stream = ExtResource("7_fhamf")
 
 [connection signal="text_changed" from="VBoxContainer/Identity/Name" to="." method="_on_text_changed"]
-[connection signal="text_submitted" from="VBoxContainer/Identity/Name" to="." method="_on_name_text_submitted"]
+[connection signal="text_submitted" from="VBoxContainer/Identity/Name" to="." method="_on_text_submitted"]
 [connection signal="pressed" from="VBoxContainer/Identity/Previous" to="." method="_on_previous_pressed"]
 [connection signal="pressed" from="VBoxContainer/Identity/Next" to="." method="_on_next_pressed"]
 [connection signal="text_changed" from="VBoxContainer/Connection/Host" to="." method="_on_text_changed"]
+[connection signal="text_submitted" from="VBoxContainer/Connection/Host" to="." method="_on_text_submitted"]
 [connection signal="text_changed" from="VBoxContainer/Connection/Port" to="." method="_on_text_changed"]
+[connection signal="text_submitted" from="VBoxContainer/Connection/Port" to="." method="_on_text_submitted"]
 [connection signal="pressed" from="VBoxContainer/Connection/Join" to="." method="_on_join_pressed"]
