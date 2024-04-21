@@ -45,8 +45,7 @@ func process_data(data):
 		var camera = %Me.get_node("Camera2D")
 		camera.limit_right = world_size.x
 		camera.limit_bottom = world_size.y
-		%Environment.position = world_size / 2
-		
+		%SwordStone.position = world_size / 2
 
 func update(actions):
 	var time = float(Time.get_ticks_usec()) / 1e6

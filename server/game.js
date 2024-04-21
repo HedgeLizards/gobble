@@ -64,26 +64,7 @@ export class Game {
 			this.timeToSpawn = 2;
 		}
 		for (let enemy of this.enemies.values()) {
-			if (enemy.cooldown < 0) {
-				if (Math.random() < 0.01) {
-					// sometimes just wait a bit
-					enemy.cooldown = Math.random() * 0.5;
-					enemy.isAttacking = true;
-					continue;
-				}
-				enemy.isAttacking = false;
-				let [nearest, target, dist] = this.findNearestTarget(enemy.pos);
-				enemy.target = target;
-				if (dist < enemy.range()) {
-					actions.push(...enemy.attack(target));
-				}
-				enemy.cooldown = 0.5;
-			}
-			enemy.cooldown -= delta;
-			if (!enemy.isAttacking) {
-				let movement = enemy.targetPos().sub(enemy.pos).truncate(2 * delta);
-				enemy.pos = enemy.pos.add(movement);
-			}
+			actions.push(...enemy.update(delta, this))
 		}
 
 		for (let removed of this.removed) {
@@ -92,9 +73,6 @@ export class Game {
 		this.removed = [];
 		for (let player of this.players.values()){
 			actions.push(player.view());
-		}
-		for (let enemy of this.enemies.values()){
-			actions.push(enemy.view());
 		}
 		return actions;
 	}
@@ -105,7 +83,7 @@ export class Game {
 		let target = {pos: this.center()};
 		for (let player of this.players.values()) {
 			let dist = pos.distanceTo(player.pos);
-			if (dist < nearestDist && dist < 20) {
+			if (dist < nearestDist) {
 				nearest = player.pos;
 				nearestDist = dist;
 				target = player;

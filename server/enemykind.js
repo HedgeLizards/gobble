@@ -2,14 +2,12 @@
 
 export class EnemyKind {
 
-	constructor(skin, health, range, weapon, projectile) {
-		this.skin = skin;
-		this.health = health;
-		this.range = range;
-		this.weapon = weapon;
-		this.projectile = projectile;
+	constructor(args) {
+		this.attackCooldown = 1;
+		this.speed = 2;
+		Object.assign(this, args);
 	}
 }
 
-EnemyKind.Knight = new EnemyKind("knight", 10, 1, "Sword", "sword");
-EnemyKind.Archer = new EnemyKind("archer", 10, 10, "Bow", "arrow");
+EnemyKind.Knight = new EnemyKind({skin: "knight", health: 10, range: 1, weapon: "Sword", projectile: "sword"});
+EnemyKind.Archer = new EnemyKind({skin: "archer", health: 10, range: 10, weapon: "Bow", projectile: "arrow"});
