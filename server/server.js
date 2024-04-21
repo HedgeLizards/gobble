@@ -89,6 +89,10 @@ class Serv {
 					this.broadcast({type: "update", actions: [response]});
 				} else if (data.type === "impactProjectile") {
 					game.hitEnemy(data.impactedId, data.damage)
+					let response = {};
+					Object.assign(response, data);
+					response.type = "projectileRemoved";
+					this.broadcast({type: "update", actions: [response]});
 				}
 			});
 		});
