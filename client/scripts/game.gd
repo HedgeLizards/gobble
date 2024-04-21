@@ -8,7 +8,6 @@ var entities = {}
 var remote_projectiles = {}
 var world_size = Vector2(1, 1)
 var world_tile_size = Vector2(1, 1)
-var drawnTime = 0
 
 func _ready():
 	%Me.get_node("Sprite2D").texture = load("%s/%s" % [SKINS_PATH, WebSocket.local_player_skin])
@@ -103,14 +102,7 @@ func parse_pos(serverpos):
 
 func _process(delta):
 	var time = float(Time.get_ticks_usec()) / 1e6
-	if drawnTime < time - 0.5:
-		var drawnTime = time - 0.2
-	if drawnTime < time - 0.25:
-		drawnTime += delta * 1.2
-	elif drawnTime > time - 0.15:
-		drawnTime += delta * 0.8
-	else:
-		drawnTime += delta
+	var drawnTime = time - 0.2
 	
 	for entity in entities.values():
 		if entity.positions.size() < 2:
