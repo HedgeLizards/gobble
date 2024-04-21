@@ -63,7 +63,8 @@ func _physics_process(delta):
 				error.visible = true
 				
 				connecting = false
-			
+
+			socket = WebSocketPeer.new()
 			set_physics_process(false)
 
 func send(message):
