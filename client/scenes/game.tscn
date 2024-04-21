@@ -1,12 +1,27 @@
-[gd_scene load_steps=4 format=3 uid="uid://011l66vx15oa"]
+[gd_scene load_steps=5 format=3 uid="uid://011l66vx15oa"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_uuqp6"]
 [ext_resource type="PackedScene" uid="uid://ck2q3henidk1g" path="res://scenes/me.tscn" id="2_m0nq5"]
 [ext_resource type="PackedScene" uid="uid://4eknfuxsf3q3" path="res://scenes/environment.tscn" id="3_aa5wh"]
+[ext_resource type="Texture2D" uid="uid://bs6jstdyrmwss" path="res://assets/World/GrassTile.png" id="4_jlxtf"]
 
 [node name="Game" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_uuqp6")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_right = 2048.0
+offset_bottom = 2048.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_jlxtf")
+stretch_mode = 1
 
 [node name="Environment" parent="." instance=ExtResource("3_aa5wh")]
 unique_name_in_owner = true
