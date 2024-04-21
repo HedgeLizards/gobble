@@ -20,4 +20,5 @@ func _on_label_resized():
 	$Label.position.x = (-$Label.size.x / 2.0 + 0.5) * $Label.scale.x
 
 func shoot():
-	print("shooting from ", id)
+	# TO DO: Add weapon selection logic; sound needs to match the weapon.
+	$Shoot.play()

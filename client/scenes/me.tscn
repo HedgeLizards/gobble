@@ -11,6 +11,12 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g3144"]
 size = Vector2(12, 12)
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_1epfc"]
+random_pitch = 1.05
+streams_count = 1
+stream_0/stream = ExtResource("6_ne6rv")
+stream_0/weight = 1.0
+
 [node name="Me" type="CharacterBody2D"]
 script = ExtResource("1_emed8")
 
@@ -57,7 +63,11 @@ theme_override_font_sizes/font_size = 40
 horizontal_alignment = 1
 
 [node name="Shoot" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("6_ne6rv")
+stream = SubResource("AudioStreamRandomizer_1epfc")
+max_distance = 500.0
+attenuation = 3.0
+max_polyphony = 6
+panning_strength = 10.0
 bus = &"SFX"
 
 [connection signal="resized" from="Label" to="." method="_on_label_resized"]

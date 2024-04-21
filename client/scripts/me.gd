@@ -21,6 +21,7 @@ func _physics_process(delta):
 	%Weapon.rotation = fposmod(%Weapon.rotation, TAU)
 	%Weapon.scale.y = -1 if %Weapon.rotation > 0.5 * PI && %Weapon.rotation < 1.5 * PI else 1
 	if Input.is_action_pressed("shoot") && cooldown < 0:
+		# TO DO: Add weapon selection logic; sound needs to match the weapon.
 		$Shoot.play()
 		shoot()
 
