@@ -139,9 +139,11 @@ func shoot():
 			"rotation": bullet.rotation,
 			"speed": bullet.speed / 16,
 			"distance": bullet.distance / 16,
-			"isEnemy": false
+			"isEnemy": false,
+			"kind": weapons[weapon_index].get("bullet", "bullet"),
 		})
 	$Camera2D.recoil(-direction, weapon.recoil_strength)
+
 
 func is_me():
 	return true

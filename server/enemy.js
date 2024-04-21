@@ -42,7 +42,8 @@ export class Enemy {
 			rotation: this.pos.directionTo(target.pos),
 			speed: 10,
 			distance: this.range(),
-			isEnemy: true
+			isEnemy: true,
+			kind: this.kind.projectile,
 		}];
 	}
 

@@ -11,12 +11,8 @@ func _physics_process(delta):
 	if distance < 0:
 		queue_free()
 
-
-
-
 func _on_area_entered(area: Area2D) -> void:
 	if area.has_method("is_enemy") and area.is_enemy():
-		
 		WebSocket.send({
 			"type": "impactProjectile",
 			"playerId": WebSocket.local_player_name,

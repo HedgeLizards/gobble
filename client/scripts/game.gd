@@ -104,6 +104,7 @@ func update(actions):
 				shooter.shoot()
 				
 			var bullet = RemoteBullet.instantiate()
+			bullet.set_kind(action.get("kind", "bullet"))
 			bullet.position = parse_pos(action["pos"])
 			bullet.rotation = action["rotation"]
 			bullet.speed = action["speed"]

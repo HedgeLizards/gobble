@@ -6,14 +6,25 @@ var is_enemy: bool
 var id
 var playerId
 var damage
+var kind: String
+
+const kinds = {
+	"bullet": {
+		"sprite": preload("res://scenes/Projectiles/bullet.tscn")
+	},
+	"arrow": {
+		"sprite": preload("res://scenes/Projectiles/arrow.tscn")
+	},
+	"sword": {
+		"sprite": preload("res://scenes/Projectiles/sword.tscn")
+	}
+}
 
 func _physics_process(delta):
+	move_local_x(speed * delta * 16)
 	distance -= speed * delta
 	if distance < 0:
 		queue_free()
-	move_local_x(speed * delta * 16)
-
-
 
 func _on_body_entered(body: Node2D) -> void:
 	if is_enemy && body.has_method("is_me") and body.is_me():
@@ -24,5 +35,11 @@ func _on_body_entered(body: Node2D) -> void:
 			"impactedId": WebSocket.local_player_name,
 			"pos": [position.x / 16, position.y / 16],
 			"damage": damage,
+			"kind": kind
 		})
 		queue_free()
+
+func set_kind(kind: String) -> void:
+	self.kind = kind
+	var sprite = kinds[kind].sprite.instantiate()
+	add_child(sprite)
