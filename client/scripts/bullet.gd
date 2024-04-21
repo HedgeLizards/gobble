@@ -1,6 +1,6 @@
 extends Area2D
 
-const speed := 20.0 * 16
+const speed := 60.0 * 16
 var distance := 256.0
 var id: String
 const damage := 5.0

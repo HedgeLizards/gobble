@@ -43,9 +43,6 @@ func _unhandled_key_input(event):
 		KEY_ENTER:
 			if $VBoxContainer/Identity/Name.has_focus():
 				_on_join_pressed()
-	
-	# PLEASE NOTE:
-	# I expect this sound to also play in-game, but that should not be the case.
 	$"UI Audio/AudioStreamPlayer Typing".play()
 
 func _on_previous_pressed():
