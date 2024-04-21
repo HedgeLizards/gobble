@@ -65,6 +65,12 @@ export class Game {
 		}
 		for (let enemy of this.enemies.values()) {
 			if (enemy.cooldown < 0) {
+				if (Math.random() < 0.01) {
+					// sometimes just wait a bit
+					enemy.cooldown = Math.random() * 0.5;
+					enemy.isAttacking = true;
+					continue;
+				}
 				enemy.isAttacking = false;
 				let [nearest, target, dist] = this.findNearestTarget(enemy.pos);
 				enemy.target = target;

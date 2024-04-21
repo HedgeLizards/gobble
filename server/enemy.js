@@ -39,7 +39,7 @@ export class Enemy {
 			playerId: this.id,
 			rotation: this.pos.directionTo(target.pos),
 			speed: 10,
-			distance: 10,
+			distance: this.range(),
 			isEnemy: true
 		}];
 	}
