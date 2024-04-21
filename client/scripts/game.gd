@@ -88,6 +88,10 @@ func update(actions):
 			var playerId = action["playerId"]
 			if typeof(playerId) == typeof(WebSocket.local_player_name) &&  playerId == WebSocket.local_player_name:
 				continue
+			var shooter = entities.get(playerId)
+			if shooter:
+				shooter.shoot()
+				
 			var bullet = RemoteBullet.instantiate()
 			bullet.position = parse_pos(action["pos"])
 			bullet.rotation = action["rotation"]
