@@ -99,7 +99,7 @@ func _on_label_resized():
 	$Label.position.x = (-$Label.size.x / 2.0 + 0.5) * $Label.scale.x
 
 func _unhandled_input(event):
-	if event is InputEventMouseButton:
+	if event is InputEventMouseButton and event.pressed:
 		match event.button_index:
 			MOUSE_BUTTON_WHEEL_UP:
 				weapon_index = (-1 if weapon_index == (weapons.size() - 2) - 1 else weapon_index) + 1
