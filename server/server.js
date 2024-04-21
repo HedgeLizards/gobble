@@ -75,6 +75,7 @@ class Serv {
 					response.type = "projectileCreated";
 					this.broadcast({type: "update", actions: [response]});
 				} else if (data.type === "impactProjectile") {
+					game.hitEnemy(data.impactedId, data.damage)
 					// todo: damage/kill enemy
 					let response = {};
 					Object.assign(response, data);

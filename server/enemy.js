@@ -5,6 +5,7 @@ export class Enemy {
 	constructor(id, pos) {
 		this.id = id;
 		this.pos = pos;
+		this.health = 10;
 	}
 
 	view() {

@@ -43,6 +43,17 @@ export class Game {
 		this.enemies.set(enemy.id, enemy);
 	}
 
+	hitEnemy(enemyId, damage) {
+		let enemy = this.enemies.get(enemyId);
+		if (!enemy) { return; }
+		enemy.health -= damage;
+		if (enemy.health <= 0) {
+			this.removed.push(enemyId);
+			this.enemies.delete(enemyId);
+		}
+
+	}
+
 	update(delta) {
 		++this.tick;
 		this.timeToSpawn -= delta;
