@@ -8,6 +8,7 @@ var entities = {}
 var remote_projectiles = {}
 var world_size = Vector2(1, 1)
 var world_tile_size = Vector2(1, 1)
+var drawnTime = 0
 
 func _ready():
 	%Me.get_node("Sprite2D").texture = load("%s/%s" % [SKINS_PATH, WebSocket.local_player_skin])
@@ -94,19 +95,6 @@ func update(actions):
 			remote_projectiles.erase(action["id"])
 		else:
 			print("unknown action ", action)
-		#elif type == "enemyUpdated":
-			#var id = action["id"]
-			#var enemy
-			#var pos = parse_pos(action["pos"])
-			#if enemies.has(id):
-				#enemy = enemies[id]
-			#else:
-				#enemy = Enemy.instantiate()
-				#enemies[id] = enemy
-				#%Enemies.add_child(enemy)
-				#enemy.position = pos
-			#enemy.positions.push_back(PositionSnapshot.new(pos, tick))
-			##enemy.position = pos
 			
 	
 
@@ -115,19 +103,14 @@ func parse_pos(serverpos):
 
 func _process(delta):
 	var time = float(Time.get_ticks_usec()) / 1e6
-	var drawnTime = time - 0.2
-	#if tick - drawnTick > 5:
-		#drawnTick = tick - 2
-		#print("time jump ", WebSocket.local_player_name)
-		#print("delta ", delta)
-	#else:
-		#var catchup = 1
-		#if tick - drawnTick > 2:
-			#catchup *= 1.2
-		#elif tick - drawnTick < 1:
-			#catchup *= 0.8
-		#drawnTick += delta / tick_duration * catchup
-	
+	if drawnTime < time - 0.5:
+		var drawnTime = time - 0.2
+	if drawnTime < time - 0.25:
+		drawnTime += delta * 1.2
+	elif drawnTime > time - 0.15:
+		drawnTime += delta * 0.8
+	else:
+		drawnTime += delta
 	
 	for entity in entities.values():
 		if entity.positions.size() < 2:

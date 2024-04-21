@@ -105,7 +105,7 @@ class Serv {
 }
 
 function send_error(socket, msg) {
-	console.warn(msg);
+	console.warn("Player error", msg);
 	socket.close(1002, msg);
 }
 
