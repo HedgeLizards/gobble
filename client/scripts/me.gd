@@ -6,7 +6,7 @@ const weapons = [
 		"texture": preload("res://assets/Gobbles/Weapons/Gobble_Gun.png"),
 		"stream": preload("res://sounds/SFX_HandGun_Fire.wav"),
 		"volume_db": 0.0,
-		"cooldown": 0.5,
+		"cooldown": 0.6,
 		"bullets": 1,
 		"spread": PI / 180 * 5,
 		"recoil_strength": 3.5,
