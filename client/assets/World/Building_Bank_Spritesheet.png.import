@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bllkpilogsiwg"
-path="res://.godot/imported/Building_Bank.png-5505f786d7c7f94d42abe7b0e9670ae5.ctex"
+uid="uid://dxua1cs0x5au2"
+path="res://.godot/imported/Building_Bank_Spritesheet.png-158c99b6494019056e88244efa27bd54.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/World/Building_Bank.png"
-dest_files=["res://.godot/imported/Building_Bank.png-5505f786d7c7f94d42abe7b0e9670ae5.ctex"]
+source_file="res://assets/World/Building_Bank_Spritesheet.png"
+dest_files=["res://.godot/imported/Building_Bank_Spritesheet.png-158c99b6494019056e88244efa27bd54.ctex"]
 
 [params]
 
