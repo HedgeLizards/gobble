@@ -64,7 +64,7 @@ class Serv {
 						send_error(socket, "invalid name " + name);
 						return
 					}
-					let err = this.game.addPlayer(new Player(name, data.skin, new Vec2(...data.pos)));
+					let err = this.game.addPlayer(new Player(name, data.skin, new Vec2(...data.pos), data.aim));
 					if (err) {
 						send_error(socket, err);
 						return
@@ -77,7 +77,7 @@ class Serv {
 						send_error(socket, "Who the fuck are you?");
 						return
 					}
-					let player = new Player(name, this.game.players.get(name).skin, new Vec2(...data.pos))
+					let player = new Player(name, this.game.players.get(name).skin, new Vec2(...data.pos), data.aim)
 					let err = this.game.updatePlayer(player);
 					if (err) {
 						send_error(socket, err);

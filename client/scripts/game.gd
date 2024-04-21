@@ -16,13 +16,15 @@ func _ready():
 		"type": "createPlayer",
 		"id": WebSocket.local_player_name,
 		"skin": WebSocket.local_player_skin,
-		"pos": [%Me.position.x / 16, %Me.position.y / 16]
+		"pos": [%Me.position.x / 16, %Me.position.y / 16],
+		"aim": %Me.get_node('%Gun').rotation,
 	})
 
 func _physics_process(delta):
 	WebSocket.send({
 		"type": "updatePlayer",
-		"pos": [%Me.position.x / 16, %Me.position.y / 16]
+		"pos": [%Me.position.x / 16, %Me.position.y / 16],
+		"aim": %Me.get_node('%Gun').rotation,
 	})
 
 func _unhandled_key_input(event):
@@ -67,10 +69,12 @@ func update(actions):
 					sprite.texture = preload("res://assets/Knights/Knight_body.png")
 				else:
 					sprite.texture = load("%s/%s" % [SKINS_PATH, action["skin"]])
+					entity.get_node("Weapon/Sprite2D").texture = preload("res://assets/Gobbles/Weapons/Gobble_Gun.png")
+					entity.aim(action["aim"])
 				entity.skin = action["skin"]
 				%Entities.add_child(entity)
 				entity.position = pos
-			entity.positions.push_back(PositionSnapshot.new(pos, time))
+			entity.positions.push_back(PositionSnapshot.new(pos, action.get("aim", 0.0), time))
 		elif type == "entityDeleted":
 			var id = action["id"]
 			entities[id].queue_free()
@@ -113,16 +117,22 @@ func _process(delta):
 		var previous_position = entity.position
 		if entity.positions.size() < 2:
 			entity.position = entity.positions[0].pos
+			if not entity.enemy:
+				entity.aim(entity.positions[0].aim)
 		else:
 			var p0 = entity.positions[0]
 			var p1 = entity.positions[1]
 			var t = (drawnTime - p0.time) / (p1.time - p0.time)
 			entity.position = p0.pos * (1-t) + p1.pos * t
+			if not entity.enemy:
+				entity.aim(lerp_angle(p0.aim, p1.aim, t))
 		entity.get_node("Sprite2D").animate(entity.position, previous_position, delta)
 
 class PositionSnapshot:
 	var pos: Vector2
+	var aim: float
 	var time: float
-	func _init(pos, time):
+	func _init(pos, aim, time):
 		self.pos = pos
+		self.aim = aim
 		self.time = time
