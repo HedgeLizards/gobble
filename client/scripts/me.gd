@@ -8,28 +8,28 @@ const weapons = [
 		"volume_db": 0.0,
 		"cooldown": 0.5,
 		"bullets": 1,
-		"spread": PI / 5.0,
-		"recoil_strength": 1.5,
+		"spread": PI / 180 * 5,
+		"recoil_strength": 3.5,
 	},
 	{
 		"id": "Automatic Rifle",
 		"texture": preload("res://assets/Gobbles/Weapons/Gobble_Assault_Rifle.png"),
 		"stream": preload("res://sounds/SFX_AutomaticRifle_Fire.wav"),
 		"volume_db": 0.0,
-		"cooldown": 0.2,
+		"cooldown": 0.1,
 		"bullets": 1,
-		"spread": PI / 5.0,
-		"recoil_strength": 1.5,
+		"spread": PI / 180 * 5,
+		"recoil_strength": 3.5,
 	},
 	{
 		"id": "Minigun",
 		"texture": preload("res://assets/Gobbles/Weapons/Gobble_Minigun.png"),
 		"stream": preload("res://sounds/SFX_HandGun_Fire.wav"), # TO DO: Replace with weapon-specific sound
 		"volume_db": 0.0,
-		"cooldown": 0.1,
+		"cooldown": 0.025,
 		"bullets": 1,
-		"spread": PI / 2.5,
-		"recoil_strength": 1.5,
+		"spread": PI / 180 * 10,
+		"recoil_strength": 3.5,
 	},
 	{
 		"id": "Sniper Rifle",
@@ -39,7 +39,7 @@ const weapons = [
 		"cooldown": 5.0,
 		"bullets": 1,
 		"spread": 0.0,
-		"recoil_strength": 5.0,
+		"recoil_strength": 7.5,
 	},
 	{
 		"id": "Shotgun",
@@ -47,8 +47,8 @@ const weapons = [
 		"stream": preload("res://sounds/SFX_Shotgun_Fire.wav"),
 		"volume_db": 0.0,
 		"cooldown": 1.5,
-		"bullets": 3,
-		"spread": PI / 2.5,
+		"bullets": 5,
+		"spread": PI / 180 * 20,
 		"recoil_strength": 5.0,
 	},
 	{
@@ -65,13 +65,13 @@ const weapons = [
 		"id": "Bow",
 		"texture": preload("res://assets/Knights/knight_bow.png"),
 		"stream": preload("res://sounds/SFX_HandGun_Fire.wav"), # TO DO: Replace with weapon-specific sound
-		"volume_db": 0.0,
+		"volume_db": -80.0,
 	},
 	{
 		"id": "Sword",
 		"texture": preload("res://assets/Knights/Knight_sword.png"),
 		"stream": preload("res://sounds/SFX_HandGun_Fire.wav"), # TO DO: Replace with weapon-specific sound
-		"volume_db": 0.0,
+		"volume_db": -80.0,
 	},
 ]
 var weapon_index:
