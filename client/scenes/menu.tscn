@@ -121,6 +121,10 @@ stream = SubResource("AudioStreamRandomizer_tlmvn")
 [node name="AudioStreamPlayer Join Click" type="AudioStreamPlayer" parent="UI Audio"]
 stream = ExtResource("7_fhamf")
 
+[connection signal="text_changed" from="VBoxContainer/Identity/Name" to="." method="_on_text_changed"]
+[connection signal="text_submitted" from="VBoxContainer/Identity/Name" to="." method="_on_name_text_submitted"]
 [connection signal="pressed" from="VBoxContainer/Identity/Previous" to="." method="_on_previous_pressed"]
 [connection signal="pressed" from="VBoxContainer/Identity/Next" to="." method="_on_next_pressed"]
+[connection signal="text_changed" from="VBoxContainer/Connection/Host" to="." method="_on_text_changed"]
+[connection signal="text_changed" from="VBoxContainer/Connection/Port" to="." method="_on_text_changed"]
 [connection signal="pressed" from="VBoxContainer/Connection/Join" to="." method="_on_join_pressed"]
