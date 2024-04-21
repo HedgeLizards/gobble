@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dhsn1is84auq8"
-path="res://.godot/imported/stone_wall_obstacle_2.png-7778a3905de71629b612d9b6c4a54d1f.ctex"
+path="res://.godot/imported/Stone_wall_obstacle_2.png-20eef3880577b5644f0ddbda88efd953.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/World/stone_wall_obstacle_2.png"
-dest_files=["res://.godot/imported/stone_wall_obstacle_2.png-7778a3905de71629b612d9b6c4a54d1f.ctex"]
+source_file="res://assets/World/Stone_wall_obstacle_2.png"
+dest_files=["res://.godot/imported/Stone_wall_obstacle_2.png-20eef3880577b5644f0ddbda88efd953.ctex"]
 
 [params]
 

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c1hyn26uppex2"
-path="res://.godot/imported/stone_pebbles_2.png-c4fea427111110c9163db05ffc2db362.ctex"
+path="res://.godot/imported/Stone_pebbles_2.png-01a825f51dc19790210d08afdcd85730.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/World/stone_pebbles_2.png"
-dest_files=["res://.godot/imported/stone_pebbles_2.png-c4fea427111110c9163db05ffc2db362.ctex"]
+source_file="res://assets/World/Stone_pebbles_2.png"
+dest_files=["res://.godot/imported/Stone_pebbles_2.png-01a825f51dc19790210d08afdcd85730.ctex"]
 
 [params]
 
