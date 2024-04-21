@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/animate.gd" id="3_uem7m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f7u7y"]
+size = Vector2(10, 16)
 
 [node name="Entity" type="Area2D"]
 script = ExtResource("1_j510w")
