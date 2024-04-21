@@ -1,15 +1,61 @@
 extends CharacterBody2D
 
+const weapons = [
+	{
+		"id": "Simple Hand Gun",
+		"texture": preload("res://assets/Gobbles/Weapons/Gobble_Gun.png")
+	},
+	{
+		"id": "Automatic Rifle",
+		"texture": preload("res://assets/Gobbles/Weapons/Gobble_Assault_Rifle.png")
+	},
+	{
+		"id": "Minigun",
+		"texture": preload("res://assets/Gobbles/Weapons/Gobble_Minigun.png")
+	},
+	{
+		"id": "Sniper Rifle",
+		"texture": preload("res://assets/Gobbles/Weapons/Gobble_Sniper.png")
+	},
+	{
+		"id": "Shotgun",
+		"texture": preload("res://assets/Gobbles/Weapons/Gobble_Shotgun.png")
+	},
+	{
+		"id": "Grenade Launcher",
+		"texture": preload("res://assets/Gobbles/Weapons/Gobble_Assault_Rifle.png")
+	},
+]
+
+var weapon_index:
+	set(value):
+		weapon_index = value
+		
+		$Weapon/Sprite2D.texture = weapons[weapon_index].texture
+
 const speed := 10 * 16
 var cooldown := 0.0
 
 const Bullet = preload("res://scenes/bullet.tscn")
 
 func _ready():
+	weapon_index = 0
+	
 	$Label.text = WebSocket.local_player_name
 
 func _on_label_resized():
 	$Label.position.x = (-$Label.size.x / 2.0 + 0.5) * $Label.scale.x
+
+func _unhandled_input(event):
+	if event is InputEventMouseButton:
+		match event.button_index:
+			MOUSE_BUTTON_WHEEL_UP:
+				weapon_index = (-1 if weapon_index == weapons.size() - 1 else weapon_index) + 1
+			MOUSE_BUTTON_WHEEL_DOWN:
+				weapon_index = (weapons.size() if weapon_index == 0 else weapon_index) - 1
+	elif event is InputEventKey:
+		if event.keycode >= KEY_1 and event.keycode <= KEY_6 and event.pressed and not event.echo:
+			weapon_index = event.keycode - KEY_1
 
 func _physics_process(delta):
 	cooldown -= delta

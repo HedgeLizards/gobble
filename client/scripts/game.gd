@@ -18,6 +18,7 @@ func _ready():
 		"skin": WebSocket.local_player_skin,
 		"pos": [%Me.position.x / 16, %Me.position.y / 16],
 		"aim": %Me.get_node("%Weapon").rotation,
+		"weapon": %Me.weapons[$Me.weapon_index].id,
 	})
 
 func _physics_process(delta):
@@ -25,6 +26,7 @@ func _physics_process(delta):
 		"type": "updatePlayer",
 		"pos": [%Me.position.x / 16, %Me.position.y / 16],
 		"aim": %Me.get_node("%Weapon").rotation,
+		"weapon": %Me.weapons[$Me.weapon_index].id,
 	})
 
 func _unhandled_key_input(event):
@@ -57,6 +59,11 @@ func update(actions):
 			var pos = parse_pos(action["pos"])
 			if entities.has(id):
 				entity = entities[id]
+				if not entity.enemy and entity.weapon.id != action["weapon"]:
+					for weapon in %Me.weapons:
+						if weapon.id == action["weapon"]:
+							entity.weapon = weapon
+							break
 			else:
 				entity = Entity.instantiate()
 				entities[id] = entity
@@ -69,7 +76,10 @@ func update(actions):
 					sprite.texture = preload("res://assets/Knights/Knight_body.png")
 				else:
 					sprite.texture = load("%s/%s" % [SKINS_PATH, action["skin"]])
-					entity.get_node("Weapon/Sprite2D").texture = preload("res://assets/Gobbles/Weapons/Gobble_Gun.png")
+					for weapon in %Me.weapons:
+						if weapon.id == action["weapon"]:
+							entity.weapon = weapon
+							break
 					entity.get_node("Weapon").visible = true
 					entity.aim(action["aim"])
 					var label = entity.get_node("Label")

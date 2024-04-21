@@ -77,7 +77,7 @@ class Serv {
 						send_error(socket, "Who the fuck are you?");
 						return
 					}
-					let player = new Player(name, this.game.players.get(name).skin, new Vec2(...data.pos), data.aim)
+					let player = new Player(name, this.game.players.get(name).skin, new Vec2(...data.pos), data.aim, data.weapon)
 					let err = this.game.updatePlayer(player);
 					if (err) {
 						send_error(socket, err);
