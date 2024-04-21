@@ -8,6 +8,9 @@ const Bullet = preload("res://scenes/bullet.tscn")
 func _ready():
 	$Label.text = WebSocket.local_player_name
 
+func _on_label_resized():
+	$Label.position.x = (-$Label.size.x / 2.0 + 0.5) * $Label.scale.x
+
 func _physics_process(delta):
 	cooldown -= delta
 	var previous_position = position
