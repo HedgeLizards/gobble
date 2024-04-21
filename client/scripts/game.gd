@@ -17,14 +17,14 @@ func _ready():
 		"id": WebSocket.local_player_name,
 		"skin": WebSocket.local_player_skin,
 		"pos": [%Me.position.x / 16, %Me.position.y / 16],
-		"aim": %Me.get_node('%Gun').rotation,
+		"aim": %Me.get_node("%Weapon").rotation,
 	})
 
 func _physics_process(delta):
 	WebSocket.send({
 		"type": "updatePlayer",
 		"pos": [%Me.position.x / 16, %Me.position.y / 16],
-		"aim": %Me.get_node('%Gun').rotation,
+		"aim": %Me.get_node("%Weapon").rotation,
 	})
 
 func _unhandled_key_input(event):
@@ -70,7 +70,11 @@ func update(actions):
 				else:
 					sprite.texture = load("%s/%s" % [SKINS_PATH, action["skin"]])
 					entity.get_node("Weapon/Sprite2D").texture = preload("res://assets/Gobbles/Weapons/Gobble_Gun.png")
+					entity.get_node("Weapon").visible = true
 					entity.aim(action["aim"])
+					var label = entity.get_node("Label")
+					label.text = id
+					label.visible = true
 				entity.skin = action["skin"]
 				%Entities.add_child(entity)
 				entity.position = pos

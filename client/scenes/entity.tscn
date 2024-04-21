@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://ctxa2np5m35ul"]
 
 [ext_resource type="Script" path="res://scripts/entity.gd" id="1_j510w"]
-[ext_resource type="Texture2D" uid="uid://deyn7f3hkh2hf" path="res://assets/Gobbles/Skins/Gobble_body2.png" id="2_kbsa2"]
+[ext_resource type="FontFile" uid="uid://chhjx2uirpf3r" path="res://assets/UI/Quicksand-Bold.otf" id="3_0jxe8"]
 [ext_resource type="Script" path="res://scripts/animate.gd" id="3_uem7m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f7u7y"]
@@ -10,7 +10,6 @@
 script = ExtResource("1_j510w")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_kbsa2")
 offset = Vector2(0, -8)
 script = ExtResource("3_uem7m")
 
@@ -19,7 +18,24 @@ position = Vector2(0, -8)
 shape = SubResource("RectangleShape2D_f7u7y")
 
 [node name="Weapon" type="Node2D" parent="."]
-position = Vector2(0, -8)
+visible = false
+position = Vector2(0, -6)
 
 [node name="Sprite2D" type="Sprite2D" parent="Weapon"]
 offset = Vector2(9, 1)
+
+[node name="Label" type="Label" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -25.0
+offset_right = 1.0
+offset_bottom = -19.0625
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.501961)
+theme_override_fonts/font = ExtResource("3_0jxe8")
+theme_override_font_sizes/font_size = 5
