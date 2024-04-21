@@ -42,7 +42,7 @@ func _unhandled_key_input(event):
 func _on_text_changed(_new_text):
 	$"UI Audio/AudioStreamPlayer Typing".play()
 
-func _on_name_text_submitted(new_text):
+func _on_text_submitted(new_text):
 	_on_join_pressed()
 
 func _on_previous_pressed():

@@ -31,6 +31,7 @@ func shoot():
 	bullet.id = "@bullet_"+WebSocket.local_player_name + str(randi())
 	bullet.position = %Muzzle.global_position
 	bullet.rotation = %Muzzle.global_rotation
+	$Camera2D.recoil(-%Muzzle.global_rotation)
 	$'../Projectiles'.add_child(bullet)
 	WebSocket.send({
 		"type": "createProjectile",

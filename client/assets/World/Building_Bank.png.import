@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bllkpilogsiwg"
-path="res://.godot/imported/building_bank.png-4379ef16059855c612410e6003e0b613.ctex"
+path="res://.godot/imported/Building_Bank.png-5505f786d7c7f94d42abe7b0e9670ae5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/World/building_bank.png"
-dest_files=["res://.godot/imported/building_bank.png-4379ef16059855c612410e6003e0b613.ctex"]
+source_file="res://assets/World/Building_Bank.png"
+dest_files=["res://.godot/imported/Building_Bank.png-5505f786d7c7f94d42abe7b0e9670ae5.ctex"]
 
 [params]
 

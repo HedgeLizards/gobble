@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://ctxa2np5m35ul"]
+[gd_scene load_steps=8 format=3 uid="uid://ctxa2np5m35ul"]
 
 [ext_resource type="Script" path="res://scripts/entity.gd" id="1_j510w"]
 [ext_resource type="FontFile" uid="uid://chhjx2uirpf3r" path="res://assets/UI/Quicksand-Bold.otf" id="3_0jxe8"]
