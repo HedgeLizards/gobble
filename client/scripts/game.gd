@@ -1,6 +1,7 @@
 extends Node2D
 
 const SKINS_PATH = "res://assets/Gobbles/Skins"
+const ENEMY_SKINS_PATH = "res://assets/Knights/Skins"
 #const Player = preload("res://scenes/player.tscn")
 const Entity = preload("res://scenes/entity.tscn")
 const RemoteBullet = preload("res://scenes/remote_bullet.tscn")
@@ -66,7 +67,7 @@ func update(actions):
 				if entity.enemy:
 					sprite.wobble_amplitude = 1.0
 					sprite.wobble_speed = 10.0
-					sprite.texture = preload("res://assets/Knights/Knight_body.png")
+					sprite.texture = load("%s/%s.png" % [ENEMY_SKINS_PATH, action["skin"]])
 				else:
 					sprite.texture = load("%s/%s" % [SKINS_PATH, action["skin"]])
 					entity.get_node("Weapon/Sprite2D").texture = preload("res://assets/Gobbles/Weapons/Gobble_Gun.png")

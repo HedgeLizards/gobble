@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://buayqqecww3pa"
-path="res://.godot/imported/Stone_pebbles_1.png-30a9d7a0ea1a7ee90efbf3c9b40e1844.ctex"
+uid="uid://bariej6wsrkto"
+path="res://.godot/imported/archer_body.png-f02693c1b67d9581eae488e443fb8e04.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/World/Stone_pebbles_1.png"
-dest_files=["res://.godot/imported/Stone_pebbles_1.png-30a9d7a0ea1a7ee90efbf3c9b40e1844.ctex"]
+source_file="res://assets/Knights/archer_body.png"
+dest_files=["res://.godot/imported/archer_body.png-f02693c1b67d9581eae488e443fb8e04.ctex"]
 
 [params]
 

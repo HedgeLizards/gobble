@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://buayqqecww3pa"
-path="res://.godot/imported/Stone_pebbles_1.png-30a9d7a0ea1a7ee90efbf3c9b40e1844.ctex"
+uid="uid://duggtx7lq51o2"
+path="res://.godot/imported/knight_bow.png-8bf2df2c014b019dfcc2a94aaa86d088.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/World/Stone_pebbles_1.png"
-dest_files=["res://.godot/imported/Stone_pebbles_1.png-30a9d7a0ea1a7ee90efbf3c9b40e1844.ctex"]
+source_file="res://assets/Knights/knight_bow.png"
+dest_files=["res://.godot/imported/knight_bow.png-8bf2df2c014b019dfcc2a94aaa86d088.ctex"]
 
 [params]
 
