@@ -35,6 +35,7 @@ class Serv {
 				let playerName = this.playerIds.get(id);
 				if (playerName) {
 					console.log("Player left ", playerName, code, msg);
+					console.log("msg", JSON.stringify(msg));
 					this.game.removePlayer(playerName);
 				}
 			});
@@ -44,6 +45,7 @@ class Serv {
 				let playerName = this.playerIds.get(id);
 				if (playerName) {
 					console.log("Player errored", playerName, error);
+					console.log("msg", JSON.stringify(error));
 					this.game.removePlayer(playerName);
 				}
 			});

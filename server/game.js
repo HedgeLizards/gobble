@@ -38,7 +38,6 @@ export class Game {
 
 	spawnEnemy(pos) {
 		let enemy = new Enemy(this.nextEnemyId++, pos);
-		console.log("spawn", enemy);
 		this.enemies.set(enemy.id, enemy);
 	}
 
