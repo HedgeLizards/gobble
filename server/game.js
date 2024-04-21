@@ -96,7 +96,7 @@ export class Game {
 		let target = {pos: this.center()};
 		for (let player of this.players.values()) {
 			let dist = pos.distanceTo(player.pos);
-			if (dist < nearestDist) {
+			if (dist < nearestDist && dist < 20) {
 				nearest = player.pos;
 				nearestDist = dist;
 				target = player;

@@ -37,5 +37,6 @@ func shoot():
 		"playerId": WebSocket.local_player_name,
 		"pos": [bullet.position.x / 16, bullet.position.y / 16],
 		"rotation": bullet.rotation,
-		"speed": bullet.speed
+		"speed": bullet.speed / 16,
+		"distance": bullet.distance / 16,
 	})

@@ -67,6 +67,10 @@ export class Vec2 {
 		return this.sub(other).mLength();
 	}
 
+	directionTo(other) {
+		return Math.atan2(other.y - this.y, other.x - this.x);
+	}
+
 	clone() {
 		return new Vec2(this.x, this.y);
 	}

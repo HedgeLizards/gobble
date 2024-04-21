@@ -23,9 +23,17 @@ export class Enemy {
 		}
 	}
 
-	attack() {
+	attack(target) {
 		this.isAttacking = true;
-		return [];//{type: "projectileCreated", pos: this.pos.arr(), id: ]
+		return [{
+			type: "projectileCreated",
+			pos: this.pos.arr(),
+			id: "@bullet_" + this.id + "_" + ((Math.random() * 1e6) | 0),
+			playerId: this.id,
+			rotation: this.pos.directionTo(target.pos),
+			speed: 10,
+			distance: 10,
+		}];
 	}
 
 	range() {

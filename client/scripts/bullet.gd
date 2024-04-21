@@ -9,12 +9,6 @@ func _physics_process(delta):
 	move_local_x(speed * delta)
 	distance -= speed * delta
 	if distance < 0:
-		WebSocket.send({
-			"type": "removeProjectile",
-			"playerId": WebSocket.local_player_name,
-			"id": id,
-			"pos": [position.x / 16, position.y / 16],
-		})
 		queue_free()
 
 
