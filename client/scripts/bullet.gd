@@ -3,6 +3,7 @@ extends Area2D
 const speed := 20.0 * 16
 var distance := 256.0
 var id: String
+const damage := 5.0
 
 func _physics_process(delta):
 	move_local_x(speed * delta)
@@ -26,7 +27,9 @@ func _on_area_entered(area: Area2D) -> void:
 			"type": "impactProjectile",
 			"playerId": WebSocket.local_player_name,
 			"id": id,
+			"impactedId": area.id,
 			"pos": [position.x / 16, position.y / 16],
+			"damage": damage,
 		})
 		area.health -= 5
 		queue_free()

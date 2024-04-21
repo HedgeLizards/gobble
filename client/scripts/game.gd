@@ -60,6 +60,7 @@ func update(actions):
 			else:
 				entity = Entity.instantiate()
 				entities[id] = entity
+				entity.id = id
 				entity.enemy = action["isEnemy"]
 				var sprite = entity.get_node("Sprite2D")
 				if entity.enemy:

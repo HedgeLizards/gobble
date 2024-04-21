@@ -34,13 +34,23 @@ export class Game {
 	removePlayer(name) {
 		this.removed.push(name);
 		this.players.delete(name);
-		console.log("Player left ", name);
 	}
 
 	spawnEnemy(pos) {
 		let enemy = new Enemy(this.nextEnemyId++, pos);
 		console.log("spawn", enemy);
 		this.enemies.set(enemy.id, enemy);
+	}
+
+	hitEnemy(enemyId, damage) {
+		let enemy = this.enemies.get(enemyId);
+		if (!enemy) { return; }
+		enemy.health -= damage;
+		if (enemy.health <= 0) {
+			this.removed.push(enemyId);
+			this.enemies.delete(enemyId);
+		}
+
 	}
 
 	update(delta) {
