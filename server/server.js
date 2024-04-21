@@ -29,10 +29,21 @@ class Serv {
 		this.wss.on("connection", socket => {
 			let id = this.nextId++;
 			this.connections.set(id, socket);
-			socket.on("close", msg => {
+			socket.on("close", (code, msg) => {
+
 				this.connections.delete(id);
 				let playerName = this.playerIds.get(id);
 				if (playerName) {
+					console.log("Player left ", playerName, code, msg);
+					this.game.removePlayer(playerName);
+				}
+			});
+			socket.on("error", error => {
+
+				this.connections.delete(id);
+				let playerName = this.playerIds.get(id);
+				if (playerName) {
+					console.log("Player errored", playerName, error);
 					this.game.removePlayer(playerName);
 				}
 			});

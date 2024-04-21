@@ -34,7 +34,6 @@ export class Game {
 	removePlayer(name) {
 		this.removed.push(name);
 		this.players.delete(name);
-		console.log("Player left ", name);
 	}
 
 	spawnEnemy(pos) {
