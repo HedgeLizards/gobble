@@ -50,6 +50,9 @@ export class Game {
 			this.spawnEnemy(new Vec2(0, 0));
 			this.timeToSpawn += 2;
 		}
+		if (this.enemies.size > 100) {
+			this.enemies.delete(this.enemies.keys()[Math.random()]);
+		}
 		for (let enemy of this.enemies.values()) {
 			enemy.pos = enemy.pos.add(this.center().sub(enemy.pos).normalize().mul(2 * delta));
 		}

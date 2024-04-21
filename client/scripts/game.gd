@@ -6,10 +6,6 @@ const Entity = preload("res://scenes/entity.tscn")
 const RemoteBullet = preload("res://scenes/remote_bullet.tscn")
 var entities = {}
 var remote_projectiles = {}
-var time = 0
-var tick = 0
-var drawnTick = 0
-var tick_duration = 0.5
 var world_size = Vector2(1, 1)
 var world_tile_size = Vector2(1, 1)
 
@@ -34,7 +30,6 @@ func _unhandled_key_input(event):
 		WebSocket.socket.close()
 
 func process_data(data):
-	tick += 1
 	if data["type"] == "update":
 		update(data["actions"])
 	elif data["type"] == "welcome":
@@ -46,10 +41,10 @@ func process_data(data):
 		camera.limit_right = world_size.x
 		camera.limit_bottom = world_size.y
 		%Environment.position = world_size / 2
-		tick_duration = data["tickDuration"]
 		
 
 func update(actions):
+	var time = float(Time.get_ticks_usec()) / 1e6
 	for action in actions:
 		var type = action["type"]
 		if type == "entityUpdated":
@@ -71,7 +66,7 @@ func update(actions):
 				entity.skin = action["skin"]
 				%Entities.add_child(entity)
 				entity.position = pos
-			entity.positions.push_back(PositionSnapshot.new(pos, tick))
+			entity.positions.push_back(PositionSnapshot.new(pos, time))
 		elif type == "entityDeleted":
 			var id = action["id"]
 			entities[id].queue_free()
@@ -85,7 +80,6 @@ func update(actions):
 			bullet.rotation = action["rotation"]
 			bullet.speed = action["speed"]
 			%Projectiles.add_child(bullet)
-			print("new bullet ", bullet.position)
 			remote_projectiles[action["id"]] =  bullet
 		elif type == "projectileRemoved":
 			var playerId = action["playerId"]
@@ -110,23 +104,32 @@ func update(actions):
 				#enemy.position = pos
 			#enemy.positions.push_back(PositionSnapshot.new(pos, tick))
 			##enemy.position = pos
+			
 	
 
 func parse_pos(serverpos):
 	return Vector2(serverpos[0], serverpos[1]) * 16
 
 func _process(delta):
-	var catchup = 1
-	if tick - drawnTick > 2:
-		catchup *= 1.2
-	elif tick - drawnTick < 1:
-		catchup *= 0.8
-	drawnTick += delta / tick_duration * catchup
+	var time = float(Time.get_ticks_usec()) / 1e6
+	var drawnTime = time - 0.2
+	#if tick - drawnTick > 5:
+		#drawnTick = tick - 2
+		#print("time jump ", WebSocket.local_player_name)
+		#print("delta ", delta)
+	#else:
+		#var catchup = 1
+		#if tick - drawnTick > 2:
+			#catchup *= 1.2
+		#elif tick - drawnTick < 1:
+			#catchup *= 0.8
+		#drawnTick += delta / tick_duration * catchup
+	
 	
 	for entity in entities.values():
 		if entity.positions.size() < 2:
 			continue
-		if entity.positions.size() >= 2 && drawnTick >= entity.positions[1].tick:
+		if entity.positions.size() >= 2 && drawnTime >= entity.positions[1].time:
 			entity.positions.pop_front()
 		var previous_position = entity.position
 		if entity.positions.size() < 2:
@@ -134,14 +137,14 @@ func _process(delta):
 		else:
 			var p0 = entity.positions[0]
 			var p1 = entity.positions[1]
-			var t = (drawnTick - p0.tick) / (p1.tick - p0.tick)
+			var t = (drawnTime - p0.time) / (p1.time - p0.time)
 			entity.position = p0.pos * (1-t) + p1.pos * t
 		if not is_equal_approx(entity.position.x, previous_position.x):
 			entity.get_node("Sprite2D").flip_h = (entity.position.x < previous_position.x)
 
 class PositionSnapshot:
 	var pos: Vector2
-	var tick: float
-	func _init(pos, tick):
+	var time: float
+	func _init(pos, time):
 		self.pos = pos
-		self.tick = tick
+		self.time = time

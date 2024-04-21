@@ -20,7 +20,7 @@ var skin_index:
 func _ready():
 	scale *= DisplayServer.screen_get_scale()
 
-	$VBoxContainer/Identity/Name.text = '' if WebSocket.local_player_name == null else WebSocket.local_player_name
+	$VBoxContainer/Identity/Name.text = generate_random_name() if WebSocket.local_player_name == null else WebSocket.local_player_name
 	$VBoxContainer/Identity/Name.caret_column = $VBoxContainer/Identity/Name.text.length()
 	$VBoxContainer/Identity/Name.grab_focus()
 	
@@ -60,3 +60,18 @@ func _on_join_pressed():
 	WebSocket.local_player_port = $VBoxContainer/Connection/Port.text
 	
 	WebSocket.connect_to_host($VBoxContainer/Error)
+
+
+func generate_random_name() -> String:
+	var vowels = Array("aaaaeeeeeeiiioooouu".split())
+	var consonants = Array("bbccdddffgghhjjkkllmmmnnnnppqrrrrsssstttttvvwxyz".split())
+
+	var name = ""
+	for i in randi_range(2, 4):
+		if randf() > 0.5:
+			name += consonants.pick_random()
+		name += vowels.pick_random()
+		if randf() > 0.5:
+			name += consonants.pick_random()
+	return name
+
