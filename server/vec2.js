@@ -74,4 +74,13 @@ export class Vec2 {
 	arr() {
 		return [this.x, this.y];
 	}
+
+	truncate(maxSize) {
+		let len = this.length();
+		if (len > maxSize) {
+			return this.mul(maxSize / len);
+		} else {
+			return this;
+		}
+	}
 }

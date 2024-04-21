@@ -66,13 +66,14 @@ export class Game {
 				let [nearest, target, dist] = this.findNearestTarget(enemy.pos);
 				enemy.target = target;
 				if (dist < enemy.range()) {
-					enemy.attack(target);
+					actions.push(...enemy.attack(target));
 				}
 				enemy.cooldown = 0.5;
 			}
 			enemy.cooldown -= delta;
 			if (!enemy.isAttacking) {
-				enemy.pos = enemy.pos.add(enemy.targetPos().sub(enemy.pos).normalize().mul(2 * delta));
+				let movement = enemy.targetPos().sub(enemy.pos).truncate(2 * delta);
+				enemy.pos = enemy.pos.add(movement);
 			}
 		}
 
@@ -94,8 +95,8 @@ export class Game {
 		let nearestDist = pos.distanceTo(nearest);
 		let target = {pos: this.center()};
 		for (let player of this.players.values()) {
-			let dist = pos.distanceTo(player.pos) < nearestDist;
-			if (dist) {
+			let dist = pos.distanceTo(player.pos);
+			if (dist < nearestDist) {
 				nearest = player.pos;
 				nearestDist = dist;
 				target = player;

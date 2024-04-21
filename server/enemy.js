@@ -6,7 +6,7 @@ export class Enemy {
 		this.id = id;
 		this.pos = pos;
 		this.health = 10;
-		this.cooldown = Math.random() * 0.5;
+		this.cooldown = 0;
 		this.isAttacking = false;
 		this.target = null;
 	}
@@ -24,8 +24,8 @@ export class Enemy {
 	}
 
 	attack() {
-
-		return []
+		this.isAttacking = true;
+		return [];//{type: "projectileCreated", pos: this.pos.arr(), id: ]
 	}
 
 	range() {
