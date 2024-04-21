@@ -36,14 +36,14 @@ func _ready():
 	$VBoxContainer/Connection/Port.text = '9412' if WebSocket.local_player_port == null else WebSocket.local_player_port
 
 func _unhandled_key_input(event):
-	match event.keycode:
-		KEY_ESCAPE:
-			if event.pressed && !event.echo:
-				get_tree().quit()
-		KEY_ENTER:
-			if $VBoxContainer/Identity/Name.has_focus():
-				_on_join_pressed()
+	if event.keycode == KEY_ESCAPE && event.pressed && !event.echo:
+		get_tree().quit()
+
+func _on_text_changed(_new_text):
 	$"UI Audio/AudioStreamPlayer Typing".play()
+
+func _on_name_text_submitted(new_text):
+	_on_join_pressed()
 
 func _on_previous_pressed():
 	skin_index = (skins.size() if skin_index == 0 else skin_index) - 1
