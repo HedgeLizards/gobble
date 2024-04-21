@@ -9,7 +9,7 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 [node name="walk_dust" type="CPUParticles2D" parent="."]
 unique_name_in_owner = true
 texture_filter = 1
-amount = 20
+amount = 10
 lifetime = 0.2
 randomness = 1.0
 lifetime_randomness = 0.5
@@ -19,6 +19,7 @@ direction = Vector2(2.08165e-12, -1)
 gravity = Vector2(2.08165e-12, 2.08165e-12)
 initial_velocity_max = 10.0
 damping_max = 100.0
+color = Color(0.333333, 0.490196, 0.333333, 1)
 color_ramp = SubResource("Gradient_o7tyr")
 hue_variation_min = -1.0
 hue_variation_max = 1.0

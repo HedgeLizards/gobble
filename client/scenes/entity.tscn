@@ -18,13 +18,13 @@ stream_0/weight = 1.0
 [node name="Entity" type="Area2D"]
 script = ExtResource("1_j510w")
 
-[node name="walk_particles" parent="." instance=ExtResource("3_02yhy")]
-unique_name_in_owner = true
-position = Vector2(2.08165e-12, 1)
-
 [node name="Sprite2D" type="Sprite2D" parent="."]
 offset = Vector2(0, -8)
 script = ExtResource("3_uem7m")
+
+[node name="walk_particles" parent="Sprite2D" instance=ExtResource("3_02yhy")]
+unique_name_in_owner = true
+position = Vector2(2.08165e-12, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -8)
