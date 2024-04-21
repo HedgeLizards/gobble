@@ -1,17 +1,36 @@
-[gd_scene load_steps=4 format=3 uid="uid://bkc86sixebnv2"]
+[gd_scene load_steps=5 format=3 uid="uid://bkc86sixebnv2"]
 
 [ext_resource type="Script" path="res://scripts/bullet.gd" id="1_24gwv"]
-[ext_resource type="Texture2D" uid="uid://crr2cbddnk7uo" path="res://assets/Knights/Knight_arrow.png" id="1_v47id"]
+[ext_resource type="Texture2D" uid="uid://bitowtaa41cpc" path="res://assets/Gobbles/Bullet.png" id="2_6evef"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_vurhs"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_whfw2"]
+radius = 2.0
+height = 10.0
+
+[sub_resource type="Gradient" id="Gradient_ktd07"]
+colors = PackedColorArray(1, 1, 1, 1, 0.958215, 0.253926, 6.45015e-07, 0)
 
 [node name="Bullet" type="Area2D"]
 script = ExtResource("1_24gwv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_vurhs")
+rotation = -1.56987
+shape = SubResource("CapsuleShape2D_whfw2")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_v47id")
+[node name="Bullet" type="Sprite2D" parent="."]
+texture = ExtResource("2_6evef")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+position = Vector2(-3, 4.21867e-12)
+rotation = -1.56987
+amount = 30
+lifetime = 0.1
+emission_shape = 3
+emission_rect_extents = Vector2(1, 1)
+direction = Vector2(2.08165e-12, -1)
+spread = 90.0
+gravity = Vector2(2.08165e-12, 2.08165e-12)
+initial_velocity_max = 50.0
+color_ramp = SubResource("Gradient_ktd07")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]

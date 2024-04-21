@@ -1,11 +1,11 @@
 [gd_scene load_steps=10 format=3 uid="uid://iosc17jma51k"]
 
 [ext_resource type="Script" path="res://scripts/menu.gd" id="1_fc1m7"]
-[ext_resource type="Texture2D" uid="uid://d23jlntk3kgxp" path="res://assets/UI/Arrow.png" id="2_cw6uy"]
+[ext_resource type="Texture2D" uid="uid://ujhf7x4lgmp0" path="res://assets/UI/Arrow.png" id="2_cw6uy"]
 [ext_resource type="AudioStream" uid="uid://dj60qq16rovbe" path="res://sounds/MUS_LOW_01.ogg" id="4_brhn7"]
 [ext_resource type="AudioStream" uid="uid://cfgof6jfllj37" path="res://sounds/UI_Arrow.wav" id="5_1ep5v"]
 [ext_resource type="AudioStream" uid="uid://dai8wwpv6umpn" path="res://sounds/UI_Typing.wav" id="5_a6wd8"]
-[ext_resource type="FontFile" uid="uid://chhjx2uirpf3r" path="res://assets/UI/Quicksand-Bold.otf" id="5_dh7dy"]
+[ext_resource type="FontFile" uid="uid://mo6xk7y1horc" path="res://assets/UI/Quicksand-Bold.otf" id="5_dh7dy"]
 [ext_resource type="AudioStream" uid="uid://q1lha6nklqno" path="res://sounds/UI_Enter.wav" id="7_fhamf"]
 
 [sub_resource type="AudioStreamInteractive" id="AudioStreamInteractive_1ww8b"]
