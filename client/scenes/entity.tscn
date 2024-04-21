@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://ctxa2np5m35ul"]
+[gd_scene load_steps=6 format=3 uid="uid://ctxa2np5m35ul"]
 
 [ext_resource type="Script" path="res://scripts/entity.gd" id="1_j510w"]
 [ext_resource type="FontFile" uid="uid://chhjx2uirpf3r" path="res://assets/UI/Quicksand-Bold.otf" id="3_0jxe8"]
+[ext_resource type="PackedScene" uid="uid://dqykjc8vecs0m" path="res://scenes/Particles/Walk_particles.tscn" id="3_02yhy"]
 [ext_resource type="Script" path="res://scripts/animate.gd" id="3_uem7m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f7u7y"]
@@ -9,6 +10,10 @@ size = Vector2(10, 16)
 
 [node name="Entity" type="Area2D"]
 script = ExtResource("1_j510w")
+
+[node name="walk_particles" parent="." instance=ExtResource("3_02yhy")]
+unique_name_in_owner = true
+position = Vector2(2.08165e-12, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 offset = Vector2(0, -8)

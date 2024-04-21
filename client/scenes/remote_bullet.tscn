@@ -2,23 +2,10 @@
 
 [ext_resource type="Texture2D" uid="uid://bitowtaa41cpc" path="res://assets/Gobbles/Bullet.png" id="1_6vbbv"]
 [ext_resource type="Script" path="res://scripts/remote_bullet.gd" id="1_cym4v"]
-
-[sub_resource type="Gradient" id="Gradient_5j6pg"]
-colors = PackedColorArray(1, 1, 1, 1, 0.958215, 0.253926, 6.45015e-07, 0)
+[ext_resource type="PackedScene" uid="uid://bgmpyhhr04w0m" path="res://scenes/Particles/bullet_particles.tscn" id="3_88lv5"]
 
 [node name="RemoteBullet" type="Sprite2D"]
 texture = ExtResource("1_6vbbv")
 script = ExtResource("1_cym4v")
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
-position = Vector2(-3, 4.21863e-12)
-rotation = -1.56987
-amount = 30
-lifetime = 0.1
-emission_shape = 3
-emission_rect_extents = Vector2(1, 1)
-direction = Vector2(2.08165e-12, -1)
-spread = 90.0
-gravity = Vector2(2.08165e-12, 2.08165e-12)
-initial_velocity_max = 50.0
-color_ramp = SubResource("Gradient_5j6pg")
+[node name="Node2D" parent="." instance=ExtResource("3_88lv5")]

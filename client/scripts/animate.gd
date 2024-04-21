@@ -9,6 +9,8 @@ var wobble_phase = 0.0
 func animate(position, previous_position, delta):
 	var standstill = position.is_equal_approx(previous_position)
 	
+	%walk_particles/walk_dust.emitting = !standstill
+	
 	if standstill && is_zero_approx(wobble_phase):
 		return
 	

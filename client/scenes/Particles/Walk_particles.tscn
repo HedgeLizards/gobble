@@ -1,15 +1,24 @@
 [gd_scene load_steps=2 format=3 uid="uid://dqykjc8vecs0m"]
 
-[ext_resource type="Texture2D" uid="uid://c3wtu072uqxg0" path="res://assets/Gobbles/Particle_grass.png" id="1_etrai"]
+[sub_resource type="Gradient" id="Gradient_o7tyr"]
+offsets = PackedFloat32Array(0, 0.872197)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [node name="Node2D" type="Node2D"]
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+[node name="walk_dust" type="CPUParticles2D" parent="."]
+unique_name_in_owner = true
 texture_filter = 1
-amount = 30
-lifetime = 0.5
-texture = ExtResource("1_etrai")
+amount = 20
+lifetime = 0.2
+randomness = 1.0
+lifetime_randomness = 0.5
+emission_shape = 3
+emission_rect_extents = Vector2(4, 1)
 direction = Vector2(2.08165e-12, -1)
-gravity = Vector2(2.08165e-12, 200)
-initial_velocity_min = 10.0
-initial_velocity_max = 100.0
+gravity = Vector2(2.08165e-12, 2.08165e-12)
+initial_velocity_max = 10.0
+damping_max = 100.0
+color_ramp = SubResource("Gradient_o7tyr")
+hue_variation_min = -1.0
+hue_variation_max = 1.0

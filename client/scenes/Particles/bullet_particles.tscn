@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://bgmpyhhr04w0m"]
+
+[sub_resource type="Gradient" id="Gradient_f8e57"]
+offsets = PackedFloat32Array(0, 0.506667, 1)
+colors = PackedColorArray(0.929412, 0.894118, 0.854902, 1, 0.890196, 0.576471, 0.278431, 1, 0.898039, 0.435294, 0.294118, 0)
+
+[node name="Node2D" type="Node2D"]
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+position = Vector2(-3, 4.21867e-12)
+rotation = -1.56987
+amount = 30
+lifetime = 0.1
+emission_shape = 3
+emission_rect_extents = Vector2(1, 1)
+direction = Vector2(2.08165e-12, -1)
+spread = 90.0
+gravity = Vector2(2.08165e-12, 2.08165e-12)
+initial_velocity_max = 50.0
+color_ramp = SubResource("Gradient_f8e57")
