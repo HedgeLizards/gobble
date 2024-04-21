@@ -5,6 +5,11 @@ var enemy: bool = false
 var health = 10
 var skin
 var id
+var weapon:
+	set(value):
+		weapon = value
+		
+		$Weapon/Sprite2D.texture = weapon.texture
 
 
 func is_enemy():
