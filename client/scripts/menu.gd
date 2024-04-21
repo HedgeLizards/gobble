@@ -41,15 +41,19 @@ func _unhandled_key_input(event):
 		KEY_ENTER:
 			if $VBoxContainer/Identity/Name.has_focus():
 				_on_join_pressed()
+	$"UI Audio/AudioStreamPlayer Typing".play()
 
 func _on_previous_pressed():
 	skin_index = (skins.size() if skin_index == 0 else skin_index) - 1
+	$"UI Audio/AudioStreamPlayer Arrow Click".play()
 
 func _on_next_pressed():
 	skin_index = (-1 if skin_index == skins.size() - 1 else skin_index) + 1
+	$"UI Audio/AudioStreamPlayer Arrow Click".play()
 
 func _on_join_pressed():
 	var local_player_name = $VBoxContainer/Identity/Name.text
+	$"UI Audio/AudioStreamPlayer Join Click".play()
 	
 	if local_player_name.is_empty():
 		return
