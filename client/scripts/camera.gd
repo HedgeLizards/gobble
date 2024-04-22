@@ -2,6 +2,7 @@ extends Camera2D
 
 const SCREEN_SIZE_RATIO = 320
 
+var tween
 @onready var base_offset = offset
 
 func _ready():
@@ -18,4 +19,8 @@ func zoom_dynamically():
 func recoil(toward, strength):
 	offset = base_offset + Vector2(-cos(toward), sin(toward)) * strength
 	
-	create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT).tween_property(self, 'offset', base_offset, strength / 6)
+	if tween != null:
+		tween.kill()
+	
+	tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, 'offset', base_offset, strength / 6)
