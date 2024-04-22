@@ -8,6 +8,11 @@ export class Player {
 		this.pos = pos;
 		this.aim = aim;
 		this.weapon = weapon;
+		this.health = 100;
+	}
+
+	update(props) {
+		Object.assign(this, props);
 	}
 
 	view() {

@@ -1,13 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://011l66vx15oa"]
+[gd_scene load_steps=6 format=3 uid="uid://011l66vx15oa"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_uuqp6"]
 [ext_resource type="PackedScene" uid="uid://ck2q3henidk1g" path="res://scenes/me.tscn" id="2_m0nq5"]
 [ext_resource type="PackedScene" uid="uid://ctas0hp1umgpj" path="res://scenes/World/Swordstone.tscn" id="3_eiuly"]
 [ext_resource type="Texture2D" uid="uid://bs6jstdyrmwss" path="res://assets/World/GrassTile.png" id="4_jlxtf"]
+[ext_resource type="PackedScene" uid="uid://k8sjvowfj3al" path="res://scenes/ui.tscn" id="5_xpa2o"]
 
 [node name="Game" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_uuqp6")
+
+[node name="UI" parent="." instance=ExtResource("5_xpa2o")]
 
 [node name="TextureRect" type="TextureRect" parent="."]
 texture_filter = 1
@@ -37,11 +40,3 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 z_index = 1
 y_sort_enabled = true
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-visible = false
-
-[node name="SwordMarker" type="Label" parent="CanvasLayer"]
-offset_right = 49.0
-offset_bottom = 23.0
-text = "Sword"

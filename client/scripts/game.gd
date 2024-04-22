@@ -122,6 +122,10 @@ func update(actions):
 			if p:
 				p.queue_free()
 			remote_projectiles.erase(action["id"])
+		elif type == "waveStart":
+			$UI.show_notice("wave " + str(action.waveNum))
+		elif type == "waveEnd":
+			print("wave " + str(action.waveNum) + " completed")
 		else:
 			print("unknown action ", action)
 			

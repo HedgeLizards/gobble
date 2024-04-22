@@ -1,6 +1,6 @@
 extends Camera2D
 
-const SCREEN_SIZE_RATIO = 256
+const SCREEN_SIZE_RATIO = 320
 
 @onready var base_offset = offset
 

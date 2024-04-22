@@ -77,11 +77,11 @@ class Serv {
 						send_error(socket, "Who the fuck are you?");
 						return
 					}
-					let player = new Player(name, this.game.players.get(name).skin, new Vec2(...data.pos), data.aim, data.weapon)
-					let err = this.game.updatePlayer(player);
-					if (err) {
-						send_error(socket, err);
+					let player = this.game.getPlayer(name);
+					if (!player) {
+						send_error(socket, "unknown player " + name);
 					}
+					player.update({pos: new Vec2(...data.pos), aim: data.aim, weapon: data.weapon});
 				} else if (data.type === "createProjectile") {
 					let response = {};
 					Object.assign(response, data);
