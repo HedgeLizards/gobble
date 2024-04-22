@@ -56,7 +56,13 @@ export class Game {
 	}
 
 	spawnEnemy(kind) {
-		let pos = pick_random([new Vec2(0, 0), new Vec2(this.size.x, 0), new Vec2(this.size.x, this.size.y), new Vec2(0, this.size.y)]);
+		let ratio = Math.random()
+		let pos = pick_random([
+			new Vec2(this.size.x * ratio, 0), // top
+			new Vec2(this.size.x, this.size.y * ratio), // right
+			new Vec2(this.size.x * ratio, this.size.y), // bottom
+			new Vec2(0, this.size.y * ratio), // left
+		]);
 		let enemy = new Enemy(this.nextEnemyId++, pos, kind);
 		this.enemies.set(enemy.id, enemy);
 	}
