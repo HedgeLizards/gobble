@@ -13,8 +13,12 @@ var weapon_index := -1:
 		
 		$Weapon/Sprite2D.texture = weapon.texture
 		
-		$Shoot.stream.set_stream(0, weapon.stream)
-		$Shoot.volume_db = weapon.volume_db
+		if weapon.stream is AudioStreamInteractive:
+			$ShootInteractive.stream = weapon.stream
+			$ShootInteractive.volume_db = weapon.volume_db
+		elif weapon.stream != null:
+			$Shoot.stream.set_stream(0, weapon.stream)
+			$Shoot.volume_db = weapon.volume_db
 var weapon: Weapons.Weapon
 
 const speed := 10.0 * Globals.SCALE
@@ -56,11 +60,18 @@ func _physics_process(delta) -> void:
 	%Weapon.look_at(get_global_mouse_position())
 	%Weapon.rotation = fposmod(%Weapon.rotation, TAU)
 	%Weapon.scale.y = -1 if %Weapon.rotation > 0.5 * PI && %Weapon.rotation < 1.5 * PI else 1
+	
+	if weapon_id() == "Minigun":
+		if Input.is_action_just_pressed("shoot"):
+			$ShootInteractive.play()
+		elif Input.is_action_just_released("shoot"):
+			$ShootInteractive.get_stream_playback().switch_to_clip_by_name("Minigun Shutdown")
 	if Input.is_action_pressed("shoot") && cooldown < 0:
 		shoot()
 
 func shoot() -> void:
-	$Shoot.play()
+	if not weapon.stream is AudioStreamInteractive and weapon.stream != null:
+		$Shoot.play()
 	cooldown = weapon.cooldown
 	var direction = %Muzzle.global_rotation + randf_range(-weapon.spread / 2.0, weapon.spread / 2.0)
 	for i in weapon.bullets:

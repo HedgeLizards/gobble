@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://ck2q3henidk1g"]
+[gd_scene load_steps=10 format=3 uid="uid://ck2q3henidk1g"]
 
 [ext_resource type="Script" path="res://scripts/me.gd" id="1_emed8"]
 [ext_resource type="Script" path="res://scripts/camera.gd" id="2_0fe2v"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dqykjc8vecs0m" path="res://scenes/Particles/Walk_particles.tscn" id="3_8tf3d"]
 [ext_resource type="FontFile" uid="uid://chhjx2uirpf3r" path="res://assets/UI/Quicksand-Bold.otf" id="6_6ojmt"]
 [ext_resource type="AudioStream" uid="uid://d1jejjlucgada" path="res://sounds/SFX_HandGun_Fire.wav" id="6_ne6rv"]
+[ext_resource type="AudioStream" uid="uid://ctbe770l47mde" path="res://sounds/minigun.tres" id="7_hri2s"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g3144"]
 size = Vector2(12, 12)
@@ -73,12 +74,13 @@ offset_right = 10.0
 offset_bottom = 1.0
 color = Color(0.466667, 1, 0.466667, 1)
 
-[node name="Shoot" type="AudioStreamPlayer2D" parent="."]
+[node name="Shoot" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamRandomizer_1epfc")
-max_distance = 500.0
-attenuation = 3.0
 max_polyphony = 4
-panning_strength = 10.0
+bus = &"SFX"
+
+[node name="ShootInteractive" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_hri2s")
 bus = &"SFX"
 
 [connection signal="resized" from="Label" to="." method="_on_label_resized"]

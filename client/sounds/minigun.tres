@@ -1,0 +1,26 @@
+[gd_resource type="AudioStreamInteractive" load_steps=4 format=3 uid="uid://ctbe770l47mde"]
+
+[ext_resource type="AudioStream" uid="uid://gvo6mh4aas7b" path="res://sounds/SFX_Minigun_Startup.wav" id="1_wwiqr"]
+[ext_resource type="AudioStream" uid="uid://cce8kqfffq8q1" path="res://sounds/SFX_Minigun_Loop.ogg" id="2_nwh7y"]
+[ext_resource type="AudioStream" uid="uid://dbkwgwlh8vf6y" path="res://sounds/SFX_Minigun_Shutdown.wav" id="3_s15xn"]
+
+[resource]
+clip_count = 3
+clip_0/name = &"Minigun Startup"
+clip_0/stream = ExtResource("1_wwiqr")
+clip_0/auto_advance = 1
+clip_0/next_clip = 1
+clip_1/name = &"Minigun Loop"
+clip_1/stream = ExtResource("2_nwh7y")
+clip_1/auto_advance = 0
+clip_2/name = &"Minigun Shutdown"
+clip_2/stream = ExtResource("3_s15xn")
+clip_2/auto_advance = 0
+_transitions = {
+Vector2i(1, 2): {
+"fade_beats": 1,
+"fade_mode": 0,
+"from_time": 0,
+"to_time": 1
+}
+}
