@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://dpf2kfmci1tdh"]
+
+[ext_resource type="AudioStream" uid="uid://gvo6mh4aas7b" path="res://sounds/SFX_Minigun_Startup.wav" id="1_w4mnv"]
+[ext_resource type="AudioStream" uid="uid://cce8kqfffq8q1" path="res://sounds/SFX_Minigun_Loop.ogg" id="2_o0pre"]
+[ext_resource type="AudioStream" uid="uid://dbkwgwlh8vf6y" path="res://sounds/SFX_Minigun_Shutdown.wav" id="3_h6t41"]
+[ext_resource type="Script" path="res://scripts/minigun.gd" id="4_echpt"]
+
+[sub_resource type="AudioStreamInteractive" id="AudioStreamInteractive_rij8g"]
+clip_count = 3
+clip_0/name = &"Minigun Startup"
+clip_0/stream = ExtResource("1_w4mnv")
+clip_0/auto_advance = 1
+clip_0/next_clip = 1
+clip_1/name = &"Minigun Loop"
+clip_1/stream = ExtResource("2_o0pre")
+clip_1/auto_advance = 0
+clip_2/name = &"Minigun Shutdown"
+clip_2/stream = ExtResource("3_h6t41")
+clip_2/auto_advance = 0
+_transitions = {
+Vector2i(1, 2): {
+"fade_beats": 1,
+"fade_mode": 0,
+"from_time": 0,
+"to_time": 1
+}
+}
+
+[node name="Minigun" type="AudioStreamPlayer2D"]
+stream = SubResource("AudioStreamInteractive_rij8g")
+script = ExtResource("4_echpt")
