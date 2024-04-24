@@ -7,6 +7,8 @@ var skin
 var id
 var weapon:
 	set(value):
+		if weapon == value:
+			return
 		weapon = value
 		
 		$Weapon/Sprite2D.texture = weapon.texture

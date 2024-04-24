@@ -2,9 +2,8 @@ extends Node2D
 
 const SKINS_PATH = "res://assets/Gobbles/Skins"
 const ENEMY_SKINS_PATH = "res://assets/Knights/Skins"
-#const Player = preload("res://scenes/player.tscn")
 const Entity = preload("res://scenes/entity.tscn")
-const RemoteBullet = preload("res://scenes/remote_bullet.tscn")
+const RemoteProjectile = preload("res://scenes/remote_projectile.tscn")
 var entities = {}
 var remote_projectiles = {}
 var world_size = Vector2(1, 1)
@@ -19,7 +18,7 @@ func _ready():
 		"skin": WebSocket.local_player_skin,
 		"pos": [%Me.position.x / Globals.SCALE, %Me.position.y / Globals.SCALE],
 		"aim": %Me.get_node("%Weapon").rotation,
-		"weapon": %Me.weapons[$Me.weapon_index].id,
+		"weapon": %Me.player_weapons[%Me.weapon_index],
 	})
 
 func _physics_process(delta):
@@ -27,7 +26,7 @@ func _physics_process(delta):
 		"type": "updatePlayer",
 		"pos": [%Me.position.x / Globals.SCALE, %Me.position.y / Globals.SCALE],
 		"aim": %Me.get_node("%Weapon").rotation,
-		"weapon": %Me.weapons[$Me.weapon_index].id,
+		"weapon": %Me.player_weapons[%Me.weapon_index],
 	})
 
 func _unhandled_key_input(event):
@@ -59,11 +58,6 @@ func update(actions):
 			var pos = parse_pos(action["pos"])
 			if entities.has(id):
 				entity = entities[id]
-				if entity.weapon.id != action["weapon"]:
-					for weapon in %Me.weapons:
-						if weapon.id == action["weapon"]:
-							entity.weapon = weapon
-							break
 			else:
 				entity = Entity.instantiate()
 				entities[id] = entity
@@ -79,15 +73,13 @@ func update(actions):
 					var label = entity.get_node("Label")
 					label.text = id
 					label.visible = true
-				for weapon in %Me.weapons:
-					if weapon.id == action["weapon"]:
-						entity.weapon = weapon
-						break
 				entity.get_node("Weapon").visible = true
 				entity.aim(action["aim"])
 				entity.skin = action["skin"]
 				%Entities.add_child(entity)
 				entity.position = pos
+				
+			entity.weapon = Weapons.weapons[action.weapon]
 			entity.positions.push_back(PositionSnapshot.new(pos, action.get("aim", 0.0), time))
 		elif type == "entityDeleted":
 			var id = action["id"]
@@ -102,7 +94,7 @@ func update(actions):
 			if shooter:
 				shooter.shoot()
 				
-			var bullet = RemoteBullet.instantiate()
+			var bullet = RemoteProjectile.instantiate()
 			bullet.set_kind(action.get("kind", "bullet"))
 			bullet.position = parse_pos(action["pos"])
 			bullet.rotation = action["rotation"]

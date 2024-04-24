@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 WebSocket="*res://scripts/web_socket.gd"
 Globals="*res://scripts/globals.gd"
+Weapons="*res://scripts/weapons.gd"
 
 [debug]
 

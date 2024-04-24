@@ -1,83 +1,15 @@
 extends CharacterBody2D
 
-const weapons = [
-	{
-		"id": "Simple Hand Gun",
-		"texture": preload("res://assets/Gobbles/Weapons/Gobble_Gun.png"),
-		"stream": preload("res://sounds/SFX_HandGun_Fire.wav"),
-		"volume_db": 0.0,
-		"cooldown": 0.6,
-		"bullets": 1,
-		"spread": PI / 180 * 5,
-		"recoil_strength": 3.5,
-	},
-	{
-		"id": "Automatic Rifle",
-		"texture": preload("res://assets/Gobbles/Weapons/Gobble_Assault_Rifle.png"),
-		"stream": preload("res://sounds/SFX_AutomaticRifle_Fire.wav"),
-		"volume_db": 0.0,
-		"cooldown": 0.3,
-		"bullets": 1,
-		"spread": PI / 180 * 5,
-		"recoil_strength": 3.5,
-	},
-	{
-		"id": "Minigun",
-		"texture": preload("res://assets/Gobbles/Weapons/Gobble_Minigun.png"),
-		"stream": preload("res://sounds/SFX_HandGun_Fire.wav"), # TO DO: Replace with weapon-specific sound
-		"volume_db": 0.0,
-		"cooldown": 0.2,
-		"bullets": 1,
-		"spread": PI / 180 * 10,
-		"recoil_strength": 5.5,
-	},
-	{
-		"id": "Sniper Rifle",
-		"texture": preload("res://assets/Gobbles/Weapons/Gobble_Sniper.png"),
-		"stream": preload("res://sounds/SFX_SniperRifle_Fire.wav"),
-		"volume_db": 0.0,
-		"cooldown": 3.5,
-		"bullets": 1,
-		"spread": 0.0,
-		"recoil_strength": 12.5,
-	},
-	{
-		"id": "Shotgun",
-		"texture": preload("res://assets/Gobbles/Weapons/Gobble_Shotgun.png"),
-		"stream": preload("res://sounds/SFX_Shotgun_Fire.wav"),
-		"volume_db": 0.0,
-		"cooldown": 1.0,
-		"bullets": 5,
-		"spread": PI / 180 * 20,
-		"recoil_strength": 12.5,
-	},
-	{
-		"id": "Grenade Launcher",
-		"texture": preload("res://assets/Gobbles/Weapons/Gobble_Granande_Launcher.png"),
-		"stream": preload("res://sounds/SFX_HandGun_Fire.wav"), # TO DO: Replace with weapon-specific sound
-		"volume_db": 0.0,
-		"cooldown": 5.0,
-		"bullets": 1,
-		"spread": 0.0,
-		"recoil_strength": 15.0,
-	},
-	{
-		"id": "Bow",
-		"texture": preload("res://assets/Knights/knight_bow.png"),
-		"stream": preload("res://sounds/SFX_HandGun_Fire.wav"), # TO DO: Replace with weapon-specific sound
-		"volume_db": -80.0,
-	},
-	{
-		"id": "Sword",
-		"texture": preload("res://assets/Knights/Knight_sword.png"),
-		"stream": preload("res://sounds/SFX_HandGun_Fire.wav"), # TO DO: Replace with weapon-specific sound
-		"volume_db": -80.0,
-	},
-]
+
+
+const player_weapons: Array[String] = ["Handgun", "AssaultRifle", "Minigun", "Sniper", "Shotgun", "GrenadeLauncher"]
+
 var weapon_index:
 	set(value):
+		if weapon_index == value:
+			return
 		weapon_index = value
-		weapon = weapons[weapon_index]
+		weapon = Weapons.weapons[player_weapons[weapon_index]]
 		
 		$Weapon/Sprite2D.texture = weapon.texture
 		
@@ -88,7 +20,7 @@ var weapon
 const speed := 10 * Globals.SCALE
 var cooldown := 0.0
 
-const Bullet = preload("res://scenes/bullet.tscn")
+const LocalProjectile = preload("res://scenes/local_projectile.tscn")
 
 func _ready():
 	weapon_index = 0
@@ -98,18 +30,18 @@ func _ready():
 func _on_label_resized():
 	$Label.position.x = (-$Label.size.x / 2.0 + 0.5) * $Label.scale.x
 
-func _unhandled_input(event):
+func _unhandled_input(event) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		match event.button_index:
 			MOUSE_BUTTON_WHEEL_UP:
-				weapon_index = (-1 if weapon_index == (weapons.size() - 2) - 1 else weapon_index) + 1
+				weapon_index = posmod(weapon_index + 1, player_weapons.size())
 			MOUSE_BUTTON_WHEEL_DOWN:
-				weapon_index = ((weapons.size() - 2) if weapon_index == 0 else weapon_index) - 1
+				weapon_index = posmod(weapon_index - 1, player_weapons.size())
 	elif event is InputEventKey:
 		if event.keycode >= KEY_1 and event.keycode <= KEY_6 and event.pressed and not event.echo:
 			weapon_index = event.keycode - KEY_1
 
-func _physics_process(delta):
+func _physics_process(delta) -> void:
 	cooldown -= delta
 	var previous_position = position
 	move_and_collide(Input.get_vector("west", "east", "north", "south") * delta * speed)
@@ -121,12 +53,12 @@ func _physics_process(delta):
 	if Input.is_action_pressed("shoot") && cooldown < 0:
 		shoot()
 
-func shoot():
+func shoot() -> void:
 	$Shoot.play()
 	cooldown = weapon.cooldown
 	var direction = %Muzzle.global_rotation + randf_range(-weapon.spread / 2.0, weapon.spread / 2.0)
 	for i in weapon.bullets:
-		var bullet = Bullet.instantiate()
+		var bullet = LocalProjectile.instantiate()
 		bullet.id = "@bullet_"+WebSocket.local_player_name + str(randi())
 		bullet.position = %Muzzle.global_position
 		bullet.rotation = direction + (i - weapon.bullets / 2.0 + 0.5) * weapon.spread / 4.0
@@ -140,11 +72,13 @@ func shoot():
 			"speed": bullet.speed / Globals.SCALE,
 			"distance": bullet.distance / Globals.SCALE,
 			"isEnemy": false,
-			"kind": weapons[weapon_index].get("bullet", "bullet"),
+			"kind": weapon.bullet,
 		})
 	$Camera2D.recoil(-direction, weapon.recoil_strength)
 
+func weapon_id() -> String:
+	return player_weapons[weapon_index]
 
-func is_me():
+func is_me() -> bool:
 	return true
 

@@ -1,12 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://dyp0omaus4xeb"]
+[gd_scene load_steps=3 format=3 uid="uid://d04omtpdi40sx"]
 
-[ext_resource type="Script" path="res://scripts/remote_bullet.gd" id="1_cym4v"]
+[ext_resource type="Script" path="res://scripts/remote_bullet.gd" id="1_bha2d"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xv0um"]
 radius = 3.0
 
-[node name="RemoteBullet" type="Area2D"]
-script = ExtResource("1_cym4v")
+[node name="RemoteProjectile" type="Area2D"]
+script = ExtResource("1_bha2d")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_xv0um")
