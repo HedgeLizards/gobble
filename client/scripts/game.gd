@@ -19,6 +19,8 @@ func _ready():
 		"pos": [%Me.position.x / Globals.SCALE, %Me.position.y / Globals.SCALE],
 		"aim": %Me.get_node("%Weapon").rotation,
 		"weapon": %Me.player_weapons[%Me.weapon_index],
+		"health": %Me.health,
+		"maxhealth": %Me.maxhealth,
 	})
 
 func _physics_process(delta):
@@ -27,6 +29,7 @@ func _physics_process(delta):
 		"pos": [%Me.position.x / Globals.SCALE, %Me.position.y / Globals.SCALE],
 		"aim": %Me.get_node("%Weapon").rotation,
 		"weapon": %Me.player_weapons[%Me.weapon_index],
+		"health": %Me.health,
 	})
 
 func _unhandled_key_input(event):
@@ -78,7 +81,9 @@ func update(actions):
 				entity.skin = action["skin"]
 				%Entities.add_child(entity)
 				entity.position = pos
-				
+				entity.maxhealth = action.maxhealth
+			
+			entity.health = action.health
 			entity.weapon = Weapons.weapons[action.weapon]
 			entity.positions.push_back(PositionSnapshot.new(pos, action.get("aim", 0.0), time))
 		elif type == "entityDeleted":

@@ -1,8 +1,17 @@
 extends Area2D
 
 var positions = []
-var enemy: bool = false
-var health = 10
+var enemy: bool:
+	set(value):
+		enemy = value
+		%HealthBar.visible = not value
+var maxhealth: float
+var health: float:
+	set(value):
+		health = value
+		var ratio := clamp(health / maxhealth, 0, 1)
+		%HealthBar/Healthy.size.x = %HealthBar.size.x * ratio
+
 var skin
 var id
 var weapon:

@@ -64,7 +64,7 @@ class Serv {
 						send_error(socket, "invalid name " + name);
 						return
 					}
-					let err = this.game.addPlayer(new Player(name, data.skin, new Vec2(...data.pos), data.aim));
+					let err = this.game.addPlayer(new Player(name, data.skin, new Vec2(...data.pos), data.aim, data.weapon, data.health || 100, data.maxhealth || 100));
 					if (err) {
 						send_error(socket, err);
 						return
@@ -81,7 +81,7 @@ class Serv {
 					if (!player) {
 						send_error(socket, "unknown player " + name);
 					}
-					player.update({pos: new Vec2(...data.pos), aim: data.aim, weapon: data.weapon});
+					player.update({pos: new Vec2(...data.pos), aim: data.aim, weapon: data.weapon, health: data.health || 100});
 				} else if (data.type === "createProjectile") {
 					let response = {};
 					Object.assign(response, data);

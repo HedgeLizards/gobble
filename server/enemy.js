@@ -45,7 +45,9 @@ export class Enemy {
 			pos: this.pos.arr(),
 			aim: this.pos.directionTo(this.targetPos()),
 			weapon: this.kind.weapon,
-			isEnemy: true
+			isEnemy: true,
+			health: this.health,
+			maxhealth: this.kind.health,
 		};
 	}
 
