@@ -2,13 +2,14 @@
 
 export class Player {
 
-	constructor(name, skin, pos, aim, weapon) {
+	constructor(name, skin, pos, aim, weapon, health, maxhealth) {
 		this.name = name;
 		this.skin = skin;
 		this.pos = pos;
 		this.aim = aim;
 		this.weapon = weapon;
-		this.health = 100;
+		this.health = health;
+		this.maxhealth = maxhealth
 	}
 
 	update(props) {
@@ -23,7 +24,9 @@ export class Player {
 			pos: this.pos.arr(),
 			aim: this.aim,
 			weapon: this.weapon,
-			isEnemy: false
+			isEnemy: false,
+			health: this.health,
+			maxhealth: this.maxhealth,
 		};
 	}
 

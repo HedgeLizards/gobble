@@ -28,7 +28,7 @@ var health := maxhealth:
 	set(value):
 		health = value
 		var ratio := clamp(health / maxhealth, 0, 1)
-		$HealthBar/Healthy.size.x = $HealthBar.size.x * ratio
+		%HealthBar/Healthy.size.x = %HealthBar.size.x * ratio
 
 const LocalProjectile = preload("res://scenes/local_projectile.tscn")
 
