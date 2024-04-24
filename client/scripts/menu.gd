@@ -36,8 +36,18 @@ func _ready():
 	$VBoxContainer/Connection/Port.text = '9412' if WebSocket.local_player_port == null else WebSocket.local_player_port
 
 func _unhandled_key_input(event):
-	if event.keycode == KEY_ESCAPE && event.pressed && !event.echo:
-		get_tree().quit()
+	if !event.pressed || event.echo:
+		return
+	
+	match event.keycode:
+		KEY_ESCAPE:
+			get_tree().quit()
+		KEY_ENTER:
+			$VBoxContainer/Identity/Name.grab_focus()
+		KEY_LEFT:
+			_on_previous_pressed()
+		KEY_RIGHT:
+			_on_next_pressed()
 
 func _on_text_changed(_new_text):
 	$"UI Audio/AudioStreamPlayer Typing".play()
