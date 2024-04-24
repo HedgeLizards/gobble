@@ -48,7 +48,7 @@ position = Vector2(9, 1)
 
 [node name="Muzzle" type="Node2D" parent="Weapon"]
 unique_name_in_owner = true
-position = Vector2(10, 0)
+position = Vector2(25, 0)
 
 [node name="Label" type="Label" parent="."]
 offset_top = -25.0
