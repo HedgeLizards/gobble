@@ -28,7 +28,7 @@ class Phase {
 			return last;
 		} else {
 			let spawned = this.spawns[index];
-			this.spawn[index] = last;
+			this.spawns[index] = last;
 			return spawned;
 		}
 	}
