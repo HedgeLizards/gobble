@@ -21,7 +21,7 @@ export class Game {
 		this.nextEnemyId = 1000;
 		this.enemies = new Map();
 		this.removed = [];
-		this.size = new Vec2(128, 128);
+		this.size = new Vec2(96, 96);
 
 		this.state = State.Start;
 		this.timeToWave = 0;
