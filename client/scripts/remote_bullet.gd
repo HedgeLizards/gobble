@@ -33,7 +33,7 @@ func _on_body_entered(body: Node2D) -> void:
 			"playerId": playerId,
 			"id": id,
 			"impactedId": WebSocket.local_player_name,
-			"pos": [position.x / 16, position.y / 16],
+			"pos": [position.x / Globals.SCALE, position.y / Globals.SCALE],
 			"damage": damage,
 			"kind": kind
 		})

@@ -85,7 +85,7 @@ var weapon_index:
 		$Shoot.volume_db = weapon.volume_db
 var weapon
 
-const speed := 10 * 16
+const speed := 10 * Globals.SCALE
 var cooldown := 0.0
 
 const Bullet = preload("res://scenes/bullet.tscn")
@@ -135,10 +135,10 @@ func shoot():
 			"type": "createProjectile",
 			"id": bullet.id,
 			"playerId": WebSocket.local_player_name,
-			"pos": [bullet.position.x / 16, bullet.position.y / 16],
+			"pos": [bullet.position.x / Globals.SCALE, bullet.position.y / Globals.SCALE],
 			"rotation": bullet.rotation,
-			"speed": bullet.speed / 16,
-			"distance": bullet.distance / 16,
+			"speed": bullet.speed / Globals.SCALE,
+			"distance": bullet.distance / Globals.SCALE,
 			"isEnemy": false,
 			"kind": weapons[weapon_index].get("bullet", "bullet"),
 		})

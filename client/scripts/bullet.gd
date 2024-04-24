@@ -18,7 +18,7 @@ func _on_area_entered(area: Area2D) -> void:
 			"playerId": WebSocket.local_player_name,
 			"id": id,
 			"impactedId": area.id,
-			"pos": [position.x / 16, position.y / 16],
+			"pos": [position.x / Globals.SCALE, position.y / Globals.SCALE],
 			"damage": damage,
 		})
 		queue_free()

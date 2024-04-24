@@ -17,7 +17,7 @@ func _ready():
 		"type": "createPlayer",
 		"id": WebSocket.local_player_name,
 		"skin": WebSocket.local_player_skin,
-		"pos": [%Me.position.x / 16, %Me.position.y / 16],
+		"pos": [%Me.position.x / Globals.SCALE, %Me.position.y / Globals.SCALE],
 		"aim": %Me.get_node("%Weapon").rotation,
 		"weapon": %Me.weapons[$Me.weapon_index].id,
 	})
@@ -25,7 +25,7 @@ func _ready():
 func _physics_process(delta):
 	WebSocket.send({
 		"type": "updatePlayer",
-		"pos": [%Me.position.x / 16, %Me.position.y / 16],
+		"pos": [%Me.position.x / Globals.SCALE, %Me.position.y / Globals.SCALE],
 		"aim": %Me.get_node("%Weapon").rotation,
 		"weapon": %Me.weapons[$Me.weapon_index].id,
 	})
@@ -40,7 +40,7 @@ func process_data(data):
 	elif data["type"] == "welcome":
 		var s = data["world"]["size"]
 		world_tile_size = Vector2(s[0], s[1])
-		world_size = world_tile_size * 16
+		world_size = world_tile_size * Globals.SCALE
 		%Me.position = world_size / 2
 		var camera = %Me.get_node("Camera2D")
 		camera.limit_right = world_size.x
@@ -132,7 +132,7 @@ func update(actions):
 	
 
 func parse_pos(serverpos):
-	return Vector2(serverpos[0], serverpos[1]) * 16
+	return Vector2(serverpos[0], serverpos[1]) * Globals.SCALE
 
 func _process(delta):
 	var time = float(Time.get_ticks_usec()) / 1e6
