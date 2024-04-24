@@ -65,6 +65,7 @@ export class Enemy {
 			playerId: this.id,
 			rotation: this.pos.directionTo(target.pos),
 			speed: 10,
+			damage: this.kind.damage,
 			distance: this.range(),
 			isEnemy: true,
 			kind: this.kind.projectile,

@@ -3,9 +3,9 @@ extends Area2D
 var speed: float
 var distance: float
 var is_enemy: bool
-var id
+var id: String
 var playerId
-var damage
+var damage: float
 var kind: String
 
 const kinds = {
@@ -37,6 +37,7 @@ func _on_body_entered(body: Node2D) -> void:
 			"damage": damage,
 			"kind": kind
 		})
+		body.hit(damage)
 		queue_free()
 
 func set_kind(kind: String) -> void:

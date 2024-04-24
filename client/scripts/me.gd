@@ -4,7 +4,7 @@ extends CharacterBody2D
 
 const player_weapons: Array[String] = ["Handgun", "AssaultRifle", "Minigun", "Sniper", "Shotgun", "GrenadeLauncher"]
 
-var weapon_index:
+var weapon_index := -1:
 	set(value):
 		if weapon_index == value:
 			return
@@ -15,10 +15,16 @@ var weapon_index:
 		
 		$Shoot.stream.set_stream(0, weapon.stream)
 		$Shoot.volume_db = weapon.volume_db
-var weapon
+var weapon: Weapons.Weapon
 
-const speed := 10 * Globals.SCALE
+const speed := 10.0 * Globals.SCALE
 var cooldown := 0.0
+const maxhealth := 100.0
+var health := maxhealth:
+	set(value):
+		health = value
+		var ratio := clamp(health / maxhealth, 0, 1)
+		$HealthBar/Healthy.size.x = $HealthBar.size.x * ratio
 
 const LocalProjectile = preload("res://scenes/local_projectile.tscn")
 
@@ -78,6 +84,9 @@ func shoot() -> void:
 
 func weapon_id() -> String:
 	return player_weapons[weapon_index]
+
+func hit(damage: float) -> void:
+	health -= damage
 
 func is_me() -> bool:
 	return true
