@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bxfouhjhx3jp6"]
+
+[node name="HealthBar" type="ColorRect"]
+auto_translate_mode = 1
+offset_left = -5.0
+offset_top = -18.0
+offset_right = 5.0
+offset_bottom = -17.0
+color = Color(1, 0, 0, 1)
+
+[node name="Healthy" type="ColorRect" parent="."]
+auto_translate_mode = 1
+layout_mode = 0
+offset_right = 10.0
+offset_bottom = 1.0
+color = Color(0.466667, 1, 0.466667, 1)
