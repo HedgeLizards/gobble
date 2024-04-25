@@ -1,4 +1,4 @@
-import WebSocket, { WebSocketServer } from 'ws';
+import { type AddressInfo, WebSocket, WebSocketServer } from 'ws';
 import { Vec2 } from './vec2.js';
 import { Game } from './game.js';
 import { Player } from './player.js';
@@ -6,7 +6,7 @@ import { Player } from './player.js';
 const tickDuration = 0.1
 
 function main() {
-	let port = 9412
+	let port: number = 9412
 	if (process.argv.length >= 3) {
 		port = Number.parseInt(process.argv[2]);
 	}
@@ -18,14 +18,19 @@ function main() {
 
 
 class Serv {
+	game: Game
+	playerIds: Map<number, string>
+	connections: Map<number, WebSocket>
+	nextId: number
+	wss: WebSocketServer
 
-	constructor(game, port) {
+	constructor(game, port: number) {
 		this.game = game;
 		this.playerIds = new Map();
 		this.connections = new Map();
 		this.nextId = 1;
 		this.wss = new WebSocketServer({port: port});
-		this.wss.once('listening', () => console.log(`Listening on ${this.wss.address().address}:${this.wss.address().port}`));
+		this.wss.once('listening', () => console.log(`Listening on port ${(this.wss.address() as AddressInfo).port}`));
 		this.wss.on("connection", socket => {
 			let id = this.nextId++;
 			this.connections.set(id, socket);
@@ -53,7 +58,7 @@ class Serv {
 				if (socket.readyState === WebSocket.CLOSING) {
 					return;
 				}
-				let data = JSON.parse(msg);
+				let data = JSON.parse(msg.toString());
 				if (data.type === "createPlayer") {
 					if (this.playerIds.has(id)) {
 						send_error(socket, "Can only introduce once");
@@ -83,13 +88,13 @@ class Serv {
 					}
 					player.update({pos: new Vec2(...data.pos), aim: data.aim, weapon: data.weapon, health: data.health || 100});
 				} else if (data.type === "createProjectile") {
-					let response = {};
+					let response: any = {};
 					Object.assign(response, data);
 					response.type = "projectileCreated";
 					this.broadcast({type: "update", actions: [response]});
 				} else if (data.type === "impactProjectile") {
 					game.hitEnemy(data.impactedId, data.damage)
-					let response = {};
+					let response: any = {};
 					Object.assign(response, data);
 					response.type = "projectileRemoved";
 					this.broadcast({type: "update", actions: [response]});
@@ -111,10 +116,13 @@ class Serv {
 	}
 }
 
-function send_error(socket, msg) {
+function send_error(socket, msg: string) {
 	console.warn("Player error", msg);
 	socket.close(1002, msg);
 }
 
 
 main();
+
+
+
