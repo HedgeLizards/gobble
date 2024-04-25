@@ -22,8 +22,9 @@ var weapon:
 		
 		$Weapon/Sprite2D.texture = weapon.texture
 		
-		$Shoot.stream.set_stream(0, weapon.stream)
-		$Shoot.volume_db = weapon.volume_db
+		if not weapon.stream is AudioStreamInteractive and weapon.stream != null:
+			$Shoot.stream.set_stream(0, weapon.stream)
+			$Shoot.volume_db = weapon.volume_db
 
 
 func is_enemy():
@@ -40,4 +41,5 @@ func _on_label_resized():
 
 
 func shoot():
-	$Shoot.play()
+	if weapon.stream != null:
+		$Shoot.play()

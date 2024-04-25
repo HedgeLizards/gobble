@@ -7,6 +7,7 @@
 [ext_resource type="FontFile" uid="uid://chhjx2uirpf3r" path="res://assets/UI/Quicksand-Bold.otf" id="6_6ojmt"]
 [ext_resource type="PackedScene" uid="uid://bxfouhjhx3jp6" path="res://scenes/healthbar.tscn" id="6_n8pr1"]
 [ext_resource type="AudioStream" uid="uid://d1jejjlucgada" path="res://sounds/SFX_HandGun_Fire.wav" id="6_ne6rv"]
+[ext_resource type="AudioStream" uid="uid://ctbe770l47mde" path="res://sounds/minigun.tres" id="7_hri2s"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g3144"]
 size = Vector2(12, 12)
@@ -64,12 +65,13 @@ horizontal_alignment = 1
 [node name="HealthBar" parent="." instance=ExtResource("6_n8pr1")]
 unique_name_in_owner = true
 
-[node name="Shoot" type="AudioStreamPlayer2D" parent="."]
+[node name="Shoot" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamRandomizer_1epfc")
-max_distance = 500.0
-attenuation = 3.0
 max_polyphony = 4
-panning_strength = 10.0
+bus = &"SFX"
+
+[node name="ShootInteractive" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_hri2s")
 bus = &"SFX"
 
 [node name="CanvasGroup" type="CanvasGroup" parent="."]

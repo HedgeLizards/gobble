@@ -13,8 +13,8 @@ class Weapon:
 	
 	func _init(args):
 		self.texture = args.texture
-		self.stream = args.stream
-		self.volume_db = args.volume_db
+		self.stream = args.get("stream")
+		self.volume_db = args.get("volume_db", 0.0)
 		self.cooldown = args.get("cooldown", 1.0)
 		self.bullets = args.get("bullets", 1)
 		self.spread = args.get("spread", 0.0)
@@ -42,7 +42,7 @@ var weapons: Dictionary = {
 	}),
 	"Minigun": Weapon.new({
 		"texture": preload("res://assets/Gobbles/Weapons/Gobble_Minigun.png"),
-		"stream": preload("res://sounds/SFX_HandGun_Fire.wav"), # TO DO: Replace with weapon-specific sound
+		"stream": preload("res://sounds/minigun.tres"),
 		"volume_db": 0.0,
 		"cooldown": 0.05,
 		"bullets": 1,
@@ -78,12 +78,8 @@ var weapons: Dictionary = {
 	}),
 	"Bow": Weapon.new({
 		"texture": preload("res://assets/Knights/knight_bow.png"),
-		"stream": preload("res://sounds/SFX_HandGun_Fire.wav"), # TO DO: Replace with weapon-specific sound
-		"volume_db": -80.0,
 	}),
 	"Sword": Weapon.new({
 		"texture": preload("res://assets/Knights/Knight_sword.png"),
-		"stream": preload("res://sounds/SFX_HandGun_Fire.wav"), # TO DO: Replace with weapon-specific sound
-		"volume_db": -80.0,
 	}),
 }
