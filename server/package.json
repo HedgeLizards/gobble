@@ -2,7 +2,7 @@
     "description": "gobble",
     "author": "HedgeLizards",
     "scripts": {
-        "start": "tsc server.ts"
+        "start": "tsc && node dist/server.js"
     },
     "dependencies": {
         "bufferutil": "latest",

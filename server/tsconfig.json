@@ -1,6 +1,9 @@
 {
     "compilerOptions": {
-        "module": "ESNext",
+        "allowJs": true,
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "outDir": "dist",
         "target": "ESNext"
     }
 }
