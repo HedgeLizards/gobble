@@ -3,18 +3,30 @@ import { Player } from "./player.js";
 import { Enemy } from "./enemy.js";
 import { Vec2 } from "./vec2.js";
 import { EnemyKind } from "./enemykind.js";
-import { planWave } from "./waves.js";
+import { Wave, planWave } from "./waves.js";
 
-const State = {
-	Start: "Start", // no players
-	WaveStart: "WaveStart", // between waves; some players, no enemies
-	Wave: "Wave", // fighting enemies; some players, some emenies
-	GameOver: "GameOver", // all players dead, some enemies
+enum State {
+	Start = "Start", // no players
+	WaveStart = "WaveStart", // between waves; some players, no enemies
+	Wave = "Wave", // fighting enemies; some players, some emenies
+	GameOver = "GameOver", // all players dead, some enemies
 };
 
 
 
 export class Game {
+
+	players: Map<string, Player>
+	nextEnemyId: number
+	enemies: Map<number, Enemy>
+	removed: Array<string | number>
+	size: Vec2
+	state: State
+	timeToWave: number
+	timeToSpawn: number
+	waveNum: number
+	wave?: Wave
+
 
 	constructor(){
 		this.players = new Map();
@@ -27,10 +39,9 @@ export class Game {
 		this.timeToWave = 0;
 		this.timeToSpawn = 0;
 		this.waveNum = 0;
-		this.wave = null;
 	}
 
-	addPlayer(player) {
+	addPlayer(player: Player) {
 		if (this.players.has(player.name)){
 			return "name " + player.name + " is already taken";
 		}
@@ -39,23 +50,23 @@ export class Game {
 		return null;
 	}
 
-	updatePlayer(player) {
+	updatePlayer(player: Player) {
 		if (!this.players.has(player.name)){
 			return "unknown player " + player.name;
 		}
 		this.players.set(player.name, player);
 	}
 
-	getPlayer(name) {
+	getPlayer(name: string) {
 		return this.players.get(name);
 	}
 
-	removePlayer(name) {
+	removePlayer(name: string) {
 		this.removed.push(name);
 		this.players.delete(name);
 	}
 
-	spawnEnemy(kind) {
+	spawnEnemy(kind: EnemyKind) {
 		let ratio = Math.random()
 		let pos = pick_random([
 			new Vec2(this.size.x * ratio, 0), // top
@@ -67,7 +78,7 @@ export class Game {
 		this.enemies.set(enemy.id, enemy);
 	}
 
-	hitEnemy(enemyId, damage) {
+	hitEnemy(enemyId: number, damage: number) {
 		let enemy = this.enemies.get(enemyId);
 		if (!enemy) { return; }
 		enemy.health -= damage;
@@ -78,7 +89,7 @@ export class Game {
 
 	}
 
-	update(delta) {
+	update(delta: number) {
 		let actions = [];
 		if (this.players.size === 0) {
 			this.state = State.Start;
@@ -102,15 +113,18 @@ export class Game {
 			}
 		}
 		if (this.state === State.Wave) {
-			if (this.wave.isOver() && this.enemies.size === 0) {
+			if (this.wave!.isOver() && this.enemies.size === 0) {
 				this.state = State.WaveStart;
 				this.timeToWave = 5;
 				actions.push({type: "waveEnd", waveNum: this.waveNum});
 			} else {
 				this.timeToSpawn -= delta;
-				if (this.timeToSpawn <= 0 && !this.wave.isOver()) {
-					this.spawnEnemy(this.wave.spawn());
-					this.timeToSpawn = 1;
+				if (this.timeToSpawn <= 0) {
+					let toSpawn = this.wave!.spawn();
+					if (toSpawn) {
+						this.spawnEnemy(toSpawn);
+						this.timeToSpawn = 1;
+					}
 				}
 				for (let enemy of this.enemies.values()) {
 					actions.push(...enemy.update(delta, this))
@@ -128,7 +142,7 @@ export class Game {
 		return actions;
 	}
 
-	findNearestTarget(pos) {
+	findNearestTarget(pos: Vec2): [Vec2, {pos: Vec2}, number] {
 		let nearest = this.center();
 		let nearestDist = pos.distanceTo(this.center()) + 1024;
 		let target = {pos: this.center()};
@@ -156,6 +170,6 @@ export class Game {
 }
 
 
-function pick_random(arr) {
+function pick_random<Type>(arr: Type[]): Type {
 	return arr[Math.random() * arr.length | 0];
 }

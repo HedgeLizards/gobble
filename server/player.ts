@@ -1,8 +1,16 @@
 
+import { Vec2 } from "./vec2.js"
 
 export class Player {
+	name: string
+	skin: string
+	pos: Vec2
+	aim: number
+	weapon: string
+	health: number
+	maxhealth: number
 
-	constructor(name, skin, pos, aim, weapon, health, maxhealth) {
+	constructor(name: string, skin: string, pos: Vec2, aim: number, weapon: string, health: number, maxhealth: number) {
 		this.name = name;
 		this.skin = skin;
 		this.pos = pos;
@@ -12,7 +20,7 @@ export class Player {
 		this.maxhealth = maxhealth
 	}
 
-	update(props) {
+	update(props: any) {
 		Object.assign(this, props);
 	}
 

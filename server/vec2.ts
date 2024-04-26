@@ -1,85 +1,87 @@
 
 
 export class Vec2 {
+	x: number
+	y: number
 
-	constructor(x, y) {
+	constructor(x: number, y: number) {
 		this.x = x;
 		this.y = y;
 	}
 
-	equals(other) {
+	equals(other: Vec2): boolean {
 		return this.x === other.x && this.y === other.y;
 	}
 
-	surface() {
+	surface(): number {
 		return this.x * this.y;
 	}
 
-	length() {
+	length(): number {
 		return Math.hypot(this.x, this.y);
 	}
 
-	mLength() {
+	mLength(): number {
 		return Math.abs(this.x) + Math.abs(this.y);
 	}
 
-	add(v) {
+	add(v: Vec2): Vec2 {
 		return new Vec2(this.x + v.x, this.y + v.y);
 	}
 
-	sub(v) {
+	sub(v: Vec2): Vec2 {
 		return new Vec2(this.x - v.x, this.y - v.y);
 	}
 
-	mul(n) {
+	mul(n: number): Vec2 {
 		return new Vec2(this.x * n, this.y * n);
 	}
 
-	div(n) {
+	div(n: number): Vec2 {
 		return new Vec2(this.x / n, this.y / n);
 	}
 
-	floor() {
+	floor(): Vec2 {
 		return new Vec2(Math.floor(this.x), Math.floor(this.y));
 	}
 
-	round() {
+	round(): Vec2 {
 		return new Vec2(Math.round(this.x), Math.round(this.y));
 	}
 
-	ceil() {
+	ceil(): Vec2 {
 		return new Vec2(Math.ceil(this.x), Math.ceil(this.y));
 	}
 
-	normalize() {
+	normalize(): Vec2 {
 		return this.div(this.length());
 	}
 
-	lerp(to, d) {
+	lerp(to: Vec2, d: number): Vec2 {
 		return new Vec2(this.x*(1-d) + to.x*d, this.y*(1-d) + to.y*d);
 	}
 
-	distanceTo(other) {
+	distanceTo(other: Vec2): number {
 		return this.sub(other).length();
 	}
 
-	mDistanceTo(other) {
+	mDistanceTo(other: Vec2): number {
 		return this.sub(other).mLength();
 	}
 
-	directionTo(other) {
+	directionTo(other: Vec2): number {
 		return Math.atan2(other.y - this.y, other.x - this.x);
 	}
 
-	clone() {
+	clone(): Vec2 {
 		return new Vec2(this.x, this.y);
 	}
 
-	arr() {
+	arr(): [number, number] {
 		return [this.x, this.y];
 	}
 
-	truncate(maxSize) {
+	truncate(maxSize: number): Vec2 {
 		let len = this.length();
 		if (len > maxSize) {
 			return this.mul(maxSize / len);

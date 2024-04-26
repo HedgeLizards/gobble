@@ -1,22 +1,29 @@
 
 
 import { Vec2 } from "./vec2.js";
+import { EnemyKind } from "./enemykind.js";
+import { Player } from "./player.js";
+import { Game } from "./game.js";
 
 
 export class Enemy {
+	id: number
+	pos: Vec2
+	kind: EnemyKind
+	cooldown: number
+	target?: {pos: Vec2}
+	health: number
 
-	constructor(id, pos, kind) {
+	constructor(id: number, pos: Vec2, kind: EnemyKind) {
 		this.id = id;
 		this.pos = pos;
 		this.health = kind.health;
 		this.cooldown = 0;
-		this.target = null;
 		this.kind = kind;
 	}
 
-	update(delta, world) {
+	update(delta: number, world: Game) {
 		let actions = [];
-		this.isAttacking = false;
 		let [nearest, target, dist] = world.findNearestTarget(this.pos);
 		this.target = target;
 		if (dist < this.range()) {
@@ -59,7 +66,7 @@ export class Enemy {
 		}
 	}
 
-	attack(target) {
+	attack(target: {pos: Vec2}) {
 		return [{
 			type: "projectileCreated",
 			pos: [this.pos.x, this.pos.y - 0.5],
