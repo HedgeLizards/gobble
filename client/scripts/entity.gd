@@ -18,6 +18,7 @@ var weapon:
 	set(value):
 		if weapon == value:
 			return
+		
 		weapon = value
 		
 		$Weapon/Sprite2D.texture = weapon.texture
@@ -41,5 +42,5 @@ func _on_label_resized():
 
 
 func shoot():
-	if weapon.stream != null:
+	if not weapon.stream is AudioStreamInteractive and weapon.stream != null:
 		$Shoot.play()
