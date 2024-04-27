@@ -102,27 +102,17 @@ class Serv {
 					for (let projectile of data.projectiles) {
 						responses.push({
 							type: "projectileCreated",
-							id: projectile.id,
+							...projectile,
 							creatorId: data.creatorId,
-							pos: projectile.pos,
-							rotation: projectile.rotation,
-							distance: projectile.distance,
-							speed: projectile.speed,
 							isEnemy: data.isEnemy,
-							kind: projectile.kind,
-							damage: projectile.damage,
 						});
 					}
 					this.broadcast({type: "update", actions: responses});
 				} else if (data.type === "impactProjectile") {
 					game.hitEnemy(data.impactedId, data.damage)
 					let response: ActionMessage = {
+						...data,
 						type: "projectileImpacted",
-						id: data.id,
-						creatorId: data.creatorId,
-						impactedId: data.impactedId as unknown as string,
-						pos: data.pos,
-						damage: data.damage
 					};
 					this.broadcast({type: "update", actions: [response]});
 				}

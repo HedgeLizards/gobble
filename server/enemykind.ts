@@ -1,5 +1,5 @@
 
-export class EnemyKind {
+export interface EnemyKind {
 	attackCooldown: number
 	speed: number
 	skin: string
@@ -9,20 +9,10 @@ export class EnemyKind {
 	projectile: string
 	damage: number
 
-	constructor(args: any) {
-		this.attackCooldown = 1;
-		this.speed = 2;
-		this.skin = args.skin;
-		this.health = args.health;
-		this.range = args.range;
-		this.weapon = args.weapon;
-		this.projectile = args.projectile;
-		this.damage = args.damage;
-	}
 
 }
 
-export const Knight = new EnemyKind({skin: "knight", health: 10, range: 1, weapon: "Sword", projectile: "sword", damage: 5});
-export const Archer = new EnemyKind({skin: "archer", health: 10, range: 10, weapon: "Bow", projectile: "arrow", damage: 3});
+export const Knight: EnemyKind = {skin: "knight", health: 10, range: 1, weapon: "Sword", projectile: "sword", damage: 5, attackCooldown: 1, speed: 2};
+export const Archer: EnemyKind = {skin: "archer", health: 10, range: 10, weapon: "Bow", projectile: "arrow", damage: 3, attackCooldown: 1, speed: 2};
 
 

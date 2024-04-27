@@ -2,6 +2,7 @@
 
 import { define, coerce, union, literal, number, object, string, tuple, boolean, array, optional, enums, Infer } from 'superstruct'
 import { Vec2 } from './vec2.js';
+import { Activity } from './player.js';
 
 const Vec2_ = coerce(define<Vec2>("Vec2", (o: any) => o instanceof Vec2), tuple([number(), number()]), ([x, y]) => new Vec2(x, y));
 const PlayerId = define<string>("PlayerId", (o: any) => typeof(o) === "string" && o.startsWith("P:"));
@@ -55,7 +56,7 @@ export const ClientMessage = union([CreatePlayerMessage, UpdatePlayerMessage, Cr
 export type ClientMessage = Infer<typeof ClientMessage>;
 
 export type ActionMessage =
-	{type: "entityUpdated", id: string, name?: string, skin: string, pos: Vec2, aim: number, weapon: string, isEnemy: boolean, health: number, maxhealth: number, activity?: {type: "idle" | "shooting" }} |
+	{type: "entityUpdated", id: string, name?: string, skin: string, pos: Vec2, aim: number, weapon: string, isEnemy: boolean, health: number, maxhealth: number, activity?: Activity} |
 	{type: "entityDeleted", id: string} |
 	{type: "projectileCreated", id: string, creatorId: string, pos: Vec2, rotation: number, speed: number, distance: number, isEnemy: boolean, kind: string, damage: number} |
 	{type: "projectileImpacted", id: string, creatorId: string, impactedId: string, pos: Vec2, damage: number} |

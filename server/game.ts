@@ -51,13 +51,6 @@ export class Game {
 		return null;
 	}
 
-	updatePlayer(player: Player) {
-		if (!this.players.has(player.id)){
-			return "unknown player " + player.id;
-		}
-		this.players.set(player.id, player);
-	}
-
 	getPlayer(id: string) {
 		return this.players.get(id);
 	}

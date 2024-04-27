@@ -9,13 +9,13 @@ class Phase {
 	constructor(...composition: (EnemyKind | [EnemyKind, number])[]) {
 		this.spawns = [];
 		for (let entry of composition) {
-			if (entry instanceof EnemyKind) {
-				this.spawns.push(entry);
-			} else {
+			if (entry instanceof Array) {
 				let [kind, n] = entry;
 				for (let i: number=0; i<n; ++i) {
 					this.spawns.push(kind);
 				}
+			} else {
+				this.spawns.push(entry);
 			}
 		}
 	}
@@ -25,12 +25,12 @@ class Phase {
 	}
 
 	spawn() {
-		if (this.isOver()) {
-			return null;
-		}
 		// pick a random element, remove it and return it;
 		let index = Math.random() * this.spawns.length | 0;
-		let last = this.spawns.pop() as EnemyKind;
+		let last = this.spawns.pop();
+		if (last === undefined) {
+			return undefined;
+		}
 		if (index === this.spawns.length) {
 			return last;
 		} else {
