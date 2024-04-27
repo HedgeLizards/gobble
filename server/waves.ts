@@ -1,16 +1,21 @@
 
-import { EnemyKind, EnemyKindId } from "./enemykind.js"
+import { EnemyKind, Knight, Archer } from "./enemykind.js"
 
 
 class Phase {
 
 	spawns: EnemyKind[]
 
-	constructor(composition: any) {
+	constructor(...composition: (EnemyKind | [EnemyKind, number])[]) {
 		this.spawns = [];
-		for (let name in composition) {
-			for (let i: number=0; i<composition[name]; ++i) {
-				this.spawns.push(EnemyKind.fromStr(name as EnemyKindId));
+		for (let entry of composition) {
+			if (entry instanceof EnemyKind) {
+				this.spawns.push(entry);
+			} else {
+				let [kind, n] = entry;
+				for (let i: number=0; i<n; ++i) {
+					this.spawns.push(kind);
+				}
 			}
 		}
 	}
@@ -34,13 +39,17 @@ class Phase {
 			return spawned;
 		}
 	}
+
+	clone() {
+		return new Phase(...this.spawns);
+	}
 }
 
 
 export class Wave {
 	phases: Phase[]
-	constructor(phases: Phase[]) {
-		this.phases = phases.map(p => new Phase(p));
+	constructor(...phases: Phase[]) {
+		this.phases = phases;
 	}
 
 	spawn() {
@@ -56,21 +65,26 @@ export class Wave {
 		}
 		return this.phases.length === 0;
 	}
+
+	clone() {
+		return new Wave(...this.phases.map(phase => phase.clone()));
+	}
 }
 
-const waves: any[][] = [
-	[], // wave 0: unused
-	[{Knight: 10, Archer: 6}],
-	[{Knight: 20, Archer: 15}],
-	[{Knight: 40, Archer: 30}],
-	[{Knight: 60, Archer: 40}],
+const waves: Wave[] = [
+	new Wave(), // wave 0: unused
+	new Wave(new Phase([Knight, 10], [Archer, 6])),
+	new Wave(new Phase([Knight, 20], [Archer, 15])),
+	new Wave(new Phase([Knight, 40], [Archer, 30])),
+	new Wave(new Phase([Knight, 60], [Archer, 50])),
+	new Wave(new Phase([Knight, 80], [Archer, 70])),
 ];
-const lateWaves: any[] = [{Knight: 100, Archer: 100}];
+const lateWaves: Wave = new Wave(new Phase([Knight, 100],  [Archer, 100]));
 
 export function planWave(waveNum: number): Wave {
 	if (waveNum < waves.length) {
-		return new Wave(waves[waveNum]);
+		return waves[waveNum].clone();
 	} else {
-		return new Wave(lateWaves);
+		return lateWaves.clone();
 	}
 }
