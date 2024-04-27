@@ -1,11 +1,14 @@
 
-import { union, literal, number, object, string, tuple, boolean, array, optional, enums, Infer } from 'superstruct'
 
+import { define, coerce, union, literal, number, object, string, tuple, boolean, array, optional, enums, Infer } from 'superstruct'
+import { Vec2 } from './vec2.js';
+
+const Vec2_ = coerce(define<Vec2>("Vec2", (o: any) => o instanceof Vec2), tuple([number(), number()]), ([x, y]) => new Vec2(x, y));
 const CreatePlayerMessage = object({
 	type: literal("createPlayer"),
 	id: string(),
 	skin: string(),
-	pos: tuple([number(), number()]),
+	pos: Vec2_,
 	aim: number(),
 	health: number(),
 	maxhealth: number(),
@@ -13,7 +16,7 @@ const CreatePlayerMessage = object({
 });
 const UpdatePlayerMessage = object({
 	type: literal("updatePlayer"),
-	pos: tuple([number(), number()]),
+	pos: Vec2_,
 	aim: number(),
 	health: number(),
 	weapon: string(),
@@ -21,7 +24,7 @@ const UpdatePlayerMessage = object({
 });
 const ProjectileState = object({
 	id: string(),
-	pos: tuple([number(), number()]),
+	pos: Vec2_,
 	rotation: number(),
 	speed: number(),
 	distance: number(),
@@ -39,7 +42,7 @@ const ImpactProjectile = object({
 	creatorId: union([string(), number()]),
 	id: string(),
 	impactedId: union([number(), string()]),
-	pos: tuple([number(), number()]),
+	pos: Vec2_,
 	damage: number(),
 	kind: string(),
 })
@@ -47,14 +50,14 @@ export const ClientMessage = union([CreatePlayerMessage, UpdatePlayerMessage, Cr
 export type ClientMessage = Infer<typeof ClientMessage>;
 
 export type ActionMessage =
-	{type: "entityUpdated", id: string | number, skin: string, pos: [number, number], aim: number, weapon: string, isEnemy: boolean, health: number, maxhealth: number, activity?: {type: "idle" | "shooting" }} |
+	{type: "entityUpdated", id: string | number, skin: string, pos: Vec2, aim: number, weapon: string, isEnemy: boolean, health: number, maxhealth: number, activity?: {type: "idle" | "shooting" }} |
 	{type: "entityDeleted", id: string | number} |
-	{type: "projectileCreated", id: string, creatorId: number | string, pos: [number, number], rotation: number, speed: number, distance: number, isEnemy: boolean, kind: string, damage: number} |
-	{type: "projectileImpacted", id: string, creatorId: number | string, impactedId: string, pos: [number, number], damage: number} |
+	{type: "projectileCreated", id: string, creatorId: number | string, pos: Vec2, rotation: number, speed: number, distance: number, isEnemy: boolean, kind: string, damage: number} |
+	{type: "projectileImpacted", id: string, creatorId: number | string, impactedId: string, pos: Vec2, damage: number} |
 	{type: "waveStart", waveNum: number} |
 	{type: "waveEnd", waveNum: number};
 
 export type ServerMessage = {type: "update", actions: ActionMessage[]}
 	| {type: "welcome", tickDuration: number, world: WorldMessage};
 
-export type WorldMessage = {type: "world", size: [number, number]};
+export type WorldMessage = {type: "world", size: Vec2};

@@ -50,7 +50,7 @@ export class Enemy {
 			type: "entityUpdated",
 			id: this.id,
 			skin: this.kind.skin,
-			pos: this.pos.arr(),
+			pos: this.pos,
 			aim: this.pos.directionTo(this.targetPos()),
 			weapon: this.kind.weapon,
 			isEnemy: true,
@@ -70,7 +70,7 @@ export class Enemy {
 	attack(target: {pos: Vec2}): ActionMessage[] {
 		return [{
 			type: "projectileCreated",
-			pos: [this.pos.x, this.pos.y - 0.5],
+			pos: this.pos.add(new Vec2(0, -0.5)),
 			id: "@bullet_" + this.id + "_" + ((Math.random() * 1e6) | 0),
 			creatorId: this.id,
 			rotation: this.pos.directionTo(target.pos),

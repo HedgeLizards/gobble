@@ -77,7 +77,7 @@ export class Vec2 {
 		return new Vec2(this.x, this.y);
 	}
 
-	arr(): [number, number] {
+	toJSON(): [number, number] {
 		return [this.x, this.y];
 	}
 

@@ -166,7 +166,7 @@ export class Game {
 	}
 
 	viewWorld(): WorldMessage {
-		return {type: "world", size: this.size.arr()};
+		return {type: "world", size: this.size};
 	}
 }
 

@@ -78,7 +78,7 @@ class Serv {
 						send_error(socket, "invalid name " + name);
 						return
 					}
-					let err = this.game.addPlayer(new Player(name, data.skin, new Vec2(data.pos[0], data.pos[1]), data.aim, data.weapon, data.health || 100, data.maxhealth || 100));
+					let err = this.game.addPlayer(new Player(name, data.skin, data.pos, data.aim, data.weapon, data.health || 100, data.maxhealth || 100));
 					if (err) {
 						send_error(socket, err);
 						return
@@ -96,7 +96,7 @@ class Serv {
 					if (!player) {
 						send_error(socket, "unknown player " + name);
 					} else {
-						player.update({pos: new Vec2(data.pos[0], data.pos[1]), aim: data.aim, weapon: data.weapon, health: data.health || 100, activity: data.activity});
+						player.update({pos: data.pos, aim: data.aim, weapon: data.weapon, health: data.health || 100, activity: data.activity});
 					}
 				} else if (data.type === "createProjectiles") {
 					let responses: ActionMessage[] = []

@@ -32,7 +32,7 @@ export class Player {
 			type: "entityUpdated",
 			id: this.name,
 			skin: this.skin,
-			pos: this.pos.arr(),
+			pos: this.pos,
 			aim: this.aim,
 			weapon: this.weapon,
 			isEnemy: false,
