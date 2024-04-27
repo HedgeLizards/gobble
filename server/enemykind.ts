@@ -1,6 +1,4 @@
 
-export type EnemyKindId = "Knight" | "Archer";
-
 export class EnemyKind {
 	attackCooldown: number
 	speed: number
@@ -10,8 +8,6 @@ export class EnemyKind {
 	weapon: string
 	projectile: string
 	damage: number
-	static Knight: EnemyKind
-	static Archer: EnemyKind
 
 	constructor(args: any) {
 		this.attackCooldown = 1;
@@ -24,20 +20,9 @@ export class EnemyKind {
 		this.damage = args.damage;
 	}
 
-	static fromStr(id: EnemyKindId): EnemyKind {
-		switch (id) {
-			case "Knight":
-		// if (name === "Knight") {
-				return EnemyKind.Knight;
-		// } else if (name === "Archer") {
-			case "Archer":
-				return EnemyKind.Archer;
-		}
-	}
-
 }
 
-EnemyKind.Knight = new EnemyKind({skin: "knight", health: 10, range: 1, weapon: "Sword", projectile: "sword", damage: 5});
-EnemyKind.Archer = new EnemyKind({skin: "archer", health: 10, range: 10, weapon: "Bow", projectile: "arrow", damage: 3});
+export const Knight = new EnemyKind({skin: "knight", health: 10, range: 1, weapon: "Sword", projectile: "sword", damage: 5});
+export const Archer = new EnemyKind({skin: "archer", health: 10, range: 10, weapon: "Bow", projectile: "arrow", damage: 3});
 
 
