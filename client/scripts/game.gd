@@ -92,7 +92,7 @@ func update(actions):
 				entities[id].queue_free()
 				entities.erase(id)
 		elif type == "projectileCreated":
-			var playerId = action["playerId"]
+			var playerId = action["creatorId"]
 			if typeof(playerId) == typeof(WebSocket.local_player_name) &&  playerId == WebSocket.local_player_name:
 				continue
 			var shooter = entities.get(playerId)
@@ -108,11 +108,11 @@ func update(actions):
 			bullet.is_enemy = action.get("isEnemy", false)
 			bullet.damage = action.get("damage", 0)
 			bullet.id = action["id"]
-			bullet.playerId = action.get("playerId")
+			bullet.playerId = action.get("creatorId")
 			%Projectiles.add_child(bullet)
 			remote_projectiles[action["id"]] =  bullet
-		elif type == "projectileRemoved":
-			var playerId = action["playerId"]
+		elif type == "projectileImpacted":
+			var playerId = action["creatorId"]
 			if typeof(playerId) == typeof(WebSocket.local_player_name) &&  playerId == WebSocket.local_player_name:
 				continue
 			var p = remote_projectiles.get(action["id"])

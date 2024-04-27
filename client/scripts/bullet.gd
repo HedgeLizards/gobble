@@ -15,10 +15,11 @@ func _on_area_entered(area: Area2D) -> void:
 	if area.has_method("is_enemy") and area.is_enemy():
 		WebSocket.send({
 			"type": "impactProjectile",
-			"playerId": WebSocket.local_player_name,
+			"creatorId": WebSocket.local_player_name,
 			"id": id,
 			"impactedId": area.id,
 			"pos": [position.x / Globals.SCALE, position.y / Globals.SCALE],
 			"damage": damage,
+			"kind": "bullet",
 		})
 		queue_free()

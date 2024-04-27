@@ -6,6 +6,7 @@
     },
     "dependencies": {
         "bufferutil": "latest",
+        "superstruct": "^1.0.5-0",
         "ws": "latest"
     },
     "devDependencies": {

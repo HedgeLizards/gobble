@@ -11,6 +11,9 @@ importers:
       bufferutil:
         specifier: latest
         version: 4.0.8
+      superstruct:
+        specifier: ^1.0.5-0
+        version: 1.0.5-0
       ws:
         specifier: latest
         version: 8.16.0(bufferutil@4.0.8)
@@ -37,6 +40,10 @@ packages:
   node-gyp-build@4.8.0:
     resolution: {integrity: sha512-u6fs2AEUljNho3EYTJNBfImO5QTo/J/1Etd+NVdCj7qWKUSN/bSLkZwhDv7I+w/MSC6qJ4cknepkAYykDdK8og==}
     hasBin: true
+
+  superstruct@1.0.5-0:
+    resolution: {integrity: sha512-43h6QIPULyG4rEhDQznp+CVseSlg5bv6Yzuz3m4pLISY4HDAyGXlv2f1ObZNaUBOJpifuwkWef7gM55LxLw9/w==}
+    engines: {node: '>=14.0.0'}
 
   typescript@5.4.5:
     resolution: {integrity: sha512-vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==}
@@ -73,6 +80,8 @@ snapshots:
       node-gyp-build: 4.8.0
 
   node-gyp-build@4.8.0: {}
+
+  superstruct@1.0.5-0: {}
 
   typescript@5.4.5: {}
 

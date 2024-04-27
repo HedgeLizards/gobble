@@ -92,13 +92,14 @@ func shoot() -> void:
 		WebSocket.send({
 			"type": "createProjectile",
 			"id": bullet.id,
-			"playerId": WebSocket.local_player_name,
+			"creatorId": WebSocket.local_player_name,
 			"pos": [bullet.position.x / Globals.SCALE, bullet.position.y / Globals.SCALE],
 			"rotation": bullet.rotation,
 			"speed": bullet.speed / Globals.SCALE,
 			"distance": bullet.distance / Globals.SCALE,
 			"isEnemy": false,
 			"kind": weapon.bullet,
+			"damage": 10,
 		})
 	$Camera2D.recoil(-direction, weapon.recoil_strength)
 

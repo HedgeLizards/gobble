@@ -30,7 +30,7 @@ func _on_body_entered(body: Node2D) -> void:
 	if is_enemy && body.has_method("is_me") and body.is_me():
 		WebSocket.send({
 			"type": "impactProjectile",
-			"playerId": playerId,
+			"creatorId": playerId,
 			"id": id,
 			"impactedId": WebSocket.local_player_name,
 			"pos": [position.x / Globals.SCALE, position.y / Globals.SCALE],

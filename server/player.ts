@@ -1,5 +1,6 @@
 
-import { Vec2 } from "./vec2.js"
+import { Vec2 } from "./vec2.js";
+import { ActionMessage } from "./messages.js";
 
 export class Player {
 	name: string
@@ -24,7 +25,7 @@ export class Player {
 		Object.assign(this, props);
 	}
 
-	view() {
+	view(): ActionMessage {
 		return {
 			type: "entityUpdated",
 			id: this.name,

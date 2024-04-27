@@ -1,7 +1,10 @@
 import { type AddressInfo, WebSocket, WebSocketServer } from 'ws';
+import { create } from 'superstruct';
 import { Vec2 } from './vec2.js';
 import { Game } from './game.js';
 import { Player } from './player.js';
+import { ClientMessage, ServerMessage, ActionMessage} from './messages.js';
+
 
 const tickDuration = 0.1
 
@@ -14,7 +17,6 @@ function main() {
 	let server = new Serv(game, port);
 	setInterval(() => server.update(tickDuration), tickDuration * 1000);
 }
-
 
 
 class Serv {
@@ -49,7 +51,7 @@ class Serv {
 				this.connections.delete(id);
 				let playerName = this.playerIds.get(id);
 				if (playerName) {
-					console.log("Player errored", playerName, error);
+					console.log("Player errored", playerName, error.toString());
 					console.log("msg", JSON.stringify(error));
 					this.game.removePlayer(playerName);
 				}
@@ -58,7 +60,14 @@ class Serv {
 				if (socket.readyState === WebSocket.CLOSING) {
 					return;
 				}
-				let data = JSON.parse(msg.toString());
+				let rawData = JSON.parse(msg.toString());
+				let data: ClientMessage;
+				try {
+					data = create(rawData, ClientMessage); 
+				} catch (e) {
+					send_error(socket, `Incorrect structure for ${rawData.type}: ${msg.toString()}`);
+					return;
+				}
 				if (data.type === "createPlayer") {
 					if (this.playerIds.has(id)) {
 						send_error(socket, "Can only introduce once");
@@ -75,7 +84,8 @@ class Serv {
 						return
 					}
 					this.playerIds.set(id, name);
-					socket.send(JSON.stringify({type: "welcome", tickDuration: tickDuration, world: this.game.viewWorld()}));
+					let welcome: ServerMessage = {type: "welcome", tickDuration: tickDuration, world: this.game.viewWorld()}
+					socket.send(JSON.stringify(welcome));
 				} else if (data.type === "updatePlayer") {
 					let name = this.playerIds.get(id);
 					if (!name) {
@@ -89,15 +99,29 @@ class Serv {
 						player.update({pos: new Vec2(data.pos[0], data.pos[1]), aim: data.aim, weapon: data.weapon, health: data.health || 100});
 					}
 				} else if (data.type === "createProjectile") {
-					let response: any = {};
-					Object.assign(response, data);
-					response.type = "projectileCreated";
+					let response: ActionMessage = {
+						type: "projectileCreated",
+						id: data.id,
+						creatorId: data.creatorId,
+						pos: data.pos,
+						rotation: data.rotation,
+						distance: data.distance,
+						speed: data.speed,
+						isEnemy: data.isEnemy,
+						kind: data.kind,
+						damage: data.damage,
+					};
 					this.broadcast({type: "update", actions: [response]});
 				} else if (data.type === "impactProjectile") {
 					game.hitEnemy(data.impactedId, data.damage)
-					let response: any = {};
-					Object.assign(response, data);
-					response.type = "projectileRemoved";
+					let response: ActionMessage = {
+						type: "projectileImpacted",
+						id: data.id,
+						creatorId: data.creatorId,
+						impactedId: data.impactedId as unknown as string,
+						pos: data.pos,
+						damage: data.damage
+					};
 					this.broadcast({type: "update", actions: [response]});
 				}
 			});
@@ -106,11 +130,11 @@ class Serv {
 
 
 	update(delta: number) {
-		let actions = this.game.update(delta);
+		let actions: ActionMessage[] = this.game.update(delta);
 		this.broadcast({type: "update", actions: actions});
 	}
 
-	broadcast(data: any) {
+	broadcast(data: ServerMessage) {
 		for (let socket of this.connections.values()) {
 			socket.send(JSON.stringify(data));
 		}
@@ -119,6 +143,9 @@ class Serv {
 
 function send_error(socket: WebSocket, msg: string) {
 	console.warn("Player error", msg);
+	if (msg.length > 120) {
+		msg = msg.substring(0, 117) + "...";
+	}
 	socket.close(1002, msg);
 }
 

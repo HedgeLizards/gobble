@@ -4,6 +4,7 @@ import { Enemy } from "./enemy.js";
 import { Vec2 } from "./vec2.js";
 import { EnemyKind } from "./enemykind.js";
 import { Wave, planWave } from "./waves.js";
+import { ActionMessage, WorldMessage } from "./messages.js";
 
 enum State {
 	Start = "Start", // no players
@@ -78,7 +79,10 @@ export class Game {
 		this.enemies.set(enemy.id, enemy);
 	}
 
-	hitEnemy(enemyId: number, damage: number) {
+	hitEnemy(enemyId: number | string, damage: number) {
+		if (typeof(enemyId) === "string") {
+			return;
+		}
 		let enemy = this.enemies.get(enemyId);
 		if (!enemy) { return; }
 		enemy.health -= damage;
@@ -89,8 +93,8 @@ export class Game {
 
 	}
 
-	update(delta: number) {
-		let actions = [];
+	update(delta: number): ActionMessage[] {
+		let actions: ActionMessage[] = [];
 		if (this.players.size === 0) {
 			this.state = State.Start;
 			this.waveNum = 0;
@@ -161,10 +165,7 @@ export class Game {
 		return this.size.div(2);
 	}
 
-	view() {
-	}
-
-	viewWorld() {
+	viewWorld(): WorldMessage {
 		return {type: "world", size: this.size.arr()};
 	}
 }

@@ -4,6 +4,7 @@ import { Vec2 } from "./vec2.js";
 import { EnemyKind } from "./enemykind.js";
 import { Player } from "./player.js";
 import { Game } from "./game.js";
+import { ActionMessage } from "./messages.js";
 
 
 export class Enemy {
@@ -22,8 +23,8 @@ export class Enemy {
 		this.kind = kind;
 	}
 
-	update(delta: number, world: Game) {
-		let actions = [];
+	update(delta: number, world: Game): ActionMessage[] {
+		let actions: ActionMessage[] = [];
 		let [nearest, target, dist] = world.findNearestTarget(this.pos);
 		this.target = target;
 		if (dist < this.range()) {
@@ -44,7 +45,7 @@ export class Enemy {
 		return actions;
 	}
 
-	view() {
+	view(): ActionMessage {
 		return {
 			type: "entityUpdated",
 			id: this.id,
@@ -66,12 +67,12 @@ export class Enemy {
 		}
 	}
 
-	attack(target: {pos: Vec2}) {
+	attack(target: {pos: Vec2}): ActionMessage[] {
 		return [{
 			type: "projectileCreated",
 			pos: [this.pos.x, this.pos.y - 0.5],
 			id: "@bullet_" + this.id + "_" + ((Math.random() * 1e6) | 0),
-			playerId: this.id,
+			creatorId: this.id,
 			rotation: this.pos.directionTo(target.pos),
 			speed: 10,
 			damage: this.kind.damage,
