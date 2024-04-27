@@ -1,5 +1,5 @@
 
-import { union, literal, number, object, string, tuple, boolean, Infer } from 'superstruct'
+import { union, literal, number, object, string, tuple, boolean, array, optional, enums, Infer } from 'superstruct'
 
 const CreatePlayerMessage = object({
 	type: literal("createPlayer"),
@@ -17,18 +17,22 @@ const UpdatePlayerMessage = object({
 	aim: number(),
 	health: number(),
 	weapon: string(),
+	activity: optional(object({type: enums(["idle", "shooting"])}))
 });
-const CreateProjectile = object({
-	type: literal("createProjectile"),
-	creatorId: union([string(), number()]),
+const ProjectileState = object({
 	id: string(),
 	pos: tuple([number(), number()]),
 	rotation: number(),
 	speed: number(),
 	distance: number(),
-	isEnemy: boolean(),
-	kind: string(),
 	damage: number(),
+	kind: string(),
+});
+const CreateProjectile = object({
+	type: literal("createProjectiles"),
+	creatorId: union([string(), number()]),
+	isEnemy: boolean(),
+	projectiles: array(ProjectileState),
 });
 const ImpactProjectile = object({
 	type: literal("impactProjectile"),
@@ -43,7 +47,7 @@ export const ClientMessage = union([CreatePlayerMessage, UpdatePlayerMessage, Cr
 export type ClientMessage = Infer<typeof ClientMessage>;
 
 export type ActionMessage =
-	{type: "entityUpdated", id: string | number, skin: string, pos: [number, number], aim: number, weapon: string, isEnemy: boolean, health: number, maxhealth: number} |
+	{type: "entityUpdated", id: string | number, skin: string, pos: [number, number], aim: number, weapon: string, isEnemy: boolean, health: number, maxhealth: number, activity?: {type: "idle" | "shooting" }} |
 	{type: "entityDeleted", id: string | number} |
 	{type: "projectileCreated", id: string, creatorId: number | string, pos: [number, number], rotation: number, speed: number, distance: number, isEnemy: boolean, kind: string, damage: number} |
 	{type: "projectileImpacted", id: string, creatorId: number | string, impactedId: string, pos: [number, number], damage: number} |

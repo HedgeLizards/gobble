@@ -96,22 +96,25 @@ class Serv {
 					if (!player) {
 						send_error(socket, "unknown player " + name);
 					} else {
-						player.update({pos: new Vec2(data.pos[0], data.pos[1]), aim: data.aim, weapon: data.weapon, health: data.health || 100});
+						player.update({pos: new Vec2(data.pos[0], data.pos[1]), aim: data.aim, weapon: data.weapon, health: data.health || 100, activity: data.activity});
 					}
-				} else if (data.type === "createProjectile") {
-					let response: ActionMessage = {
-						type: "projectileCreated",
-						id: data.id,
-						creatorId: data.creatorId,
-						pos: data.pos,
-						rotation: data.rotation,
-						distance: data.distance,
-						speed: data.speed,
-						isEnemy: data.isEnemy,
-						kind: data.kind,
-						damage: data.damage,
-					};
-					this.broadcast({type: "update", actions: [response]});
+				} else if (data.type === "createProjectiles") {
+					let responses: ActionMessage[] = []
+					for (let projectile of data.projectiles) {
+						responses.push({
+							type: "projectileCreated",
+							id: projectile.id,
+							creatorId: data.creatorId,
+							pos: projectile.pos,
+							rotation: projectile.rotation,
+							distance: projectile.distance,
+							speed: projectile.speed,
+							isEnemy: data.isEnemy,
+							kind: projectile.kind,
+							damage: projectile.damage,
+						});
+					}
+					this.broadcast({type: "update", actions: responses});
 				} else if (data.type === "impactProjectile") {
 					game.hitEnemy(data.impactedId, data.damage)
 					let response: ActionMessage = {

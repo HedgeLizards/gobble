@@ -83,24 +83,28 @@ func _physics_process(delta) -> void:
 func shoot() -> void:
 	cooldown = weapon.cooldown
 	var direction = %Muzzle.global_rotation + randf_range(-weapon.spread / 2.0, weapon.spread / 2.0)
+	var projectiles = []
 	for i in weapon.bullets:
 		var bullet = LocalProjectile.instantiate()
 		bullet.id = "@bullet_"+WebSocket.local_player_name + str(randi())
 		bullet.position = %Muzzle.global_position
 		bullet.rotation = direction + (i - weapon.bullets / 2.0 + 0.5) * weapon.spread / 4.0
 		$'../Projectiles'.add_child(bullet)
-		WebSocket.send({
-			"type": "createProjectile",
+		projectiles.push_back({
 			"id": bullet.id,
-			"creatorId": WebSocket.local_player_name,
 			"pos": [bullet.position.x / Globals.SCALE, bullet.position.y / Globals.SCALE],
 			"rotation": bullet.rotation,
 			"speed": bullet.speed / Globals.SCALE,
 			"distance": bullet.distance / Globals.SCALE,
-			"isEnemy": false,
 			"kind": weapon.bullet,
-			"damage": 10,
+			"damage": bullet.damage,
 		})
+	WebSocket.send({
+		"type": "createProjectiles",
+		"creatorId": WebSocket.local_player_name,
+		"isEnemy": false,
+		"projectiles": projectiles,
+	})
 	$Camera2D.recoil(-direction, weapon.recoil_strength)
 
 func weapon_id() -> String:
