@@ -18,9 +18,9 @@ func _ready():
 		"skin": WebSocket.local_player_skin,
 		"pos": [%Me.position.x / Globals.SCALE, %Me.position.y / Globals.SCALE],
 		"aim": %Me.get_node("%Weapon").rotation,
-		"weapon": %Me.player_weapons[%Me.weapon_index],
 		"health": %Me.health,
 		"maxhealth": %Me.maxhealth,
+		"weapon": %Me.player_weapons[%Me.weapon_index],
 	})
 
 func _physics_process(delta):
@@ -28,8 +28,9 @@ func _physics_process(delta):
 		"type": "updatePlayer",
 		"pos": [%Me.position.x / Globals.SCALE, %Me.position.y / Globals.SCALE],
 		"aim": %Me.get_node("%Weapon").rotation,
-		"weapon": %Me.player_weapons[%Me.weapon_index],
 		"health": %Me.health,
+		"activity": { "type": "shooting" if Input.is_action_pressed("shoot") else "idle" },
+		"weapon": %Me.player_weapons[%Me.weapon_index],
 	})
 
 func _unhandled_key_input(event):
@@ -51,6 +52,7 @@ func process_data(data):
 
 func update(actions):
 	var time = float(Time.get_ticks_usec()) / 1e6
+	var shot = {}
 	for action in actions:
 		var type = action["type"]
 		if type == "entityUpdated":
@@ -76,7 +78,6 @@ func update(actions):
 					var label = entity.get_node("Label")
 					label.text = id
 					label.visible = true
-				entity.get_node("Weapon").visible = true
 				entity.aim(action["aim"])
 				entity.skin = action["skin"]
 				%Entities.add_child(entity)
@@ -84,7 +85,9 @@ func update(actions):
 				entity.maxhealth = action.maxhealth
 			
 			entity.health = action.health
-			entity.weapon = Weapons.weapons[action.weapon]
+			if not entity.enemy:
+				entity.activity = action.activity
+			entity.weapon_id = action.weapon
 			entity.positions.push_back(PositionSnapshot.new(pos, action.get("aim", 0.0), time))
 		elif type == "entityDeleted":
 			var id = action["id"]
@@ -95,10 +98,12 @@ func update(actions):
 			var playerId = action["playerId"]
 			if typeof(playerId) == typeof(WebSocket.local_player_name) &&  playerId == WebSocket.local_player_name:
 				continue
-			var shooter = entities.get(playerId)
-			if shooter:
-				shooter.shoot()
-				
+			if not shot.has(playerId):
+				var shooter = entities.get(playerId)
+				if shooter:
+					shooter.shoot()
+				shot[playerId] = true
+			
 			var bullet = RemoteProjectile.instantiate()
 			bullet.set_kind(action.get("kind", "bullet"))
 			bullet.position = parse_pos(action["pos"])

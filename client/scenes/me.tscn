@@ -74,6 +74,4 @@ bus = &"SFX"
 stream = ExtResource("7_hri2s")
 bus = &"SFX"
 
-[node name="CanvasGroup" type="CanvasGroup" parent="."]
-
 [connection signal="resized" from="Label" to="." method="_on_label_resized"]

@@ -14,18 +14,35 @@ var health: float:
 
 var skin
 var id
-var weapon:
+var weapon_id:
 	set(value):
-		if weapon == value:
+		if value == weapon_id:
 			return
 		
-		weapon = value
+		if not enemy and activity.type == "shooting":
+			stop_shooting()
+		
+		weapon_id = value
+		weapon = Weapons.weapons[weapon_id]
 		
 		$Weapon/Sprite2D.texture = weapon.texture
 		
-		if not weapon.stream is AudioStreamInteractive and weapon.stream != null:
+		if weapon.stream is AudioStreamInteractive:
+			$ShootInteractive.stream = weapon.stream
+			$ShootInteractive.volume_db = weapon.volume_db
+		elif weapon.stream != null:
 			$Shoot.stream.set_stream(0, weapon.stream)
 			$Shoot.volume_db = weapon.volume_db
+var weapon: Weapons.Weapon
+var activity = { "type": "idle" }:
+	set(value):
+		if value.type == activity.type:
+			return
+		
+		if activity.type == "shooting":
+			stop_shooting()
+		
+		activity = value
 
 
 func is_enemy():
@@ -42,5 +59,13 @@ func _on_label_resized():
 
 
 func shoot():
-	if not weapon.stream is AudioStreamInteractive and weapon.stream != null:
+	if weapon_id == "Minigun":
+		if activity.type == "idle" or not $ShootInteractive.playing:
+			$ShootInteractive.play()
+	elif weapon.stream != null:
 		$Shoot.play()
+
+
+func stop_shooting():
+	if weapon_id == "Minigun" and $ShootInteractive.playing:
+		$ShootInteractive.get_stream_playback().switch_to_clip_by_name("Minigun Shutdown")

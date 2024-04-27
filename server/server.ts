@@ -86,13 +86,18 @@ class Serv {
 					if (!player) {
 						send_error(socket, "unknown player " + name);
 					} else {
-						player.update({pos: new Vec2(data.pos[0], data.pos[1]), aim: data.aim, weapon: data.weapon, health: data.health || 100});
+						player.update({pos: new Vec2(data.pos[0], data.pos[1]), aim: data.aim, weapon: data.weapon, health: data.health || 100, activity: data.activity});
 					}
-				} else if (data.type === "createProjectile") {
-					let response: any = {};
-					Object.assign(response, data);
-					response.type = "projectileCreated";
-					this.broadcast({type: "update", actions: [response]});
+				} else if (data.type === "createProjectiles") {
+					let actions: any[] = [];
+					for (let projectile of data.projectiles) {
+						let response: any = {};
+						Object.assign(response, data, projectile);
+						response.type = "projectileCreated";
+						delete response.projectiles;
+						actions.push(response);
+					}
+					this.broadcast({type: "update", actions: actions});
 				} else if (data.type === "impactProjectile") {
 					game.hitEnemy(data.impactedId, data.damage)
 					let response: any = {};

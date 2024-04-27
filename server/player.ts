@@ -9,6 +9,7 @@ export class Player {
 	weapon: string
 	health: number
 	maxhealth: number
+	activity: { type: "idle" | "shooting" }
 
 	constructor(name: string, skin: string, pos: Vec2, aim: number, weapon: string, health: number, maxhealth: number) {
 		this.name = name;
@@ -18,6 +19,7 @@ export class Player {
 		this.weapon = weapon;
 		this.health = health;
 		this.maxhealth = maxhealth
+		this.activity = { type: "idle" }
 	}
 
 	update(props: any) {
@@ -35,6 +37,7 @@ export class Player {
 			isEnemy: false,
 			health: this.health,
 			maxhealth: this.maxhealth,
+			activity: this.activity,
 		};
 	}
 
