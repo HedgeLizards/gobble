@@ -15,7 +15,7 @@ func _on_area_entered(area: Area2D) -> void:
 	if area.has_method("is_enemy") and area.is_enemy():
 		WebSocket.send({
 			"type": "impactProjectile",
-			"creatorId": WebSocket.local_player_name,
+			"creatorId": WebSocket.local_player_id,
 			"id": id,
 			"impactedId": area.id,
 			"pos": [position.x / Globals.SCALE, position.y / Globals.SCALE],

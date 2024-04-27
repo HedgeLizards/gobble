@@ -1,6 +1,7 @@
 extends Node
 
 var socket = WebSocketPeer.new()
+var local_player_id
 var local_player_name
 var local_player_skin
 var local_player_error

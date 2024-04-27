@@ -32,7 +32,7 @@ func _on_body_entered(body: Node2D) -> void:
 			"type": "impactProjectile",
 			"creatorId": playerId,
 			"id": id,
-			"impactedId": WebSocket.local_player_name,
+			"impactedId": WebSocket.local_player_id,
 			"pos": [position.x / Globals.SCALE, position.y / Globals.SCALE],
 			"damage": damage,
 			"kind": kind

@@ -86,7 +86,7 @@ func shoot() -> void:
 	var projectiles = []
 	for i in weapon.bullets:
 		var bullet = LocalProjectile.instantiate()
-		bullet.id = "@bullet_"+WebSocket.local_player_name + str(randi())
+		bullet.id = "B:"+WebSocket.local_player_id + ";" + str(randi())
 		bullet.position = %Muzzle.global_position
 		bullet.rotation = direction + (i - weapon.bullets / 2.0 + 0.5) * weapon.spread / 4.0
 		$'../Projectiles'.add_child(bullet)
@@ -101,7 +101,7 @@ func shoot() -> void:
 		})
 	WebSocket.send({
 		"type": "createProjectiles",
-		"creatorId": WebSocket.local_player_name,
+		"creatorId": WebSocket.local_player_id,
 		"isEnemy": false,
 		"projectiles": projectiles,
 	})

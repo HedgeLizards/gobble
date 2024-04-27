@@ -1,6 +1,5 @@
 import { type AddressInfo, WebSocket, WebSocketServer } from 'ws';
 import { create } from 'superstruct';
-import { Vec2 } from './vec2.js';
 import { Game } from './game.js';
 import { Player } from './player.js';
 import { ClientMessage, ServerMessage, ActionMessage} from './messages.js';
@@ -65,6 +64,7 @@ class Serv {
 				try {
 					data = create(rawData, ClientMessage); 
 				} catch (e) {
+					console.error("invalid message structure: ", e)
 					send_error(socket, `Incorrect structure for ${rawData.type}: ${msg.toString()}`);
 					return;
 				}
@@ -73,17 +73,16 @@ class Serv {
 						send_error(socket, "Can only introduce once");
 						return;
 					}
-					let name = data.id;
-					if (!name) {
-						send_error(socket, "invalid name " + name);
-						return
+					if (!(data.name.toLowerCase() === data.id.substring(2))) {
+						send_error(socket, `id '${data.id}' does not match name '${data.name}'`);
+						return;
 					}
-					let err = this.game.addPlayer(new Player(name, data.skin, data.pos, data.aim, data.weapon, data.health || 100, data.maxhealth || 100));
+					let err = this.game.addPlayer(new Player(data.id, data));//data.skin, data.pos, data.aim, data.weapon, data.health || 100, data.maxhealth || 100));
 					if (err) {
 						send_error(socket, err);
-						return
+						return;
 					}
-					this.playerIds.set(id, name);
+					this.playerIds.set(id, data.id);
 					let welcome: ServerMessage = {type: "welcome", tickDuration: tickDuration, world: this.game.viewWorld()}
 					socket.send(JSON.stringify(welcome));
 				} else if (data.type === "updatePlayer") {

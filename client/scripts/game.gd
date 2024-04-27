@@ -14,7 +14,8 @@ func _ready():
 	
 	WebSocket.send({
 		"type": "createPlayer",
-		"id": WebSocket.local_player_name,
+		"id": WebSocket.local_player_id,
+		"name": WebSocket.local_player_name,
 		"skin": WebSocket.local_player_skin,
 		"pos": [%Me.position.x / Globals.SCALE, %Me.position.y / Globals.SCALE],
 		"aim": %Me.get_node("%Weapon").rotation,
@@ -57,7 +58,7 @@ func update(actions):
 		var type = action["type"]
 		if type == "entityUpdated":
 			var id = action["id"]
-			if typeof(id) == typeof(WebSocket.local_player_name) &&  id == WebSocket.local_player_name:
+			if id == WebSocket.local_player_id:
 				continue
 			var entity
 			var pos = parse_pos(action["pos"])
@@ -96,7 +97,7 @@ func update(actions):
 				entities.erase(id)
 		elif type == "projectileCreated":
 			var playerId = action["creatorId"]
-			if typeof(playerId) == typeof(WebSocket.local_player_name) &&  playerId == WebSocket.local_player_name:
+			if playerId == WebSocket.local_player_id:
 				continue
 			if not shot.has(playerId):
 				var shooter = entities.get(playerId)
@@ -118,7 +119,7 @@ func update(actions):
 			remote_projectiles[action["id"]] =  bullet
 		elif type == "projectileImpacted":
 			var playerId = action["creatorId"]
-			if typeof(playerId) == typeof(WebSocket.local_player_name) &&  playerId == WebSocket.local_player_name:
+			if  playerId == WebSocket.local_player_id:
 				continue
 			var p = remote_projectiles.get(action["id"])
 			if p:

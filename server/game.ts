@@ -19,8 +19,8 @@ export class Game {
 
 	players: Map<string, Player>
 	nextEnemyId: number
-	enemies: Map<number, Enemy>
-	removed: Array<string | number>
+	enemies: Map<string, Enemy>
+	removed: Array<string>
 	size: Vec2
 	state: State
 	timeToWave: number
@@ -43,28 +43,28 @@ export class Game {
 	}
 
 	addPlayer(player: Player) {
-		if (this.players.has(player.name)){
-			return "name " + player.name + " is already taken";
+		if (this.players.has(player.id)){
+			return "id " + player.id + " is already taken";
 		}
 		console.log("new player", player.name, player);
-		this.players.set(player.name, player);
+		this.players.set(player.id, player);
 		return null;
 	}
 
 	updatePlayer(player: Player) {
-		if (!this.players.has(player.name)){
-			return "unknown player " + player.name;
+		if (!this.players.has(player.id)){
+			return "unknown player " + player.id;
 		}
-		this.players.set(player.name, player);
+		this.players.set(player.id, player);
 	}
 
-	getPlayer(name: string) {
-		return this.players.get(name);
+	getPlayer(id: string) {
+		return this.players.get(id);
 	}
 
-	removePlayer(name: string) {
-		this.removed.push(name);
-		this.players.delete(name);
+	removePlayer(id: string) {
+		this.removed.push(id);
+		this.players.delete(id);
 	}
 
 	spawnEnemy(kind: EnemyKind) {
@@ -75,14 +75,11 @@ export class Game {
 			new Vec2(this.size.x * ratio, this.size.y), // bottom
 			new Vec2(0, this.size.y * ratio), // left
 		]);
-		let enemy = new Enemy(this.nextEnemyId++, pos, kind);
+		let enemy = new Enemy("E:" + this.nextEnemyId++, pos, kind);
 		this.enemies.set(enemy.id, enemy);
 	}
 
-	hitEnemy(enemyId: number | string, damage: number) {
-		if (typeof(enemyId) === "string") {
-			return;
-		}
+	hitEnemy(enemyId: string, damage: number) {
 		let enemy = this.enemies.get(enemyId);
 		if (!enemy) { return; }
 		enemy.health -= damage;

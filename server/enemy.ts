@@ -8,14 +8,14 @@ import { ActionMessage } from "./messages.js";
 
 
 export class Enemy {
-	id: number
+	id: string
 	pos: Vec2
 	kind: EnemyKind
 	cooldown: number
 	target?: {pos: Vec2}
 	health: number
 
-	constructor(id: number, pos: Vec2, kind: EnemyKind) {
+	constructor(id: string, pos: Vec2, kind: EnemyKind) {
 		this.id = id;
 		this.pos = pos;
 		this.health = kind.health;
@@ -71,7 +71,7 @@ export class Enemy {
 		return [{
 			type: "projectileCreated",
 			pos: this.pos.add(new Vec2(0, -0.5)),
-			id: "@bullet_" + this.id + "_" + ((Math.random() * 1e6) | 0),
+			id: "B:" + this.id + ";" + ((Math.random() * 1e6) | 0),
 			creatorId: this.id,
 			rotation: this.pos.directionTo(target.pos),
 			speed: 10,
