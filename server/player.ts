@@ -10,19 +10,18 @@ export class Player {
 	alive: boolean
 	skin: string
 	pos: Vec2
-	aim: number
+	aim: number = 0;
 	weapon: string
 	health: number
 	maxhealth: number
 	activity: Activity
 
-	constructor(id: string, p: {name: string, skin: string, pos: Vec2, aim: number, weapon: string, health: number, maxhealth: number}) {
+	constructor(id: string, p: {name: string, skin: string, pos: Vec2, weapon: string, health: number, maxhealth: number, alive: boolean}) {
 		this.id = id;
 		this.name = p.name;
-		this.alive = true;
+		this.alive = p.alive;
 		this.skin = p.skin;
 		this.pos = p.pos;
-		this.aim = p.aim;
 		this.weapon = p.weapon;
 		this.health = p.health;
 		this.maxhealth = p.maxhealth

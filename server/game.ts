@@ -4,7 +4,7 @@ import { Enemy } from "./enemy.js";
 import { Vec2 } from "./vec2.js";
 import { EnemyKind } from "./enemykind.js";
 import { Wave, planWave } from "./waves.js";
-import { ActionMessage, WorldMessage } from "./messages.js";
+import { ActionMessage, WorldMessage, CreatePlayerMessage } from "./messages.js";
 
 enum State {
 	Start = "Start", // no players
@@ -44,10 +44,11 @@ export class Game {
 		this.waveNum = 0;
 	}
 
-	addPlayer(player: Player) {
-		if (this.players.has(player.id)){
-			return "id " + player.id + " is already taken";
+	addPlayer(id: string, data: CreatePlayerMessage) {
+		if (this.players.has(id)){
+			return "id " + id + " is already taken";
 		}
+		let player = new Player(id, {...data, pos: this.center(), alive: this.acceptNewPlayers(), health: data.maxhealth, weapon: "HandGun"});
 		console.log("new player", player.name, player);
 		this.players.set(player.id, player);
 		return null;
@@ -188,6 +189,10 @@ export class Game {
 			}
 		}
 		return [nearest, target, nearestDist];
+	}
+
+	acceptNewPlayers() {
+		return this.waveNum <= 1 || this.state === State.WaveStart;
 	}
 
 	center() {

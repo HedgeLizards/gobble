@@ -34,7 +34,7 @@ var health := maxhealth:
 		var ratio := clamp(health / maxhealth, 0, 1)
 		%HealthBar/Healthy.size.x = %HealthBar.size.x * ratio
 
-var alive: bool = true:
+var alive: bool = false:
 	set(value):
 		alive = value
 		$Sprite2D.visible = value
@@ -47,6 +47,7 @@ const LocalProjectile = preload("res://scenes/local_projectile.tscn")
 
 func _ready():
 	weapon_index = 0
+	alive = false
 	
 	$Label.text = WebSocket.local_player_name
 

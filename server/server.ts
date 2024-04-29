@@ -1,7 +1,6 @@
 import { type AddressInfo, WebSocket, WebSocketServer } from 'ws';
 import { create } from 'superstruct';
 import { Game } from './game.js';
-import { Player } from './player.js';
 import { ClientMessage, ServerMessage, ActionMessage} from './messages.js';
 
 
@@ -77,7 +76,7 @@ class Serv {
 						send_error(socket, `id '${data.id}' does not match name '${data.name}'`);
 						return;
 					}
-					let err = this.game.addPlayer(new Player(data.id, data));//data.skin, data.pos, data.aim, data.weapon, data.health || 100, data.maxhealth || 100));
+					let err = this.game.addPlayer(data.id, data);//data.skin, data.pos, data.aim, data.weapon, data.health || 100, data.maxhealth || 100));
 					if (err) {
 						send_error(socket, err);
 						return;

@@ -14,12 +14,9 @@ const CreatePlayerMessage = object({
 	id: PlayerId,
 	name: string(),
 	skin: string(),
-	pos: Vec2_,
-	aim: number(),
-	health: number(),
 	maxhealth: number(),
-	weapon: string(),
 });
+export type CreatePlayerMessage = Infer<typeof CreatePlayerMessage>;
 const UpdatePlayerMessage = object({
 	type: literal("updatePlayer"),
 	pos: Vec2_,
