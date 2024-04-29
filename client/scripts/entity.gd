@@ -8,9 +8,10 @@ var enemy: bool:
 var maxhealth: float
 var health: float:
 	set(value):
+		if value == health:
+			return
 		health = value
-		var ratio := clamp(health / maxhealth, 0, 1)
-		%HealthBar/Healthy.size.x = %HealthBar.size.x * ratio
+		%HealthBar.ratio = clamp(health / maxhealth, 0, 1)
 
 var skin
 var id
@@ -56,6 +57,7 @@ func aim(toward):
 
 func _on_label_resized():
 	$Label.position.x = (-$Label.size.x / 2.0 + 0.5) * $Label.scale.x
+	%HealthBar.resize_to_fit($Label)
 
 
 func shoot():

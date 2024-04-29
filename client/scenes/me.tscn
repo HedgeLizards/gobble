@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://ck2q3henidk1g"]
+[gd_scene load_steps=14 format=3 uid="uid://ck2q3henidk1g"]
 
 [ext_resource type="Script" path="res://scripts/me.gd" id="1_emed8"]
 [ext_resource type="Script" path="res://scripts/camera.gd" id="2_0fe2v"]
@@ -12,6 +12,38 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g3144"]
 size = Vector2(12, 12)
+
+[sub_resource type="Shader" id="Shader_rjj8q"]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_nearest;
+uniform vec2 size;
+
+void fragment() {
+	vec2 pixel = size * UV;
+	float half_height = size.y / 2.0;
+	
+	if (pixel.x < half_height && sqrt(pow(pixel.x - half_height, 2.0) + pow(pixel.y - half_height, 2.0)) > half_height) {
+		COLOR.a = 0.0;
+	} else if (pixel.x > size.x - half_height && sqrt(pow(pixel.x - (size.x - half_height), 2.0) + pow(pixel.y - half_height, 2.0)) > half_height) {
+		COLOR.a = 0.0;
+	} else {
+		vec4 c = textureLod(screen_texture, SCREEN_UV, 0.0);
+		
+		if (c.a > 0.0001) {
+			c.rgb /= c.a;
+		}
+		
+		COLOR *= c;
+	}
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3ki8k"]
+resource_local_to_scene = true
+shader = SubResource("Shader_rjj8q")
+shader_parameter/size = Vector2(20, 5.875)
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_1epfc"]
 random_pitch = 1.05
@@ -43,6 +75,21 @@ limit_left = 0
 limit_top = 0
 script = ExtResource("2_0fe2v")
 
+[node name="HealthBar" parent="." instance=ExtResource("6_n8pr1")]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_3ki8k")
+
+[node name="Label" type="Label" parent="."]
+offset_top = -26.0
+offset_right = 1.0
+offset_bottom = 21.0
+scale = Vector2(0.125, 0.125)
+theme_override_colors/font_color = Color(1, 1, 1, 0.768627)
+theme_override_fonts/font = ExtResource("6_6ojmt")
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Weapon" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(0, -6)
@@ -53,19 +100,6 @@ position = Vector2(9, 1)
 [node name="Muzzle" type="Node2D" parent="Weapon"]
 unique_name_in_owner = true
 position = Vector2(25, 0)
-
-[node name="Label" type="Label" parent="."]
-offset_top = -25.0
-offset_right = 1.0
-offset_bottom = 22.0
-scale = Vector2(0.125, 0.125)
-theme_override_colors/font_color = Color(1, 1, 1, 0.768627)
-theme_override_fonts/font = ExtResource("6_6ojmt")
-theme_override_font_sizes/font_size = 40
-horizontal_alignment = 1
-
-[node name="HealthBar" parent="." instance=ExtResource("6_n8pr1")]
-unique_name_in_owner = true
 
 [node name="Shoot" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamRandomizer_1epfc")
