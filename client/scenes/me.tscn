@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ck2q3henidk1g"]
+[gd_scene load_steps=12 format=3 uid="uid://ck2q3henidk1g"]
 
 [ext_resource type="Script" path="res://scripts/me.gd" id="1_emed8"]
 [ext_resource type="Script" path="res://scripts/camera.gd" id="2_0fe2v"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bxfouhjhx3jp6" path="res://scenes/healthbar.tscn" id="6_n8pr1"]
 [ext_resource type="AudioStream" uid="uid://d1jejjlucgada" path="res://sounds/SFX_HandGun_Fire.wav" id="6_ne6rv"]
 [ext_resource type="AudioStream" uid="uid://ctbe770l47mde" path="res://sounds/minigun.tres" id="7_hri2s"]
+[ext_resource type="Texture2D" uid="uid://desqehgl3ydxa" path="res://assets/Gobbles/Gobble_ghost.png" id="9_7fssd"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g3144"]
 size = Vector2(12, 12)
@@ -19,6 +20,7 @@ stream_0/stream = ExtResource("6_ne6rv")
 stream_0/weight = 1.0
 
 [node name="Me" type="CharacterBody2D"]
+motion_mode = 1
 script = ExtResource("1_emed8")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -73,5 +75,10 @@ bus = &"SFX"
 [node name="ShootInteractive" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_hri2s")
 bus = &"SFX"
+
+[node name="GhostSprite" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.4)
+texture = ExtResource("9_7fssd")
 
 [connection signal="resized" from="Label" to="." method="_on_label_resized"]

@@ -34,6 +34,15 @@ var health := maxhealth:
 		var ratio := clamp(health / maxhealth, 0, 1)
 		%HealthBar/Healthy.size.x = %HealthBar.size.x * ratio
 
+var alive: bool = true:
+	set(value):
+		alive = value
+		$Sprite2D.visible = value
+		$HealthBar.visible = value
+		$Weapon.visible = value
+		$GhostSprite.visible = !value
+
+
 const LocalProjectile = preload("res://scenes/local_projectile.tscn")
 
 func _ready():
@@ -75,9 +84,9 @@ func _physics_process(delta) -> void:
 			if $ShootInteractive.playing:
 				$ShootInteractive.get_stream_playback().switch_to_clip_by_name("Minigun Shutdown")
 	elif weapon.stream != null:
-		if Input.is_action_pressed("shoot") and cooldown == 0.0:
+		if Input.is_action_pressed("shoot") and cooldown == 0.0 and is_alive():
 			$Shoot.play()
-	if Input.is_action_pressed("shoot") and cooldown == 0.0:
+	if Input.is_action_pressed("shoot") and cooldown == 0.0 and is_alive():
 		shoot()
 
 func shoot() -> void:
@@ -110,9 +119,9 @@ func shoot() -> void:
 func weapon_id() -> String:
 	return player_weapons[weapon_index]
 
-func hit(damage: float) -> void:
-	health -= damage
-
 func is_me() -> bool:
 	return true
+
+func is_alive() -> bool:
+	return alive
 

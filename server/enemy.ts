@@ -50,6 +50,7 @@ export class Enemy {
 			type: "entityUpdated",
 			id: this.id,
 			skin: this.kind.skin,
+			alive: true,
 			pos: this.pos,
 			aim: this.pos.directionTo(this.targetPos()),
 			weapon: this.kind.weapon,

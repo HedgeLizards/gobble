@@ -27,7 +27,7 @@ func _physics_process(delta):
 		queue_free()
 
 func _on_body_entered(body: Node2D) -> void:
-	if is_enemy && body.has_method("is_me") and body.is_me():
+	if is_enemy && body.has_method("is_me") and body.is_me() and body.is_alive():
 		WebSocket.send({
 			"type": "impactProjectile",
 			"creatorId": playerId,
@@ -37,7 +37,7 @@ func _on_body_entered(body: Node2D) -> void:
 			"damage": damage,
 			"kind": kind
 		})
-		body.hit(damage)
+		# body.hit(damage)
 		queue_free()
 
 func set_kind(kind: String) -> void:

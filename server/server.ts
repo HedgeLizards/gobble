@@ -95,7 +95,7 @@ class Serv {
 					if (!player) {
 						send_error(socket, "unknown player " + name);
 					} else {
-						player.update({pos: data.pos, aim: data.aim, weapon: data.weapon, health: data.health || 100, activity: data.activity});
+						player.update(data);
 					}
 				} else if (data.type === "createProjectiles") {
 					let responses: ActionMessage[] = []
@@ -109,7 +109,7 @@ class Serv {
 					}
 					this.broadcast({type: "update", actions: responses});
 				} else if (data.type === "impactProjectile") {
-					game.hitEnemy(data.impactedId, data.damage)
+					game.hitEntity(data.impactedId, data.damage)
 					let response: ActionMessage = {
 						...data,
 						type: "projectileImpacted",

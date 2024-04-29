@@ -7,6 +7,7 @@ export type Activity = { type: "idle" | "shooting"}
 export class Player {
 	id: string
 	name: string
+	alive: boolean
 	skin: string
 	pos: Vec2
 	aim: number
@@ -18,6 +19,7 @@ export class Player {
 	constructor(id: string, p: {name: string, skin: string, pos: Vec2, aim: number, weapon: string, health: number, maxhealth: number}) {
 		this.id = id;
 		this.name = p.name;
+		this.alive = true;
 		this.skin = p.skin;
 		this.pos = p.pos;
 		this.aim = p.aim;
@@ -31,11 +33,17 @@ export class Player {
 		Object.assign(this, p);
 	}
 
+	reset() {
+		this.health = this.maxhealth;
+		this.alive = true;
+	}
+
 	view(): ActionMessage {
 		return {
 			type: "entityUpdated",
 			id: this.id,
 			name: this.name,
+			alive: this.alive,
 			skin: this.skin,
 			pos: this.pos,
 			aim: this.aim,

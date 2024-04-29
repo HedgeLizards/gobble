@@ -24,7 +24,7 @@ const UpdatePlayerMessage = object({
 	type: literal("updatePlayer"),
 	pos: Vec2_,
 	aim: number(),
-	health: number(),
+	// health: number(),
 	weapon: string(),
 	activity: optional(object({type: enums(["idle", "shooting"])}))
 });
@@ -56,12 +56,13 @@ export const ClientMessage = union([CreatePlayerMessage, UpdatePlayerMessage, Cr
 export type ClientMessage = Infer<typeof ClientMessage>;
 
 export type ActionMessage =
-	{type: "entityUpdated", id: string, name?: string, skin: string, pos: Vec2, aim: number, weapon: string, isEnemy: boolean, health: number, maxhealth: number, activity?: Activity} |
+	{type: "entityUpdated", id: string, name?: string, alive: boolean, skin: string, pos: Vec2, aim: number, weapon: string, isEnemy: boolean, health: number, maxhealth: number, activity?: Activity,} |
 	{type: "entityDeleted", id: string} |
 	{type: "projectileCreated", id: string, creatorId: string, pos: Vec2, rotation: number, speed: number, distance: number, isEnemy: boolean, kind: string, damage: number} |
 	{type: "projectileImpacted", id: string, creatorId: string, impactedId: string, pos: Vec2, damage: number} |
 	{type: "waveStart", waveNum: number} |
-	{type: "waveEnd", waveNum: number};
+	{type: "waveEnd", waveNum: number} |
+	{type: "gameOver"};
 
 export type ServerMessage = {type: "update", actions: ActionMessage[]}
 	| {type: "welcome", tickDuration: number, world: WorldMessage};

@@ -29,7 +29,6 @@ func _physics_process(delta):
 		"type": "updatePlayer",
 		"pos": [%Me.position.x / Globals.SCALE, %Me.position.y / Globals.SCALE],
 		"aim": %Me.get_node("%Weapon").rotation,
-		"health": %Me.health,
 		"activity": { "type": "shooting" if Input.is_action_pressed("shoot") else "idle" },
 		"weapon": %Me.player_weapons[%Me.weapon_index],
 	})
@@ -59,9 +58,13 @@ func update(actions):
 		if type == "entityUpdated":
 			var id = action["id"]
 			if id == WebSocket.local_player_id:
+				if not %Me.is_alive():
+					%Me.position = parse_pos(action.pos)
+				%Me.health = action.health
+				%Me.alive = action.alive
 				continue
 			var entity
-			var pos = parse_pos(action["pos"])
+			var pos = parse_pos(action.pos)
 			if entities.has(id):
 				entity = entities[id]
 			else:
@@ -77,7 +80,7 @@ func update(actions):
 				else:
 					sprite.texture = load("%s/%s" % [SKINS_PATH, action["skin"]])
 					var label = entity.get_node("Label")
-					label.text = id
+					label.text = action.name
 					label.visible = true
 				entity.aim(action["aim"])
 				entity.skin = action["skin"]
@@ -92,6 +95,8 @@ func update(actions):
 			entity.positions.push_back(PositionSnapshot.new(pos, action.get("aim", 0.0), time))
 		elif type == "entityDeleted":
 			var id = action["id"]
+			if id == WebSocket.local_player_id:
+				%Me.alive = false
 			if entities.has(id):
 				entities[id].queue_free()
 				entities.erase(id)
@@ -128,7 +133,9 @@ func update(actions):
 		elif type == "waveStart":
 			$UI.show_notice("Wave " + str(action.waveNum))
 		elif type == "waveEnd":
-			print("wave " + str(action.waveNum) + " completed")
+			$UI.show_notice("Wave " + str(action.waveNum) + " completed!")
+		elif type == "gameOver":
+			$UI.show_notice("Game over!")
 		else:
 			print("unknown action ", action)
 			

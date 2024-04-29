@@ -25,6 +25,7 @@ export class Game {
 	state: State
 	timeToWave: number
 	timeToSpawn: number
+	timeToRestart: number
 	waveNum: number
 	wave?: Wave
 
@@ -39,6 +40,7 @@ export class Game {
 		this.state = State.Start;
 		this.timeToWave = 0;
 		this.timeToSpawn = 0;
+		this.timeToRestart = 0;
 		this.waveNum = 0;
 	}
 
@@ -72,13 +74,24 @@ export class Game {
 		this.enemies.set(enemy.id, enemy);
 	}
 
-	hitEnemy(enemyId: string, damage: number) {
-		let enemy = this.enemies.get(enemyId);
-		if (!enemy) { return; }
-		enemy.health -= damage;
-		if (enemy.health <= 0) {
-			this.removed.push(enemyId);
-			this.enemies.delete(enemyId);
+	hitEntity(entityId: string, damage: number) {
+		let enemy = this.enemies.get(entityId);
+		if (enemy) {
+			enemy.health -= damage;
+			if (enemy.health <= 0) {
+				this.removed.push(entityId);
+				this.enemies.delete(entityId);
+			}
+			return;
+		}
+		let player = this.players.get(entityId);
+		if (player) {
+			player.health -= damage;
+			if (player.health <= 0) {
+				player.alive = false;
+				this.removed.push(entityId);
+			}
+			return;
 		}
 
 	}
@@ -87,11 +100,17 @@ export class Game {
 		let actions: ActionMessage[] = [];
 		if (this.players.size === 0) {
 			this.state = State.Start;
-			this.waveNum = 0;
-			this.enemies = new Map();
 			return [];
 		}
 		if (this.state === State.Start) {
+			for (let player of this.players.values()) {
+				player.reset();
+			}
+			this.waveNum = 0;
+			for (let enemy of this.enemies.values()) {
+				actions.push({type: "entityDeleted", id: enemy.id})
+			}
+			this.enemies = new Map();
 			this.state = State.WaveStart;
 			this.timeToWave = 5;
 		}
@@ -103,6 +122,12 @@ export class Game {
 				this.timeToSpawn = 0;
 				actions.push({type: "waveStart", waveNum: this.waveNum});
 			} else {
+				for (let player of this.players.values()) {
+					player.alive = true;
+					player.health = Math.max(1, player.health);
+					player.health += 40 * delta;
+					player.health = Math.min(player.maxhealth, player.health);
+				}
 				this.timeToWave -= delta;
 			}
 		}
@@ -111,6 +136,10 @@ export class Game {
 				this.state = State.WaveStart;
 				this.timeToWave = 5;
 				actions.push({type: "waveEnd", waveNum: this.waveNum});
+			} else if ([...this.players.values()].filter(player => player.alive).length === 0) {
+				this.state = State.GameOver;
+				actions.push({type: "gameOver"});
+				this.timeToRestart = 5;
 			} else {
 				this.timeToSpawn -= delta;
 				if (this.timeToSpawn <= 0) {
@@ -125,13 +154,22 @@ export class Game {
 				}
 			}
 		}
+		if (this.state === State.GameOver) {
+			this.timeToRestart -= delta;
+			if (this.timeToRestart <= 0) {
+				this.state = State.Start;
+
+			}
+		}
 
 		for (let removed of this.removed) {
 			actions.push({type: "entityDeleted", id: removed});
 		}
 		this.removed = [];
 		for (let player of this.players.values()){
-			actions.push(player.view());
+			if (player.alive) {
+				actions.push(player.view());
+			}
 		}
 		return actions;
 	}
@@ -141,6 +179,7 @@ export class Game {
 		let nearestDist = pos.distanceTo(this.center()) + 1024;
 		let target = {pos: this.center()};
 		for (let player of this.players.values()) {
+			if (!player.alive) continue;
 			let dist = pos.distanceTo(player.pos);
 			if (dist < nearestDist) {
 				nearest = player.pos;
