@@ -89,6 +89,15 @@ func _physics_process(delta) -> void:
 			$Shoot.play()
 	if Input.is_action_pressed("shoot") and cooldown == 0.0 and is_alive():
 		shoot()
+	
+	if alive:
+		WebSocket.send({
+			"type": "updatePlayer",
+			"pos": [position.x / Globals.SCALE, position.y / Globals.SCALE],
+			"aim": %Weapon.rotation,
+			"activity": { "type": "shooting" if Input.is_action_pressed("shoot") else "idle" },
+			"weapon": weapon_id(),
+		})
 
 func shoot() -> void:
 	cooldown = weapon.cooldown

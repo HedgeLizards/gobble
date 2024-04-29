@@ -17,20 +17,7 @@ func _ready():
 		"id": WebSocket.local_player_id,
 		"name": WebSocket.local_player_name,
 		"skin": WebSocket.local_player_skin,
-		# "pos": [%Me.position.x / Globals.SCALE, %Me.position.y / Globals.SCALE],
-		# "aim": %Me.get_node("%Weapon").rotation,
-		# "health": %Me.health,
 		"maxhealth": %Me.maxhealth,
-		# "weapon": %Me.player_weapons[%Me.weapon_index],
-	})
-
-func _physics_process(delta):
-	WebSocket.send({
-		"type": "updatePlayer",
-		"pos": [%Me.position.x / Globals.SCALE, %Me.position.y / Globals.SCALE],
-		"aim": %Me.get_node("%Weapon").rotation,
-		"activity": { "type": "shooting" if Input.is_action_pressed("shoot") else "idle" },
-		"weapon": %Me.player_weapons[%Me.weapon_index],
 	})
 
 func _unhandled_key_input(event):
