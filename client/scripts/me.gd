@@ -24,6 +24,7 @@ var weapon_index := -1:
 			$Shoot.stream.set_stream(0, weapon.stream)
 			$Shoot.volume_db = weapon.volume_db
 var weapon: Weapons.Weapon
+var playing_interactive = false
 
 const speed := 10.0 * Globals.SCALE
 var cooldown := 0.0
@@ -65,6 +66,10 @@ func _unhandled_input(event) -> void:
 	elif event is InputEventKey:
 		if event.pressed and event.keycode >= KEY_1 and event.keycode <= KEY_6 and not event.echo:
 			weapon_index = event.keycode - KEY_1
+	
+	if playing_interactive and (Input.is_action_just_released("shoot") or weapon_id() != "Minigun"):
+		$ShootInteractive.get_stream_playback().switch_to_clip_by_name("Minigun Shutdown")
+		playing_interactive = false
 
 func _process(delta) -> void:
 	%Weapon.look_at(get_global_mouse_position())
@@ -77,16 +82,6 @@ func _physics_process(delta) -> void:
 	$Sprite2D.animate(position, previous_position, delta)
 	
 	cooldown = max(cooldown - delta, 0.0)
-	if weapon_id() == "Minigun":
-		if Input.is_action_just_pressed("shoot") or (Input.is_action_pressed("shoot") and not $ShootInteractive.playing):
-			if cooldown == 0.0:
-				$ShootInteractive.play()
-		elif Input.is_action_just_released("shoot"):
-			if $ShootInteractive.playing:
-				$ShootInteractive.get_stream_playback().switch_to_clip_by_name("Minigun Shutdown")
-	elif weapon.stream != null:
-		if Input.is_action_pressed("shoot") and cooldown == 0.0 and is_alive():
-			$Shoot.play()
 	if Input.is_action_pressed("shoot") and cooldown == 0.0 and is_alive():
 		shoot()
 	
@@ -100,6 +95,12 @@ func _physics_process(delta) -> void:
 		})
 
 func shoot() -> void:
+	if weapon_id() == "Minigun":
+		if !playing_interactive:
+			$ShootInteractive.play()
+			playing_interactive = true
+	elif weapon.stream != null:
+		$Shoot.play()
 	cooldown = weapon.cooldown
 	var direction = %Muzzle.global_rotation + randf_range(-weapon.spread / 2.0, weapon.spread / 2.0)
 	var projectiles = []
