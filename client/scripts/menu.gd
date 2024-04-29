@@ -68,7 +68,7 @@ func _on_join_pressed():
 	$"UI Audio/AudioStreamPlayer Join Click".play()
 	
 	WebSocket.local_player_name = generate_random_name() if local_player_name.is_empty() else local_player_name
-	WebSocket.local_player_id = "P:" + WebSocket.local_player_name
+	WebSocket.local_player_id = "P:" + WebSocket.local_player_name.to_lower()
 	WebSocket.local_player_skin = skins[skin_index]
 	WebSocket.local_player_host = $VBoxContainer/Connection/Host.text
 	WebSocket.local_player_port = $VBoxContainer/Connection/Port.text
