@@ -35,9 +35,6 @@ jobs:
         relative_project_path: ./client/
         archive_output: true
 
-    - name: explore file system
-      run: find ${{ steps.export.outputs.build_directory }}
-
     - name: set index
       run: cp ${{ steps.export.outputs.build_directory }}/Web/*.html ${{ steps.export.outputs.build_directory }}/Web/index.html
 
