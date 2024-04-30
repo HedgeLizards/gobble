@@ -31,15 +31,16 @@ var cooldown := 0.0
 const maxhealth := 100.0
 var health := maxhealth:
 	set(value):
+		if value == health:
+			return
 		health = value
-		var ratio := clamp(health / maxhealth, 0, 1)
-		%HealthBar/Healthy.size.x = %HealthBar.size.x * ratio
+		%HealthBar.ratio = clamp(health / maxhealth, 0, 1)
 
 var alive: bool = false:
 	set(value):
 		alive = value
 		$Sprite2D.visible = value
-		$HealthBar.visible = value
+		%HealthBar.visible = value
 		$Weapon.visible = value
 		$GhostSprite.visible = !value
 
@@ -54,6 +55,7 @@ func _ready():
 
 func _on_label_resized():
 	$Label.position.x = (-$Label.size.x / 2.0 + 0.5) * $Label.scale.x
+	%HealthBar.resize_to_fit($Label)
 
 func _unhandled_input(event) -> void:
 	if event is InputEventMouseButton:

@@ -1,16 +1,54 @@
-[gd_scene format=3 uid="uid://bxfouhjhx3jp6"]
+[gd_scene load_steps=4 format=3 uid="uid://bxfouhjhx3jp6"]
 
-[node name="HealthBar" type="ColorRect"]
+[ext_resource type="Script" path="res://scripts/health_bar.gd" id="1_efs5s"]
+
+[sub_resource type="Shader" id="Shader_rjj8q"]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_nearest;
+uniform vec2 size;
+
+void fragment() {
+	vec2 pixel = size * UV;
+	float half_height = size.y / 2.0;
+	
+	if (pixel.x < half_height && sqrt(pow(pixel.x - half_height, 2.0) + pow(pixel.y - half_height, 2.0)) > half_height) {
+		COLOR.a = 0.0;
+	} else if (pixel.x > size.x - half_height && sqrt(pow(pixel.x - (size.x - half_height), 2.0) + pow(pixel.y - half_height, 2.0)) > half_height) {
+		COLOR.a = 0.0;
+	} else {
+		vec4 c = textureLod(screen_texture, SCREEN_UV, 0.0);
+		
+		if (c.a > 0.0001) {
+			c.rgb /= c.a;
+		}
+		
+		COLOR *= c;
+	}
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cmwg3"]
+resource_local_to_scene = true
+shader = SubResource("Shader_rjj8q")
+shader_parameter/size = Vector2(20, 5.875)
+
+[node name="HealthBar" type="CanvasGroup"]
+material = SubResource("ShaderMaterial_cmwg3")
+position = Vector2(-10, -26)
+fit_margin = 0.0
+clear_margin = 0.0
+script = ExtResource("1_efs5s")
+
+[node name="Damage" type="ColorRect" parent="."]
 auto_translate_mode = 1
-offset_left = -5.0
-offset_top = -18.0
-offset_right = 5.0
-offset_bottom = -17.0
-color = Color(1, 0, 0, 1)
+offset_right = 20.0
+offset_bottom = 5.875
+color = Color(0.662745, 0.286275, 0.286275, 1)
 
 [node name="Healthy" type="ColorRect" parent="."]
 auto_translate_mode = 1
-layout_mode = 0
-offset_right = 10.0
-offset_bottom = 1.0
-color = Color(0.466667, 1, 0.466667, 1)
+offset_right = 20.0
+offset_bottom = 5.875
+color = Color(0.545098, 0.568627, 0.313726, 1)
