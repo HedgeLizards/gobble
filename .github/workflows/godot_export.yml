@@ -15,7 +15,7 @@ jobs:
     steps:
 
     - name: checkout
-      uses: actions/checkout@v3.3.0
+      uses: actions/checkout@v4.1.4
 
     - name: calculate version
       run: echo "v0.1.${{ github.run_number }}" > version.txt
@@ -35,6 +35,9 @@ jobs:
         relative_project_path: ./client/
         archive_output: true
 
+    - name: explore file system
+      run: find ${{ steps.export.outputs.build_directory }}
+
     - name: set index
       run: cp ${{ steps.export.outputs.build_directory }}/Web/*.html ${{ steps.export.outputs.build_directory }}/Web/index.html
 
@@ -42,13 +45,13 @@ jobs:
       run: cp html/coi-serviceworker.min.js ${{ steps.export.outputs.build_directory }}/Web/
 
     - name: publish page
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ${{ steps.export.outputs.build_directory }}/Web
 
     - name: create release
-      uses: ncipollo/release-action@v1.13.0
+      uses: ncipollo/release-action@v1.14.0
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         generateReleaseNotes: true
