@@ -39,7 +39,7 @@ jobs:
       run: cp ${{ steps.export.outputs.build_directory }}/Web/*.html ${{ steps.export.outputs.build_directory }}/Web/index.html
 
     - name: copy coi-serviceworker
-      run: cp html/coi-serviceworker.min.js ${{ steps.export.outputs.build_directory }}/Web/
+      run: cp client/html/coi-serviceworker.min.js ${{ steps.export.outputs.build_directory }}/Web/
 
     - name: publish page
       uses: peaceiris/actions-gh-pages@v4
