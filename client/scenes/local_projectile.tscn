@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bqr2mf5xy7uty"]
 
-[ext_resource type="Script" path="res://scripts/bullet.gd" id="1_eerly"]
+[ext_resource type="Script" path="res://scripts/local_projectile.gd" id="1_eerly"]
 [ext_resource type="Texture2D" uid="uid://bitowtaa41cpc" path="res://assets/Gobbles/Bullet.png" id="2_xrryb"]
 [ext_resource type="PackedScene" uid="uid://bgmpyhhr04w0m" path="res://scenes/Particles/bullet_particles.tscn" id="3_ceewn"]
 

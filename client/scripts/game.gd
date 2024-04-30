@@ -2,7 +2,7 @@ extends Node2D
 
 const SKINS_PATH = "res://assets/Gobbles/Skins"
 const ENEMY_SKINS_PATH = "res://assets/Knights/Skins"
-const Entity = preload("res://scenes/entity.tscn")
+const Entity = preload("res://scenes/remote_entity.tscn")
 const RemoteProjectile = preload("res://scenes/remote_projectile.tscn")
 var entities = {}
 var remote_projectiles = {}

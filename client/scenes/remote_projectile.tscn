@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://d04omtpdi40sx"]
 
-[ext_resource type="Script" path="res://scripts/remote_bullet.gd" id="1_bha2d"]
+[ext_resource type="Script" path="res://scripts/remote_projectile.gd" id="1_bha2d"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xv0um"]
 radius = 3.0
