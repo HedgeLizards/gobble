@@ -44,6 +44,7 @@ var activity = { "type": "idle" }:
 			stop_shooting()
 		
 		activity = value
+var shot_interactive_at
 
 
 func is_enemy():
@@ -64,10 +65,15 @@ func shoot():
 	if weapon_id == "Minigun":
 		if activity.type == "idle" or not $ShootInteractive.playing:
 			$ShootInteractive.play()
+			
+			shot_interactive_at = Time.get_ticks_msec()
 	elif weapon.stream != null:
 		$Shoot.play()
 
 
 func stop_shooting():
 	if weapon_id == "Minigun" and $ShootInteractive.playing:
-		$ShootInteractive.get_stream_playback().switch_to_clip_by_name("Minigun Shutdown")
+		if Time.get_ticks_msec() < shot_interactive_at + 20:
+			$ShootInteractive.stop()
+		else:
+			$ShootInteractive.get_stream_playback().switch_to_clip_by_name("Minigun Shutdown")
