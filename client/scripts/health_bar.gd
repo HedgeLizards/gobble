@@ -7,7 +7,7 @@ var ratio = 1.0:
 			tween.kill()
 		
 		tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-		tween.tween_method(func(r): $Healthy.size.x = $Damage.size.x * r, ratio, value, 0.5)
+		tween.tween_method(func(r): $Healthy.size.x = $Damage.size.x * r, ratio, value, 0.4)
 		
 		ratio = value
 
