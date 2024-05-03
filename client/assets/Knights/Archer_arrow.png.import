@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dffs0ckgt2n5b"
-path="res://.godot/imported/Building_Armory_Spritesheet.png-6bc23243dea320073921d8cb15326722.ctex"
+uid="uid://crr2cbddnk7uo"
+path="res://.godot/imported/Archer_arrow.png-617990ed6140a528c7f92bef510582a4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/World/Building_Armory_Spritesheet.png"
-dest_files=["res://.godot/imported/Building_Armory_Spritesheet.png-6bc23243dea320073921d8cb15326722.ctex"]
+source_file="res://assets/Knights/Archer_arrow.png"
+dest_files=["res://.godot/imported/Archer_arrow.png-617990ed6140a528c7f92bef510582a4.ctex"]
 
 [params]
 

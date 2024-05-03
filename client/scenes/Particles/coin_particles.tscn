@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://nmer27egbyfv"]
 
-[ext_resource type="Texture2D" uid="uid://c4x7fow6nrs15" path="res://assets/Building/resource_coin.png" id="1_eno6m"]
+[ext_resource type="Texture2D" uid="uid://dl4brsm6xlmmy" path="res://assets/Buildings/resource_coin.png" id="1_eno6m"]
 
 [sub_resource type="Gradient" id="Gradient_vospc"]
 offsets = PackedFloat32Array(0.536667, 1)

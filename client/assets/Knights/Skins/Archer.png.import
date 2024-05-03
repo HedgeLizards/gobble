@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bariej6wsrkto"
-path="res://.godot/imported/archer_body.png-f02693c1b67d9581eae488e443fb8e04.ctex"
+uid="uid://de24mwfd8nn70"
+path="res://.godot/imported/Archer.png-5ffa8c59e28a9716a3dbb4753325b659.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Knights/archer_body.png"
-dest_files=["res://.godot/imported/archer_body.png-f02693c1b67d9581eae488e443fb8e04.ctex"]
+source_file="res://assets/Knights/Skins/Archer.png"
+dest_files=["res://.godot/imported/Archer.png-5ffa8c59e28a9716a3dbb4753325b659.ctex"]
 
 [params]
 

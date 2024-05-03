@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bavmkdwgnn4d3"
-path="res://.godot/imported/knight.png-4a36aa080ca215575b689da48ccd5146.ctex"
+uid="uid://dxua1cs0x5au2"
+path="res://.godot/imported/Building_Bank_Spritesheet.png-defe3fc6a6f8d1b47692c12aeacb2929.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Knights/Skins/knight.png"
-dest_files=["res://.godot/imported/knight.png-4a36aa080ca215575b689da48ccd5146.ctex"]
+source_file="res://assets/Buildings/Building_Bank_Spritesheet.png"
+dest_files=["res://.godot/imported/Building_Bank_Spritesheet.png-defe3fc6a6f8d1b47692c12aeacb2929.ctex"]
 
 [params]
 

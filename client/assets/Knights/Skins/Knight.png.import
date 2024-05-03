@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgl3gesl4wetx"
-path="res://.godot/imported/Guardian_body.png-8a967df81d0c407c89b681f50aad3822.ctex"
+uid="uid://bavmkdwgnn4d3"
+path="res://.godot/imported/Knight.png-6e449647abce8a7b42b0a6c10b010d15.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Knights/Guardian_body.png"
-dest_files=["res://.godot/imported/Guardian_body.png-8a967df81d0c407c89b681f50aad3822.ctex"]
+source_file="res://assets/Knights/Skins/Knight.png"
+dest_files=["res://.godot/imported/Knight.png-6e449647abce8a7b42b0a6c10b010d15.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b6s43weiyi617"
-path="res://.godot/imported/Building_Armory.png-2627edbd4fea859bdd613863104fc2eb.ctex"
+uid="uid://bdnxurj3v41j4"
+path="res://.godot/imported/Tower.png-95ec1eac3ef9a782e2ec9092c4b34678.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/World/Building_Armory.png"
-dest_files=["res://.godot/imported/Building_Armory.png-2627edbd4fea859bdd613863104fc2eb.ctex"]
+source_file="res://assets/Knights/Skins/Tower.png"
+dest_files=["res://.godot/imported/Tower.png-95ec1eac3ef9a782e2ec9092c4b34678.ctex"]
 
 [params]
 

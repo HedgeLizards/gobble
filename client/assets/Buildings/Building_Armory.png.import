@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://crr2cbddnk7uo"
-path="res://.godot/imported/Knight_arrow.png-beb5b8f0bb618a4f713a9d42bad5ca20.ctex"
+uid="uid://b6s43weiyi617"
+path="res://.godot/imported/Building_Armory.png-8898e249f6977139174549bbb31e59d9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Knights/Knight_arrow.png"
-dest_files=["res://.godot/imported/Knight_arrow.png-beb5b8f0bb618a4f713a9d42bad5ca20.ctex"]
+source_file="res://assets/Buildings/Building_Armory.png"
+dest_files=["res://.godot/imported/Building_Armory.png-8898e249f6977139174549bbb31e59d9.ctex"]
 
 [params]
 
