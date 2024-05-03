@@ -48,7 +48,7 @@ export class Game {
 		if (this.players.has(id)){
 			return "id " + id + " is already taken";
 		}
-		let player = new Player(id, {...data, pos: this.center(), alive: this.acceptNewPlayers(), health: data.maxhealth, weapon: "HandGun"});
+		let player = new Player(id, {...data, pos: this.center(), alive: this.acceptNewPlayers(), health: data.maxhealth, weapon: "Handgun"});
 		console.log("new player", player.name, player);
 		this.players.set(player.id, player);
 		return null;
