@@ -77,6 +77,8 @@ func _physics_process(delta) -> void:
 	var previous_position = position
 	move_and_collide(Input.get_vector("west", "east", "north", "south") * delta * speed)
 	$Sprite2D.animate(position, previous_position, delta)
+	if !is_equal_approx(position.x, previous_position.x):
+		$GhostSprite.flip_h = (position.x < previous_position.x)
 	
 	cooldown = max(cooldown - delta, 0.0)
 	if weapon_id() == "Minigun":
