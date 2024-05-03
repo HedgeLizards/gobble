@@ -77,7 +77,7 @@ var weapons: Dictionary = {
 		"recoil_strength": 15.0,
 	}),
 	"Bow": Weapon.new({
-		"texture": preload("res://assets/Knights/knight_bow.png"),
+		"texture": preload("res://assets/Knights/Archer_bow.png"),
 	}),
 	"Sword": Weapon.new({
 		"texture": preload("res://assets/Knights/Knight_sword.png"),

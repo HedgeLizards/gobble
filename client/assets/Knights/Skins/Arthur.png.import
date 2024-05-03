@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dbmus0vh0nsw0"
-path="res://.godot/imported/Arthur_body.png-61aee6c691d5dee19411c65a6a63ecd9.ctex"
+path="res://.godot/imported/Arthur.png-5dea43e1b818c77f5ccd4e0a3473171c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Knights/Arthur_body.png"
-dest_files=["res://.godot/imported/Arthur_body.png-61aee6c691d5dee19411c65a6a63ecd9.ctex"]
+source_file="res://assets/Knights/Skins/Arthur.png"
+dest_files=["res://.godot/imported/Arthur.png-5dea43e1b818c77f5ccd4e0a3473171c.ctex"]
 
 [params]
 

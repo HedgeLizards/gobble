@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://de24mwfd8nn70"
-path="res://.godot/imported/archer.png-718201f82376771c3051130bb94ea9fe.ctex"
+uid="uid://bo5sm45tfnpoj"
+path="res://.godot/imported/Chest.png-1c044e5727348e2acfcb320fe0906b34.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Knights/Skins/archer.png"
-dest_files=["res://.godot/imported/archer.png-718201f82376771c3051130bb94ea9fe.ctex"]
+source_file="res://assets/Knights/Skins/Chest.png"
+dest_files=["res://.godot/imported/Chest.png-1c044e5727348e2acfcb320fe0906b34.ctex"]
 
 [params]
 

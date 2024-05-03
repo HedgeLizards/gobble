@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d366y6yalojas"
-path="res://.godot/imported/Particle_grass.png-08ae0c033029557ac12a1e6617186309.ctex"
+uid="uid://duggtx7lq51o2"
+path="res://.godot/imported/Archer_bow.png-cfc01dc360e8bf915b9a7812a2a065ec.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Gobbles/Particle_grass.png"
-dest_files=["res://.godot/imported/Particle_grass.png-08ae0c033029557ac12a1e6617186309.ctex"]
+source_file="res://assets/Knights/Archer_bow.png"
+dest_files=["res://.godot/imported/Archer_bow.png-cfc01dc360e8bf915b9a7812a2a065ec.ctex"]
 
 [params]
 
