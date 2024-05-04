@@ -102,10 +102,7 @@ func update(actions):
 			projectile.weapon_id = action["weapon"]
 			projectile.position = parse_pos(action["pos"])
 			projectile.rotation = action["rotation"]
-			projectile.speed = action["speed"]
-			projectile.distance = action["distance"]
 			projectile.is_enemy = action.get("isEnemy", false)
-			projectile.damage = action.get("damage", 0)
 			projectile.id = action["id"]
 			projectile.playerId = action.get("creatorId")
 			%Projectiles.add_child(projectile)

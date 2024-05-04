@@ -24,8 +24,15 @@ const kinds = {
 	}
 }
 
+func _ready():
+	var weapon = Weapons.weapons[weapon_id]
+	
+	speed = weapon.speed * Globals.SCALE
+	distance = weapon.distance * Globals.SCALE
+	damage = weapon.damage
+
 func _physics_process(delta):
-	move_local_x(speed * delta * Globals.SCALE)
+	move_local_x(speed * delta)
 	distance -= speed * delta
 	if distance < 0:
 		queue_free()

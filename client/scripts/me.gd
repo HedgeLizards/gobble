@@ -23,6 +23,8 @@ var weapon_index := -1:
 		elif weapon.stream != null:
 			$Shoot.stream.set_stream(0, weapon.stream)
 			$Shoot.volume_db = weapon.volume_db
+		
+		$Camera2D.zoom_factor = 1.5 if weapon_id() == "Sniper" else 1.0
 var weapon: Weapons.Weapon
 
 const speed := 10.0 * Globals.SCALE
@@ -118,9 +120,6 @@ func shoot() -> void:
 			"id": bullet.id,
 			"pos": [bullet.position.x / Globals.SCALE, bullet.position.y / Globals.SCALE],
 			"rotation": bullet.rotation,
-			"speed": bullet.speed / Globals.SCALE,
-			"distance": bullet.distance / Globals.SCALE,
-			"damage": bullet.damage,
 		})
 	WebSocket.send({
 		"type": "createProjectiles",

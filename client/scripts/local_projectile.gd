@@ -1,11 +1,18 @@
 extends Area2D
 
-const speed := 60.0 * Globals.SCALE
-var distance := 256.0
+var speed: float
+var distance: float
 var id: String
-const damage := 5.0
+var damage: float
 const Shockwave = preload("res://scenes/shockwave.tscn")
 var weapon_id
+
+func _ready():
+	var weapon = Weapons.weapons[weapon_id]
+	
+	speed = weapon.speed * Globals.SCALE
+	distance = weapon.distance * Globals.SCALE
+	damage = weapon.damage
 
 func _physics_process(delta):
 	move_local_x(speed * delta)

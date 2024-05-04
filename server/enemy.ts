@@ -75,9 +75,6 @@ export class Enemy {
 			id: "B:" + this.id + ";" + ((Math.random() * 1e6) | 0),
 			creatorId: this.id,
 			rotation: this.pos.directionTo(target.pos),
-			speed: 10,
-			damage: this.kind.damage,
-			distance: this.range(),
 			isEnemy: true,
 			weapon: this.kind.weapon,
 		}];

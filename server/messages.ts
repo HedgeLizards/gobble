@@ -29,9 +29,6 @@ const ProjectileState = object({
 	id: ProjectileId,
 	pos: Vec2_,
 	rotation: number(),
-	speed: number(),
-	distance: number(),
-	damage: number(),
 });
 const CreateProjectiles = object({
 	type: literal("createProjectiles"),
@@ -55,7 +52,7 @@ export type ClientMessage = Infer<typeof ClientMessage>;
 export type ActionMessage =
 	{type: "entityUpdated", id: string, name?: string, alive: boolean, skin: string, pos: Vec2, aim: number, weapon: string, isEnemy: boolean, health: number, maxhealth: number, activity?: Activity,} |
 	{type: "entityDeleted", id: string} |
-	{type: "projectileCreated", id: string, creatorId: string, pos: Vec2, rotation: number, speed: number, distance: number, isEnemy: boolean, weapon: string, damage: number} |
+	{type: "projectileCreated", id: string, creatorId: string, pos: Vec2, rotation: number, isEnemy: boolean, weapon: string} |
 	{type: "projectileImpacted", id: string, creatorId: string, impactedIds: string[], pos: Vec2, damage: number, weapon: string} |
 	{type: "waveStart", waveNum: number} |
 	{type: "waveEnd", waveNum: number} |
