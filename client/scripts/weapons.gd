@@ -72,10 +72,12 @@ var weapons: Dictionary = {
 	"Sword": Weapon.new({
 		"texture": preload("res://assets/Knights/Knight_sword.png"),
 		"projectile": "sword",
+		"speed": 10.0,
 	}),
 	"Bow": Weapon.new({
 		"texture": preload("res://assets/Knights/Archer_bow.png"),
 		"projectile": "arrow",
+		"speed": 10.0,
 		"damage": 3.0,
 	}),
 }
