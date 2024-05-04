@@ -10,6 +10,9 @@ var remote_projectiles = {}
 var world_size = Vector2(1, 1)
 var world_tile_size = Vector2(1, 1)
 
+func _init():
+	visible = false
+
 func _ready():
 	%Me.get_node("Sprite2D").texture = load("%s/%s" % [SKINS_PATH, WebSocket.local_player_skin])
 	
@@ -37,6 +40,7 @@ func process_data(data):
 		camera.limit_right = world_size.x
 		camera.limit_bottom = world_size.y
 		%SwordStone.position = world_size / 2
+		visible = true
 
 func update(actions):
 	var time = float(Time.get_ticks_usec()) / 1e6

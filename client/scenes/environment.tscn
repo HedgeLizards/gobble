@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://4eknfuxsf3q3"]
-
-[ext_resource type="PackedScene" uid="uid://ctas0hp1umgpj" path="res://scenes/World/Swordstone.tscn" id="3_4pqil"]
-
-[node name="Environment" type="Node2D"]
-y_sort_enabled = true
-
-[node name="Node2D" parent="." instance=ExtResource("3_4pqil")]
-position = Vector2(0, 8)

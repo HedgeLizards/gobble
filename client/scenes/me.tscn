@@ -115,5 +115,6 @@ bus = &"SFX"
 visible = false
 modulate = Color(1, 1, 1, 0.4)
 texture = ExtResource("9_7fssd")
+offset = Vector2(0, -8)
 
 [connection signal="resized" from="Label" to="." method="_on_label_resized"]

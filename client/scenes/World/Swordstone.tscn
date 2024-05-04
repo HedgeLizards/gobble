@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://oas1hybsa2xs" path="res://scenes/Particles/Sparkle_particles.tscn" id="2_4pr4c"]
 
 [node name="SwordStone" type="Node2D"]
-y_sort_enabled = true
 
 [node name="StoneSword" type="Sprite2D" parent="."]
 position = Vector2(0, -17)
