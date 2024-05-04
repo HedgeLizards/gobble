@@ -61,7 +61,7 @@ class Serv {
 				let rawData = JSON.parse(msg.toString());
 				let data: ClientMessage;
 				try {
-					data = create(rawData, ClientMessage); 
+					data = create(rawData, ClientMessage);
 				} catch (e) {
 					console.error("invalid message structure: ", e)
 					send_error(socket, `Incorrect structure for ${rawData.type}: ${msg.toString()}`);
@@ -101,14 +101,17 @@ class Serv {
 					for (let projectile of data.projectiles) {
 						responses.push({
 							type: "projectileCreated",
-							...projectile,
 							creatorId: data.creatorId,
 							isEnemy: data.isEnemy,
+							weapon: data.weapon,
+							...projectile,
 						});
 					}
 					this.broadcast({type: "update", actions: responses});
 				} else if (data.type === "impactProjectile") {
-					game.hitEntity(data.impactedId, data.damage)
+					for (const impactedId of data.impactedIds) {
+						game.hitEntity(impactedId, data.damage);
+					}
 					let response: ActionMessage = {
 						...data,
 						type: "projectileImpacted",

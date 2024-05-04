@@ -8,6 +8,8 @@
 radius = 4.0
 
 [node name="LocalProjectile" type="Area2D"]
+input_pickable = false
+monitorable = false
 script = ExtResource("1_eerly")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -20,4 +22,4 @@ texture = ExtResource("2_xrryb")
 [node name="Node2D" parent="." instance=ExtResource("3_ceewn")]
 position = Vector2(1, 0)
 
-[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_entered" from="." to="." method="_on_area_entered" flags=6]

@@ -77,9 +77,11 @@ script = ExtResource("2_0fe2v")
 
 [node name="HealthBar" parent="." instance=ExtResource("6_n8pr1")]
 unique_name_in_owner = true
+z_index = 2
 material = SubResource("ShaderMaterial_3ki8k")
 
 [node name="Label" type="Label" parent="."]
+z_index = 2
 offset_top = -26.0
 offset_right = 1.0
 offset_bottom = 21.0

@@ -79,7 +79,7 @@ export class Enemy {
 			damage: this.kind.damage,
 			distance: this.range(),
 			isEnemy: true,
-			kind: this.kind.projectile,
+			weapon: this.kind.weapon,
 		}];
 	}
 

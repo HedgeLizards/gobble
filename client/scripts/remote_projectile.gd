@@ -6,7 +6,11 @@ var is_enemy: bool
 var id: String
 var playerId
 var damage: float
-var kind: String
+var weapon_id: String:
+	set(value):
+		weapon_id = value
+		var sprite = kinds[Weapons.weapons[weapon_id].projectile].sprite.instantiate()
+		add_child(sprite)
 
 const kinds = {
 	"bullet": {
@@ -32,15 +36,10 @@ func _on_body_entered(body: Node2D) -> void:
 			"type": "impactProjectile",
 			"creatorId": playerId,
 			"id": id,
-			"impactedId": WebSocket.local_player_id,
+			"impactedIds": [WebSocket.local_player_id],
 			"pos": [position.x / Globals.SCALE, position.y / Globals.SCALE],
 			"damage": damage,
-			"kind": kind
+			"weapon": weapon_id
 		})
 		# body.hit(damage)
 		queue_free()
-
-func set_kind(kind: String) -> void:
-	self.kind = kind
-	var sprite = kinds[kind].sprite.instantiate()
-	add_child(sprite)

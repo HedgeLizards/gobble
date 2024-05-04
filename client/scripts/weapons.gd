@@ -9,7 +9,7 @@ class Weapon:
 	var bullets: int
 	var spread: float
 	var recoil_strength: float
-	var bullet: String
+	var projectile: String
 	
 	func _init(args):
 		self.texture = args.texture
@@ -19,7 +19,7 @@ class Weapon:
 		self.bullets = args.get("bullets", 1)
 		self.spread = args.get("spread", 0.0)
 		self.recoil_strength = args.get("recoil_strength", 0.0)
-		self.bullet = args.get("bullet", "bullet")
+		self.projectile = args.get("projectile", "bullet")
 
 var weapons: Dictionary = {
 	"Handgun": Weapon.new({
@@ -78,8 +78,10 @@ var weapons: Dictionary = {
 	}),
 	"Bow": Weapon.new({
 		"texture": preload("res://assets/Knights/Archer_bow.png"),
+		"projectile": "arrow",
 	}),
 	"Sword": Weapon.new({
 		"texture": preload("res://assets/Knights/Knight_sword.png"),
+		"projectile": "sword",
 	}),
 }

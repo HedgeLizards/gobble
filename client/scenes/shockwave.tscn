@@ -1,0 +1,60 @@
+[gd_scene load_steps=5 format=3 uid="uid://dtamcwxmy65pt"]
+
+[ext_resource type="Script" path="res://scripts/shockwave.gd" id="1_nwsr6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_p0ftl"]
+radius = 50.0
+
+[sub_resource type="Shader" id="Shader_5p1ub"]
+code = "shader_type canvas_item;
+
+uniform float progress : hint_range(0.0, 1.0) = 0.0;
+uniform float width : hint_range(0.0, 0.5) = 0.25;
+uniform float blur_center : hint_range(0.0, 5.0) = 5.0;
+uniform float blur_edge : hint_range(0.0, 5.0) = 0.0;
+uniform vec4 modulate_center : source_color = vec4(1.0);
+uniform vec4 modulate_edge : source_color = vec4(1.0);
+uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_nearest_mipmap;
+
+void fragment() {
+	float distance_to_origin = sqrt(pow(UV.x - 0.5, 2.0) + pow(UV.y - 0.5, 2.0));
+	float scaled_progress = progress * (0.5 + width);
+	float begin = scaled_progress - width;
+	float end = min(scaled_progress, 0.5);
+
+	if (distance_to_origin >= begin && distance_to_origin < end) {
+		float normalized_distance_to_center = abs(distance_to_origin - (begin + width / 2.0)) / (width / 2.0);
+		float blur = blur_center - (blur_center - blur_edge) * normalized_distance_to_center;
+		vec4 modulate = modulate_center - (modulate_center - modulate_edge) * normalized_distance_to_center;
+
+		COLOR = textureLod(screen_texture, SCREEN_UV, blur) * modulate;
+	} else {
+		COLOR = texture(screen_texture, SCREEN_UV);
+	}
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_baucp"]
+resource_local_to_scene = true
+shader = SubResource("Shader_5p1ub")
+shader_parameter/progress = 0.0
+shader_parameter/width = 0.25
+shader_parameter/blur_center = 5.0
+shader_parameter/blur_edge = 1.0
+shader_parameter/modulate_center = Color(1.25, 1.1, 1, 1)
+shader_parameter/modulate_edge = Color(1, 1, 1, 1)
+
+[node name="Shockwave" type="Area2D"]
+input_pickable = false
+monitorable = false
+script = ExtResource("1_nwsr6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_p0ftl")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_baucp")
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0

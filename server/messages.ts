@@ -32,31 +32,31 @@ const ProjectileState = object({
 	speed: number(),
 	distance: number(),
 	damage: number(),
-	kind: string(),
 });
-const CreateProjectile = object({
+const CreateProjectiles = object({
 	type: literal("createProjectiles"),
 	creatorId: EntityId,
 	isEnemy: boolean(),
+	weapon: string(),
 	projectiles: array(ProjectileState),
 });
 const ImpactProjectile = object({
 	type: literal("impactProjectile"),
 	creatorId: EntityId,
 	id: ProjectileId,
-	impactedId: EntityId,
+	impactedIds: array(EntityId),
 	pos: Vec2_,
 	damage: number(),
-	kind: string(),
+	weapon: string(),
 })
-export const ClientMessage = union([CreatePlayerMessage, UpdatePlayerMessage, CreateProjectile, ImpactProjectile]);
+export const ClientMessage = union([CreatePlayerMessage, UpdatePlayerMessage, CreateProjectiles, ImpactProjectile]);
 export type ClientMessage = Infer<typeof ClientMessage>;
 
 export type ActionMessage =
 	{type: "entityUpdated", id: string, name?: string, alive: boolean, skin: string, pos: Vec2, aim: number, weapon: string, isEnemy: boolean, health: number, maxhealth: number, activity?: Activity,} |
 	{type: "entityDeleted", id: string} |
-	{type: "projectileCreated", id: string, creatorId: string, pos: Vec2, rotation: number, speed: number, distance: number, isEnemy: boolean, kind: string, damage: number} |
-	{type: "projectileImpacted", id: string, creatorId: string, impactedId: string, pos: Vec2, damage: number} |
+	{type: "projectileCreated", id: string, creatorId: string, pos: Vec2, rotation: number, speed: number, distance: number, isEnemy: boolean, weapon: string, damage: number} |
+	{type: "projectileImpacted", id: string, creatorId: string, impactedIds: string[], pos: Vec2, damage: number, weapon: string} |
 	{type: "waveStart", waveNum: number} |
 	{type: "waveEnd", waveNum: number} |
 	{type: "gameOver"};

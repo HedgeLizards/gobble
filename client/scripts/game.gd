@@ -4,6 +4,7 @@ const SKINS_PATH = "res://assets/Gobbles/Skins"
 const ENEMY_SKINS_PATH = "res://assets/Knights/Skins"
 const Entity = preload("res://scenes/remote_entity.tscn")
 const RemoteProjectile = preload("res://scenes/remote_projectile.tscn")
+const Shockwave = preload("res://scenes/shockwave.tscn")
 var entities = {}
 var remote_projectiles = {}
 var world_size = Vector2(1, 1)
@@ -97,24 +98,30 @@ func update(actions):
 					shooter.shoot()
 				shot[playerId] = true
 			
-			var bullet = RemoteProjectile.instantiate()
-			bullet.set_kind(action.get("kind", "bullet"))
-			bullet.position = parse_pos(action["pos"])
-			bullet.rotation = action["rotation"]
-			bullet.speed = action["speed"]
-			bullet.distance = action["distance"]
-			bullet.is_enemy = action.get("isEnemy", false)
-			bullet.damage = action.get("damage", 0)
-			bullet.id = action["id"]
-			bullet.playerId = action.get("creatorId")
-			%Projectiles.add_child(bullet)
-			remote_projectiles[action["id"]] =  bullet
+			var projectile = RemoteProjectile.instantiate()
+			projectile.weapon_id = action["weapon"]
+			projectile.position = parse_pos(action["pos"])
+			projectile.rotation = action["rotation"]
+			projectile.speed = action["speed"]
+			projectile.distance = action["distance"]
+			projectile.is_enemy = action.get("isEnemy", false)
+			projectile.damage = action.get("damage", 0)
+			projectile.id = action["id"]
+			projectile.playerId = action.get("creatorId")
+			%Projectiles.add_child(projectile)
+			remote_projectiles[action["id"]] = projectile
 		elif type == "projectileImpacted":
 			var playerId = action["creatorId"]
-			if  playerId == WebSocket.local_player_id:
+			if playerId == WebSocket.local_player_id:
 				continue
 			var p = remote_projectiles.get(action["id"])
 			if p:
+				if action["weapon"] == "GrenadeLauncher":
+					var shockwave = Shockwave.instantiate()
+					shockwave.monitoring = false
+					shockwave.position = parse_pos(action["pos"])
+					shockwave.z_index = 1
+					%Projectiles.add_child(shockwave)
 				p.queue_free()
 			remote_projectiles.erase(action["id"])
 		elif type == "waveStart":

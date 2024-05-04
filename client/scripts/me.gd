@@ -112,20 +112,21 @@ func shoot() -> void:
 		bullet.id = "B:"+WebSocket.local_player_id + ";" + str(randi())
 		bullet.position = %Muzzle.global_position
 		bullet.rotation = direction + (i - weapon.bullets / 2.0 + 0.5) * weapon.spread / 4.0
-		$'../Projectiles'.add_child(bullet)
+		bullet.weapon_id = weapon_id()
+		$"../Projectiles".add_child(bullet)
 		projectiles.push_back({
 			"id": bullet.id,
 			"pos": [bullet.position.x / Globals.SCALE, bullet.position.y / Globals.SCALE],
 			"rotation": bullet.rotation,
 			"speed": bullet.speed / Globals.SCALE,
 			"distance": bullet.distance / Globals.SCALE,
-			"kind": weapon.bullet,
 			"damage": bullet.damage,
 		})
 	WebSocket.send({
 		"type": "createProjectiles",
 		"creatorId": WebSocket.local_player_id,
 		"isEnemy": false,
+		"weapon": weapon_id(),
 		"projectiles": projectiles,
 	})
 	$Camera2D.recoil(-direction, weapon.recoil_strength)
