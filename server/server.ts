@@ -2,17 +2,41 @@ import { type AddressInfo, WebSocket, WebSocketServer } from 'ws';
 import { create } from 'superstruct';
 import { Game } from './game.js';
 import { ClientMessage, ServerMessage, ActionMessage} from './messages.js';
+import { createServer } from 'https';
+import { readFileSync } from 'fs';
 
 
-const tickDuration = 0.1
+const tickDuration = 0.1;
+
+type Args = {port: number, tls?: {key: string, cert: string}};
+
+function parseArgs(): Args {
+	let argv = process.argv.slice(2);
+	let args: Args = {
+		port: 9412,
+	}
+	let i: number = 0;
+	while (i < argv.length) {
+		let a: string = argv[i++].trim();
+		if (a === "-p" || a === "--port") {
+			if (i >= argv.length) throw new Error("missing argument for "+a);
+			args.port = parseInt(argv[i++].trim());
+		} else if (a === "-s" || a === "--tls") {
+			if (i+1 >= argv.length) throw new Error("missing argument for "+a);
+			let cert = argv[i++].trim();
+			let key = argv[i++].trim();
+			args.tls = {cert, key};
+		} else {
+			throw new Error(`Unknown argument '${a}'`);
+		}
+	}
+	return args;
+}
 
 function main() {
-	let port: number = 9412
-	if (process.argv.length >= 3) {
-		port = Number.parseInt(process.argv[2]);
-	}
+	let args = parseArgs();
 	let game = new Game()
-	let server = new Serv(game, port);
+	let server = new Serv(game, args);
 	setInterval(() => server.update(tickDuration), tickDuration * 1000);
 }
 
@@ -24,12 +48,21 @@ class Serv {
 	nextId: number
 	wss: WebSocketServer
 
-	constructor(game: Game, port: number) {
+	constructor(game: Game, args: Args) {
 		this.game = game;
 		this.playerIds = new Map();
 		this.connections = new Map();
 		this.nextId = 1;
-		this.wss = new WebSocketServer({port: port});
+		if (args.tls) {
+			let server = createServer({
+				cert: readFileSync(args.tls.cert),
+				key: readFileSync(args.tls.key),
+			});
+			this.wss = new WebSocketServer({server});
+			server.listen(args.port);
+		} else {
+			this.wss = new WebSocketServer({port: args.port});
+		}
 		this.wss.once('listening', () => console.log(`Listening on port ${(this.wss.address() as AddressInfo).port}`));
 		this.wss.on("connection", socket => {
 			let id = this.nextId++;
@@ -76,7 +109,7 @@ class Serv {
 						send_error(socket, `id '${data.id}' does not match name '${data.name}'`);
 						return;
 					}
-					let err = this.game.addPlayer(data.id, data);//data.skin, data.pos, data.aim, data.weapon, data.health || 100, data.maxhealth || 100));
+					let err = this.game.addPlayer(data.id, data);
 					if (err) {
 						send_error(socket, err);
 						return;
