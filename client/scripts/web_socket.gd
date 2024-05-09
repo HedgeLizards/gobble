@@ -15,8 +15,16 @@ func _ready():
 func connect_to_host(error):
 	if connecting:
 		return
+	var url: String = local_player_host
+	if not url.contains("://"):
+		var schema: String = "ws://"
+		if url.contains(".") and not url.is_valid_ip_address():
+			schema = "wss://"
+		url = schema + url
+		
+		
 	
-	var result = socket.connect_to_url('ws://%s:%s' % [local_player_host, local_player_port])
+	var result = socket.connect_to_url('%s:%s' % [url, local_player_port])
 	
 	if result == OK:
 		error.text = ''
