@@ -21,6 +21,7 @@ export class Game {
 	nextEnemyId: number
 	enemies: Map<string, Enemy>
 	removed: Array<string>
+	gold: number
 	size: Vec2
 	state: State
 	timeToWave: number
@@ -35,6 +36,7 @@ export class Game {
 		this.nextEnemyId = 1000;
 		this.enemies = new Map();
 		this.removed = [];
+		this.gold = 0;
 		this.size = new Vec2(96, 96);
 
 		this.state = State.Start;
@@ -80,6 +82,7 @@ export class Game {
 		if (enemy) {
 			enemy.health -= damage;
 			if (enemy.health <= 0) {
+				this.gold += enemy.kind.gold;
 				this.removed.push(entityId);
 				this.enemies.delete(entityId);
 			}
@@ -108,9 +111,8 @@ export class Game {
 				player.reset();
 			}
 			this.waveNum = 0;
-			for (let enemy of this.enemies.values()) {
-				actions.push({type: "entityDeleted", id: enemy.id})
-			}
+			this.gold = 0;
+			this.removed.push(...this.enemies.keys())
 			this.enemies = new Map();
 			this.state = State.WaveStart;
 			this.timeToWave = 5;
@@ -163,10 +165,10 @@ export class Game {
 			}
 		}
 
-		for (let removed of this.removed) {
-			actions.push({type: "entityDeleted", id: removed});
+		if (this.removed.length > 0) {
+			actions.push({type: "entitiesDeleted", ids: this.removed, gold: this.gold});
+			this.removed = [];
 		}
-		this.removed = [];
 		for (let player of this.players.values()){
 			if (player.alive) {
 				actions.push(player.view());
@@ -200,7 +202,7 @@ export class Game {
 	}
 
 	viewWorld(): WorldMessage {
-		return {type: "world", size: this.size};
+		return {type: "world", size: this.size, gold: this.gold};
 	}
 }
 

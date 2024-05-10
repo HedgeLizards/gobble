@@ -5,6 +5,7 @@ const ENEMY_SKINS_PATH = "res://assets/Knights/Skins"
 const Entity = preload("res://scenes/remote_entity.tscn")
 const RemoteProjectile = preload("res://scenes/remote_projectile.tscn")
 const Shockwave = preload("res://scenes/shockwave.tscn")
+const CoinParticles = preload("res://scenes/Particles/coin_particles.tscn")
 var entities = {}
 var remote_projectiles = {}
 var world_size = Vector2(1, 1)
@@ -40,6 +41,7 @@ func process_data(data):
 		camera.limit_right = world_size.x
 		camera.limit_bottom = world_size.y
 		%SwordStone.position = world_size / 2
+		$UI.gold = data["world"]["gold"]
 		visible = true
 
 func update(actions):
@@ -85,13 +87,22 @@ func update(actions):
 				entity.activity = action.activity
 			entity.weapon_id = action.weapon
 			entity.positions.push_back(PositionSnapshot.new(pos, action.get("aim", 0.0), time))
-		elif type == "entityDeleted":
-			var id = action["id"]
-			if id == WebSocket.local_player_id:
-				%Me.alive = false
-			if entities.has(id):
-				entities[id].queue_free()
-				entities.erase(id)
+		elif type == "entitiesDeleted":
+			for id in action["ids"]:
+				if id == WebSocket.local_player_id:
+					%Me.alive = false
+				elif entities.has(id):
+					var entity = entities[id]
+					if entity.enemy and action["gold"] > 0:
+						var coin_particles = CoinParticles.instantiate()
+						var cpu_particles_2d = coin_particles.get_node("CPUParticles2D")
+						cpu_particles_2d.emitting = true
+						cpu_particles_2d.finished.connect(coin_particles.queue_free)
+						coin_particles.position = entity.position
+						add_child(coin_particles)
+					entity.queue_free()
+					entities.erase(id)
+			$UI.gold = action["gold"]
 		elif type == "projectileCreated":
 			var playerId = action["creatorId"]
 			if playerId == WebSocket.local_player_id:

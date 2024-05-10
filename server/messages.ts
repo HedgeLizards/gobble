@@ -51,7 +51,7 @@ export type ClientMessage = Infer<typeof ClientMessage>;
 
 export type ActionMessage =
 	{type: "entityUpdated", id: string, name?: string, alive: boolean, skin: string, pos: Vec2, aim: number, weapon: string, isEnemy: boolean, health: number, maxhealth: number, activity?: Activity,} |
-	{type: "entityDeleted", id: string} |
+	{type: "entitiesDeleted", ids: string[], gold: number} |
 	{type: "projectileCreated", id: string, creatorId: string, pos: Vec2, rotation: number, isEnemy: boolean, weapon: string} |
 	{type: "projectileImpacted", id: string, creatorId: string, impactedIds: string[], pos: Vec2, damage: number, weapon: string} |
 	{type: "waveStart", waveNum: number} |
@@ -61,4 +61,4 @@ export type ActionMessage =
 export type ServerMessage = {type: "update", actions: ActionMessage[]}
 	| {type: "welcome", tickDuration: number, world: WorldMessage};
 
-export type WorldMessage = {type: "world", size: Vec2};
+export type WorldMessage = {type: "world", size: Vec2, gold: number};
