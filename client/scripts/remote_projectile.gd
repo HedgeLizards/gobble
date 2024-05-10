@@ -39,6 +39,7 @@ func _physics_process(delta):
 
 func _on_body_entered(body: Node2D) -> void:
 	if is_enemy && body.has_method("is_me") and body.is_me() and body.is_alive():
+		body_entered.disconnect(_on_body_entered)
 		WebSocket.send({
 			"type": "impactProjectile",
 			"creatorId": playerId,

@@ -22,6 +22,7 @@ func _physics_process(delta):
 
 func _on_area_entered(area: Area2D) -> void:
 	if area.has_method("is_enemy") and area.is_enemy():
+		area_entered.disconnect(_on_area_entered)
 		var impactedIds = []
 		if weapon_id == "GrenadeLauncher":
 			var shockwave = Shockwave.instantiate()
