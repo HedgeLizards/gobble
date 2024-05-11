@@ -3,6 +3,7 @@ extends Control
 const SKINS_PATH = 'res://assets/Gobbles/Skins'
 
 static var skins = []
+static var default_host := "localhost"
 
 static func _static_init():
 	for filename in DirAccess.get_files_at(SKINS_PATH):
@@ -10,6 +11,10 @@ static func _static_init():
 		
 		if substrings.size() == 2:
 			skins.push_back(substrings[0])
+	
+	var file := FileAccess.open("res://default_host.txt", FileAccess.READ)
+	if file != null:
+		default_host = file.get_as_text()
 
 var skin_index:
 	set(value):
@@ -32,7 +37,7 @@ func _ready():
 		$VBoxContainer/Error.text = WebSocket.local_player_error
 		$VBoxContainer/Error.visible = true
 	
-	$VBoxContainer/Connection/Host.text = 'localhost' if WebSocket.local_player_host == null else WebSocket.local_player_host
+	$VBoxContainer/Connection/Host.text = default_host if WebSocket.local_player_host == null else WebSocket.local_player_host
 	$VBoxContainer/Connection/Port.text = '9412' if WebSocket.local_player_port == null else WebSocket.local_player_port
 
 func _unhandled_key_input(event):
