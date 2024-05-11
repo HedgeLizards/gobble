@@ -18,7 +18,7 @@ jobs:
       uses: actions/checkout@v4.1.4
 
     - name: set default host
-      run: echo 's.troido.nl' > client/default_server.txt
+      run: echo 's.troido.nl' > client/default_host.txt
 
     - name: calculate version
       run: echo "v0.1.${{ github.run_number }}" > client/version.txt
