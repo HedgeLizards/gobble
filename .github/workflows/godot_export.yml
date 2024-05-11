@@ -44,15 +44,11 @@ jobs:
     - name: copy coi-serviceworker
       run: cp client/html/coi-serviceworker.min.js ${{ steps.export.outputs.build_directory }}/Web/
 
-    - name: Setup Pages
-      uses: actions/configure-pages@v5
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3
+    - name: publish page
+      uses: peaceiris/actions-gh-pages@v4
       with:
-        path: ${{ steps.export.outputs.build_directory }}/Web
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ${{ steps.export.outputs.build_directory }}/Web
 
     - name: create release
       uses: ncipollo/release-action@v1.14.0
