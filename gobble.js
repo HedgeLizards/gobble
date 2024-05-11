@@ -5032,13 +5032,26 @@ function ___syscall_fstat64(fd, buf) {
  }
 }
 
+function ___syscall_ftruncate64(fd, length) {
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(13, 1, fd, length);
+ length = bigintToI53Checked(length);
+ try {
+  if (isNaN(length)) return 61;
+  FS.ftruncate(fd, length);
+  return 0;
+ } catch (e) {
+  if (typeof FS == "undefined" || !(e.name === "ErrnoError")) throw e;
+  return -e.errno;
+ }
+}
+
 var stringToUTF8 = (str, outPtr, maxBytesToWrite) => {
  assert(typeof maxBytesToWrite == "number", "stringToUTF8(str, outPtr, maxBytesToWrite) is missing the third parameter that specifies the length of the output buffer!");
  return stringToUTF8Array(str, GROWABLE_HEAP_U8(), outPtr, maxBytesToWrite);
 };
 
 function ___syscall_getcwd(buf, size) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(13, 1, buf, size);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(14, 1, buf, size);
  try {
   if (size === 0) return -28;
   var cwd = FS.cwd();
@@ -5053,7 +5066,7 @@ function ___syscall_getcwd(buf, size) {
 }
 
 function ___syscall_getdents64(fd, dirp, count) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(14, 1, fd, dirp, count);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(15, 1, fd, dirp, count);
  try {
   var stream = SYSCALLS.getStreamFromFD(fd);
   stream.getdents ||= FS.readdir(stream.path);
@@ -5097,7 +5110,7 @@ function ___syscall_getdents64(fd, dirp, count) {
 }
 
 function ___syscall_getsockname(fd, addr, addrlen, d1, d2, d3) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(15, 1, fd, addr, addrlen, d1, d2, d3);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(16, 1, fd, addr, addrlen, d1, d2, d3);
  try {
   var sock = getSocketFromFD(fd);
   var errno = writeSockaddr(addr, sock.family, DNS.lookup_name(sock.saddr || "0.0.0.0"), sock.sport, addrlen);
@@ -5110,7 +5123,7 @@ function ___syscall_getsockname(fd, addr, addrlen, d1, d2, d3) {
 }
 
 function ___syscall_getsockopt(fd, level, optname, optval, optlen, d1) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(16, 1, fd, level, optname, optval, optlen, d1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(17, 1, fd, level, optname, optval, optlen, d1);
  try {
   var sock = getSocketFromFD(fd);
   if (level === 1) {
@@ -5129,7 +5142,7 @@ function ___syscall_getsockopt(fd, level, optname, optval, optlen, d1) {
 }
 
 function ___syscall_ioctl(fd, op, varargs) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(17, 1, fd, op, varargs);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(18, 1, fd, op, varargs);
  SYSCALLS.varargs = varargs;
  try {
   var stream = SYSCALLS.getStreamFromFD(fd);
@@ -5246,7 +5259,7 @@ function ___syscall_ioctl(fd, op, varargs) {
 }
 
 function ___syscall_listen(fd, backlog) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(18, 1, fd, backlog);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(19, 1, fd, backlog);
  try {
   var sock = getSocketFromFD(fd);
   sock.sock_ops.listen(sock, backlog);
@@ -5258,7 +5271,7 @@ function ___syscall_listen(fd, backlog) {
 }
 
 function ___syscall_lstat64(path, buf) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(19, 1, path, buf);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(20, 1, path, buf);
  try {
   path = SYSCALLS.getStr(path);
   return SYSCALLS.doStat(FS.lstat, path, buf);
@@ -5269,7 +5282,7 @@ function ___syscall_lstat64(path, buf) {
 }
 
 function ___syscall_mkdirat(dirfd, path, mode) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(20, 1, dirfd, path, mode);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(21, 1, dirfd, path, mode);
  try {
   path = SYSCALLS.getStr(path);
   path = SYSCALLS.calculateAt(dirfd, path);
@@ -5283,8 +5296,32 @@ function ___syscall_mkdirat(dirfd, path, mode) {
  }
 }
 
+function ___syscall_mknodat(dirfd, path, mode, dev) {
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(22, 1, dirfd, path, mode, dev);
+ try {
+  path = SYSCALLS.getStr(path);
+  path = SYSCALLS.calculateAt(dirfd, path);
+  switch (mode & 61440) {
+  case 32768:
+  case 8192:
+  case 24576:
+  case 4096:
+  case 49152:
+   break;
+
+  default:
+   return -28;
+  }
+  FS.mknod(path, mode, dev);
+  return 0;
+ } catch (e) {
+  if (typeof FS == "undefined" || !(e.name === "ErrnoError")) throw e;
+  return -e.errno;
+ }
+}
+
 function ___syscall_newfstatat(dirfd, path, buf, flags) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(21, 1, dirfd, path, buf, flags);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(23, 1, dirfd, path, buf, flags);
  try {
   path = SYSCALLS.getStr(path);
   var nofollow = flags & 256;
@@ -5300,7 +5337,7 @@ function ___syscall_newfstatat(dirfd, path, buf, flags) {
 }
 
 function ___syscall_openat(dirfd, path, flags, varargs) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(22, 1, dirfd, path, flags, varargs);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(24, 1, dirfd, path, flags, varargs);
  SYSCALLS.varargs = varargs;
  try {
   path = SYSCALLS.getStr(path);
@@ -5314,7 +5351,7 @@ function ___syscall_openat(dirfd, path, flags, varargs) {
 }
 
 function ___syscall_poll(fds, nfds, timeout) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(23, 1, fds, nfds, timeout);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(25, 1, fds, nfds, timeout);
  try {
   var nonzero = 0;
   for (var i = 0; i < nfds; i++) {
@@ -5341,7 +5378,7 @@ function ___syscall_poll(fds, nfds, timeout) {
 }
 
 function ___syscall_readlinkat(dirfd, path, buf, bufsize) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(24, 1, dirfd, path, buf, bufsize);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(26, 1, dirfd, path, buf, bufsize);
  try {
   path = SYSCALLS.getStr(path);
   path = SYSCALLS.calculateAt(dirfd, path);
@@ -5359,7 +5396,7 @@ function ___syscall_readlinkat(dirfd, path, buf, bufsize) {
 }
 
 function ___syscall_recvfrom(fd, buf, len, flags, addr, addrlen) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(25, 1, fd, buf, len, flags, addr, addrlen);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(27, 1, fd, buf, len, flags, addr, addrlen);
  try {
   var sock = getSocketFromFD(fd);
   var msg = sock.sock_ops.recvmsg(sock, len);
@@ -5377,7 +5414,7 @@ function ___syscall_recvfrom(fd, buf, len, flags, addr, addrlen) {
 }
 
 function ___syscall_renameat(olddirfd, oldpath, newdirfd, newpath) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(26, 1, olddirfd, oldpath, newdirfd, newpath);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(28, 1, olddirfd, oldpath, newdirfd, newpath);
  try {
   oldpath = SYSCALLS.getStr(oldpath);
   newpath = SYSCALLS.getStr(newpath);
@@ -5392,7 +5429,7 @@ function ___syscall_renameat(olddirfd, oldpath, newdirfd, newpath) {
 }
 
 function ___syscall_rmdir(path) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(27, 1, path);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(29, 1, path);
  try {
   path = SYSCALLS.getStr(path);
   FS.rmdir(path);
@@ -5404,7 +5441,7 @@ function ___syscall_rmdir(path) {
 }
 
 function ___syscall_sendto(fd, message, length, flags, addr, addr_len) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(28, 1, fd, message, length, flags, addr, addr_len);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(30, 1, fd, message, length, flags, addr, addr_len);
  try {
   var sock = getSocketFromFD(fd);
   var dest = getSocketAddress(addr, addr_len, true);
@@ -5419,7 +5456,7 @@ function ___syscall_sendto(fd, message, length, flags, addr, addr_len) {
 }
 
 function ___syscall_socket(domain, type, protocol) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(29, 1, domain, type, protocol);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(31, 1, domain, type, protocol);
  try {
   var sock = SOCKFS.createSocket(domain, type, protocol);
   assert(sock.stream.fd < 64);
@@ -5431,7 +5468,7 @@ function ___syscall_socket(domain, type, protocol) {
 }
 
 function ___syscall_stat64(path, buf) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(30, 1, path, buf);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(32, 1, path, buf);
  try {
   path = SYSCALLS.getStr(path);
   return SYSCALLS.doStat(FS.stat, path, buf);
@@ -5442,7 +5479,7 @@ function ___syscall_stat64(path, buf) {
 }
 
 function ___syscall_statfs64(path, size, buf) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(31, 1, path, size, buf);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(33, 1, path, size, buf);
  try {
   path = SYSCALLS.getStr(path);
   assert(size === 64);
@@ -5464,7 +5501,7 @@ function ___syscall_statfs64(path, size, buf) {
 }
 
 function ___syscall_symlink(target, linkpath) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(32, 1, target, linkpath);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(34, 1, target, linkpath);
  try {
   target = SYSCALLS.getStr(target);
   linkpath = SYSCALLS.getStr(linkpath);
@@ -5477,7 +5514,7 @@ function ___syscall_symlink(target, linkpath) {
 }
 
 function ___syscall_unlinkat(dirfd, path, flags) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(33, 1, dirfd, path, flags);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(35, 1, dirfd, path, flags);
  try {
   path = SYSCALLS.getStr(path);
   path = SYSCALLS.calculateAt(dirfd, path);
@@ -5900,7 +5937,7 @@ var __emscripten_receive_on_main_thread_js = (index, callingThread, numCallArgs,
 };
 
 function __emscripten_runtime_keepalive_clear() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(34, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(36, 1);
  noExitRuntime = false;
  runtimeKeepaliveCounter = 0;
 }
@@ -5957,31 +5994,6 @@ function __localtime_js(time, tmPtr) {
  var winterOffset = start.getTimezoneOffset();
  var dst = (summerOffset != winterOffset && date.getTimezoneOffset() == Math.min(winterOffset, summerOffset)) | 0;
  GROWABLE_HEAP_I32()[(((tmPtr) + (32)) >> 2)] = dst;
-}
-
-var timers = {};
-
-var _emscripten_get_now;
-
-_emscripten_get_now = () => performance.timeOrigin + performance.now();
-
-function __setitimer_js(which, timeout_ms) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(35, 1, which, timeout_ms);
- if (timers[which]) {
-  clearTimeout(timers[which].id);
-  delete timers[which];
- }
- if (!timeout_ms) return 0;
- var id = setTimeout(() => {
-  assert(which in timers);
-  delete timers[which];
-  callUserCallback(() => __emscripten_timeout(which, _emscripten_get_now()));
- }, timeout_ms);
- timers[which] = {
-  id: id,
-  timeout_ms: timeout_ms
- };
- return 0;
 }
 
 var stringToNewUTF8 = str => {
@@ -6080,6 +6092,10 @@ var _emscripten_set_main_loop_timing = (mode, value) => {
  }
  return 0;
 };
+
+var _emscripten_get_now;
+
+_emscripten_get_now = () => performance.timeOrigin + performance.now();
 
 var runtimeKeepalivePop = () => {
  assert(runtimeKeepaliveCounter > 0);
@@ -6686,7 +6702,7 @@ var _emscripten_exit_with_live_runtime = () => {
 };
 
 function _emscripten_force_exit(status) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(36, 1, status);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(37, 1, status);
  __emscripten_runtime_keepalive_clear();
  _exit(status);
 }
@@ -8253,7 +8269,7 @@ var setCanvasElementSizeCallingThread = (target, width, height) => {
 };
 
 function setCanvasElementSizeMainThread(target, width, height) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(37, 1, target, width, height);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(38, 1, target, width, height);
  return setCanvasElementSizeCallingThread(target, width, height);
 }
 
@@ -8273,7 +8289,7 @@ var _emscripten_set_main_loop = (func, fps, simulateInfiniteLoop) => {
 var _emscripten_supports_offscreencanvas = () =>  0;
 
 function _emscripten_webgl_destroy_context(contextHandle) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(38, 1, contextHandle);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(39, 1, contextHandle);
  if (GL.currentContext == contextHandle) GL.currentContext = 0;
  GL.deleteContext(contextHandle);
 }
@@ -8293,7 +8309,7 @@ var _emscripten_webgl_do_commit_frame = () => {
 };
 
 function _emscripten_webgl_create_context_proxied(target, attributes) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(39, 1, target, attributes);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(40, 1, target, attributes);
  return _emscripten_webgl_do_create_context(target, attributes);
 }
 
@@ -8340,7 +8356,7 @@ var _emscripten_webgl_do_create_context = (target, attributes) => {
 };
 
 function _emscripten_webgl_enable_extension(contextHandle, extension) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(40, 1, contextHandle, extension);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(41, 1, contextHandle, extension);
  var context = GL.getContext(contextHandle);
  var extString = UTF8ToString(extension);
  if (extString.startsWith("GL_")) extString = extString.substr(3);
@@ -8397,7 +8413,7 @@ var stringToAscii = (str, buffer) => {
 };
 
 var _environ_get = function(__environ, environ_buf) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(41, 1, __environ, environ_buf);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(42, 1, __environ, environ_buf);
  var bufSize = 0;
  getEnvStrings().forEach((string, i) => {
   var ptr = environ_buf + bufSize;
@@ -8409,7 +8425,7 @@ var _environ_get = function(__environ, environ_buf) {
 };
 
 var _environ_sizes_get = function(penviron_count, penviron_buf_size) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(42, 1, penviron_count, penviron_buf_size);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(43, 1, penviron_count, penviron_buf_size);
  var strings = getEnvStrings();
  GROWABLE_HEAP_U32()[((penviron_count) >> 2)] = strings.length;
  var bufSize = 0;
@@ -8419,7 +8435,7 @@ var _environ_sizes_get = function(penviron_count, penviron_buf_size) {
 };
 
 function _fd_close(fd) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(43, 1, fd);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(44, 1, fd);
  try {
   var stream = SYSCALLS.getStreamFromFD(fd);
   FS.close(stream);
@@ -8431,7 +8447,7 @@ function _fd_close(fd) {
 }
 
 function _fd_fdstat_get(fd, pbuf) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(44, 1, fd, pbuf);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(45, 1, fd, pbuf);
  try {
   var rightsBase = 0;
   var rightsInheriting = 0;
@@ -8469,7 +8485,7 @@ function _fd_fdstat_get(fd, pbuf) {
 };
 
 function _fd_read(fd, iov, iovcnt, pnum) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(45, 1, fd, iov, iovcnt, pnum);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(46, 1, fd, iov, iovcnt, pnum);
  try {
   var stream = SYSCALLS.getStreamFromFD(fd);
   var num = doReadv(stream, iov, iovcnt);
@@ -8482,7 +8498,7 @@ function _fd_read(fd, iov, iovcnt, pnum) {
 }
 
 function _fd_seek(fd, offset, whence, newOffset) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(46, 1, fd, offset, whence, newOffset);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(47, 1, fd, offset, whence, newOffset);
  offset = bigintToI53Checked(offset);
  try {
   if (isNaN(offset)) return 61;
@@ -8514,7 +8530,7 @@ function _fd_seek(fd, offset, whence, newOffset) {
 };
 
 function _fd_write(fd, iov, iovcnt, pnum) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(47, 1, fd, iov, iovcnt, pnum);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(48, 1, fd, iov, iovcnt, pnum);
  try {
   var stream = SYSCALLS.getStreamFromFD(fd);
   var num = doWritev(stream, iov, iovcnt);
@@ -8527,7 +8543,7 @@ function _fd_write(fd, iov, iovcnt, pnum) {
 }
 
 function _getaddrinfo(node, service, hint, out) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(48, 1, node, service, hint, out);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(49, 1, node, service, hint, out);
  var addrs = [];
  var canon = null;
  var addr = 0;
@@ -9039,12 +9055,12 @@ var GodotAudio = {
 };
 
 function _godot_audio_has_worklet() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(49, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(50, 1);
  return (GodotAudio.ctx && GodotAudio.ctx.audioWorklet) ? 1 : 0;
 }
 
 function _godot_audio_init(p_mix_rate, p_latency, p_state_change, p_latency_update) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(50, 1, p_mix_rate, p_latency, p_state_change, p_latency_update);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(51, 1, p_mix_rate, p_latency, p_state_change, p_latency_update);
  const statechange = GodotRuntime.get_func(p_state_change);
  const latencyupdate = GodotRuntime.get_func(p_latency_update);
  const mix_rate = GodotRuntime.getHeapValue(p_mix_rate, "i32");
@@ -9054,14 +9070,14 @@ function _godot_audio_init(p_mix_rate, p_latency, p_state_change, p_latency_upda
 }
 
 function _godot_audio_input_start() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(51, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(52, 1);
  return GodotAudio.create_input(function(input) {
   input.connect(GodotAudio.driver.get_node());
  });
 }
 
 function _godot_audio_input_stop() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(52, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(53, 1);
  if (GodotAudio.input) {
   const tracks = GodotAudio.input["mediaStream"]["getTracks"]();
   for (let i = 0; i < tracks.length; i++) {
@@ -9073,7 +9089,7 @@ function _godot_audio_input_stop() {
 }
 
 function _godot_audio_is_available() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(53, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(54, 1);
  if (!(window.AudioContext || window.webkitAudioContext)) {
   return 0;
  }
@@ -9081,7 +9097,7 @@ function _godot_audio_is_available() {
 }
 
 function _godot_audio_resume() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(54, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(55, 1);
  if (GodotAudio.ctx && GodotAudio.ctx.state !== "running") {
   GodotAudio.ctx.resume();
  }
@@ -9222,7 +9238,7 @@ var GodotAudioWorklet = {
 };
 
 function _godot_audio_worklet_create(channels) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(55, 1, channels);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(56, 1, channels);
  try {
   GodotAudioWorklet.create(channels);
  } catch (e) {
@@ -9233,7 +9249,7 @@ function _godot_audio_worklet_create(channels) {
 }
 
 function _godot_audio_worklet_start(p_in_buf, p_in_size, p_out_buf, p_out_size, p_state) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(56, 1, p_in_buf, p_in_size, p_out_buf, p_out_size, p_state);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(57, 1, p_in_buf, p_in_size, p_out_buf, p_out_size, p_state);
  const out_buffer = GodotRuntime.heapSub(GROWABLE_HEAP_F32(), p_out_buf, p_out_size);
  const in_buffer = GodotRuntime.heapSub(GROWABLE_HEAP_F32(), p_in_buf, p_in_size);
  const state = GodotRuntime.heapSub(GROWABLE_HEAP_I32(), p_state, 4);
@@ -9254,12 +9270,12 @@ function _godot_audio_worklet_state_wait(p_state, p_idx, p_expected, p_timeout) 
 }
 
 function _godot_js_config_canvas_id_get(p_ptr, p_ptr_max) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(57, 1, p_ptr, p_ptr_max);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(58, 1, p_ptr, p_ptr_max);
  GodotRuntime.stringToHeap(`#${GodotConfig.canvas.id}`, p_ptr, p_ptr_max);
 }
 
 function _godot_js_config_locale_get(p_ptr, p_ptr_max) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(58, 1, p_ptr, p_ptr_max);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(59, 1, p_ptr, p_ptr_max);
  GodotRuntime.stringToHeap(GodotConfig.locale, p_ptr, p_ptr_max);
 }
 
@@ -9567,22 +9583,22 @@ var GodotDisplay = {
 };
 
 function _godot_js_display_alert(p_text) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(59, 1, p_text);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(60, 1, p_text);
  window.alert(GodotRuntime.parseString(p_text));
 }
 
 function _godot_js_display_canvas_focus() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(60, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(61, 1);
  GodotConfig.canvas.focus();
 }
 
 function _godot_js_display_canvas_is_focused() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(61, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(62, 1);
  return document.activeElement === GodotConfig.canvas;
 }
 
 function _godot_js_display_clipboard_get(callback) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(62, 1, callback);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(63, 1, callback);
  const func = GodotRuntime.get_func(callback);
  try {
   navigator.clipboard.readText().then(function(result) {
@@ -9594,7 +9610,7 @@ function _godot_js_display_clipboard_get(callback) {
 }
 
 function _godot_js_display_clipboard_set(p_text) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(63, 1, p_text);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(64, 1, p_text);
  const text = GodotRuntime.parseString(p_text);
  if (!navigator.clipboard || !navigator.clipboard.writeText) {
   return 1;
@@ -9606,17 +9622,17 @@ function _godot_js_display_clipboard_set(p_text) {
 }
 
 function _godot_js_display_cursor_is_hidden() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(64, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(65, 1);
  return !GodotDisplayCursor.visible;
 }
 
 function _godot_js_display_cursor_is_locked() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(65, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(66, 1);
  return GodotDisplayCursor.isPointerLocked() ? 1 : 0;
 }
 
 function _godot_js_display_cursor_lock_set(p_lock) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(66, 1, p_lock);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(67, 1, p_lock);
  if (p_lock) {
   GodotDisplayCursor.lockPointer();
  } else {
@@ -9625,7 +9641,7 @@ function _godot_js_display_cursor_lock_set(p_lock) {
 }
 
 function _godot_js_display_cursor_set_custom_shape(p_shape, p_ptr, p_len, p_hotspot_x, p_hotspot_y) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(67, 1, p_shape, p_ptr, p_len, p_hotspot_x, p_hotspot_y);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(68, 1, p_shape, p_ptr, p_len, p_hotspot_x, p_hotspot_y);
  const shape = GodotRuntime.parseString(p_shape);
  const old_shape = GodotDisplayCursor.cursors[shape];
  if (p_len > 0) {
@@ -9650,12 +9666,12 @@ function _godot_js_display_cursor_set_custom_shape(p_shape, p_ptr, p_len, p_hots
 }
 
 function _godot_js_display_cursor_set_shape(p_string) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(68, 1, p_string);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(69, 1, p_string);
  GodotDisplayCursor.set_shape(GodotRuntime.parseString(p_string));
 }
 
 function _godot_js_display_cursor_set_visible(p_visible) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(69, 1, p_visible);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(70, 1, p_visible);
  const visible = p_visible !== 0;
  if (visible === GodotDisplayCursor.visible) {
   return;
@@ -9669,13 +9685,13 @@ function _godot_js_display_cursor_set_visible(p_visible) {
 }
 
 function _godot_js_display_desired_size_set(width, height) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(70, 1, width, height);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(71, 1, width, height);
  GodotDisplayScreen.desired_size = [ width, height ];
  GodotDisplayScreen.updateSize();
 }
 
 function _godot_js_display_fullscreen_cb(callback) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(71, 1, callback);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(72, 1, callback);
  const canvas = GodotConfig.canvas;
  const func = GodotRuntime.get_func(callback);
  function change_cb(evt) {
@@ -9689,17 +9705,17 @@ function _godot_js_display_fullscreen_cb(callback) {
 }
 
 function _godot_js_display_fullscreen_exit() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(72, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(73, 1);
  return GodotDisplayScreen.exitFullscreen();
 }
 
 function _godot_js_display_fullscreen_request() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(73, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(74, 1);
  return GodotDisplayScreen.requestFullscreen();
 }
 
 function _godot_js_display_has_webgl(p_version) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(74, 1, p_version);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(75, 1, p_version);
  if (p_version !== 1 && p_version !== 2) {
   return false;
  }
@@ -9710,7 +9726,7 @@ function _godot_js_display_has_webgl(p_version) {
 }
 
 function _godot_js_display_is_swap_ok_cancel() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(75, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(76, 1);
  const win = ([ "Windows", "Win64", "Win32", "WinCE" ]);
  const plat = navigator.platform || "";
  if (win.indexOf(plat) !== -1) {
@@ -9720,7 +9736,7 @@ function _godot_js_display_is_swap_ok_cancel() {
 }
 
 function _godot_js_display_notification_cb(callback, p_enter, p_exit, p_in, p_out) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(76, 1, callback, p_enter, p_exit, p_in, p_out);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(77, 1, callback, p_enter, p_exit, p_in, p_out);
  const canvas = GodotConfig.canvas;
  const func = GodotRuntime.get_func(callback);
  const notif = [ p_enter, p_exit, p_in, p_out ];
@@ -9732,24 +9748,24 @@ function _godot_js_display_notification_cb(callback, p_enter, p_exit, p_in, p_ou
 }
 
 function _godot_js_display_pixel_ratio_get() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(77, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(78, 1);
  return GodotDisplayScreen.getPixelRatio();
 }
 
 function _godot_js_display_screen_dpi_get() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(78, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(79, 1);
  return GodotDisplay.getDPI();
 }
 
 function _godot_js_display_screen_size_get(width, height) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(79, 1, width, height);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(80, 1, width, height);
  const scale = GodotDisplayScreen.getPixelRatio();
  GodotRuntime.setHeapValue(width, window.screen.width * scale, "i32");
  GodotRuntime.setHeapValue(height, window.screen.height * scale, "i32");
 }
 
 function _godot_js_display_setup_canvas(p_width, p_height, p_fullscreen, p_hidpi) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(80, 1, p_width, p_height, p_fullscreen, p_hidpi);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(81, 1, p_width, p_height, p_fullscreen, p_hidpi);
  const canvas = GodotConfig.canvas;
  GodotEventListeners.add(canvas, "contextmenu", function(ev) {
   ev.preventDefault();
@@ -9781,7 +9797,7 @@ function _godot_js_display_setup_canvas(p_width, p_height, p_fullscreen, p_hidpi
 }
 
 function _godot_js_display_size_update() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(81, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(82, 1);
  const updated = GodotDisplayScreen.updateSize();
  if (updated) {
   GodotDisplayVK.updateSize();
@@ -9790,22 +9806,22 @@ function _godot_js_display_size_update() {
 }
 
 function _godot_js_display_touchscreen_is_available() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(82, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(83, 1);
  return "ontouchstart" in window;
 }
 
 function _godot_js_display_tts_available() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(83, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(84, 1);
  return "speechSynthesis" in window;
 }
 
 function _godot_js_display_vk_available() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(84, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(85, 1);
  return GodotDisplayVK.available();
 }
 
 function _godot_js_display_vk_cb(p_input_cb) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(85, 1, p_input_cb);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(86, 1, p_input_cb);
  const input_cb = GodotRuntime.get_func(p_input_cb);
  if (GodotDisplayVK.available()) {
   GodotDisplayVK.init(input_cb);
@@ -9813,12 +9829,12 @@ function _godot_js_display_vk_cb(p_input_cb) {
 }
 
 function _godot_js_display_vk_hide() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(86, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(87, 1);
  GodotDisplayVK.hide();
 }
 
 function _godot_js_display_vk_show(p_text, p_type, p_start, p_end) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(87, 1, p_text, p_type, p_start, p_end);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(88, 1, p_text, p_type, p_start, p_end);
  const text = GodotRuntime.parseString(p_text);
  const start = p_start > 0 ? p_start : 0;
  const end = p_end > 0 ? p_end : start;
@@ -9826,7 +9842,7 @@ function _godot_js_display_vk_show(p_text, p_type, p_start, p_end) {
 }
 
 function _godot_js_display_window_blur_cb(callback) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(88, 1, callback);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(89, 1, callback);
  const func = GodotRuntime.get_func(callback);
  GodotEventListeners.add(window, "blur", function() {
   func();
@@ -9834,7 +9850,7 @@ function _godot_js_display_window_blur_cb(callback) {
 }
 
 function _godot_js_display_window_icon_set(p_ptr, p_len) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(89, 1, p_ptr, p_len);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(90, 1, p_ptr, p_len);
  let link = document.getElementById("-gd-engine-icon");
  const old_icon = GodotDisplay.window_icon;
  if (p_ptr) {
@@ -9861,13 +9877,13 @@ function _godot_js_display_window_icon_set(p_ptr, p_len) {
 }
 
 function _godot_js_display_window_size_get(p_width, p_height) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(90, 1, p_width, p_height);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(91, 1, p_width, p_height);
  GodotRuntime.setHeapValue(p_width, GodotConfig.canvas.width, "i32");
  GodotRuntime.setHeapValue(p_height, GodotConfig.canvas.height, "i32");
 }
 
 function _godot_js_display_window_title_set(p_data) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(91, 1, p_data);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(92, 1, p_data);
  document.title = GodotRuntime.parseString(p_data);
 }
 
@@ -10022,7 +10038,7 @@ var GodotFetch = {
 };
 
 function _godot_js_fetch_create(p_method, p_url, p_headers, p_headers_size, p_body, p_body_size) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(92, 1, p_method, p_url, p_headers, p_headers_size, p_body, p_body_size);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(93, 1, p_method, p_url, p_headers, p_headers_size, p_body, p_body_size);
  const method = GodotRuntime.parseString(p_method);
  const url = GodotRuntime.parseString(p_url);
  const headers = GodotRuntime.parseStringArray(p_headers, p_headers_size);
@@ -10039,12 +10055,12 @@ function _godot_js_fetch_create(p_method, p_url, p_headers, p_headers_size, p_bo
 }
 
 function _godot_js_fetch_free(id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(93, 1, id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(94, 1, id);
  GodotFetch.free(id);
 }
 
 function _godot_js_fetch_http_status_get(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(94, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(95, 1, p_id);
  const obj = IDHandler.get(p_id);
  if (!obj || !obj.response) {
   return 0;
@@ -10053,7 +10069,7 @@ function _godot_js_fetch_http_status_get(p_id) {
 }
 
 function _godot_js_fetch_is_chunked(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(95, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(96, 1, p_id);
  const obj = IDHandler.get(p_id);
  if (!obj || !obj.response) {
   return -1;
@@ -10062,7 +10078,7 @@ function _godot_js_fetch_is_chunked(p_id) {
 }
 
 function _godot_js_fetch_read_chunk(p_id, p_buf, p_buf_size) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(96, 1, p_id, p_buf, p_buf_size);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(97, 1, p_id, p_buf, p_buf_size);
  const obj = IDHandler.get(p_id);
  if (!obj || !obj.response) {
   return 0;
@@ -10088,7 +10104,7 @@ function _godot_js_fetch_read_chunk(p_id, p_buf, p_buf_size) {
 }
 
 function _godot_js_fetch_read_headers(p_id, p_parse_cb, p_ref) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(97, 1, p_id, p_parse_cb, p_ref);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(98, 1, p_id, p_parse_cb, p_ref);
  const obj = IDHandler.get(p_id);
  if (!obj || !obj.response) {
   return 1;
@@ -10105,7 +10121,7 @@ function _godot_js_fetch_read_headers(p_id, p_parse_cb, p_ref) {
 }
 
 function _godot_js_fetch_state_get(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(98, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(99, 1, p_id);
  const obj = IDHandler.get(p_id);
  if (!obj) {
   return -1;
@@ -10483,7 +10499,7 @@ var GodotInput = {
 };
 
 function _godot_js_input_drop_files_cb(callback) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(99, 1, callback);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(100, 1, callback);
  const func = GodotRuntime.get_func(callback);
  const dropFiles = function(files) {
   const args = files || [];
@@ -10503,24 +10519,24 @@ function _godot_js_input_drop_files_cb(callback) {
 }
 
 function _godot_js_input_gamepad_cb(change_cb) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(100, 1, change_cb);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(101, 1, change_cb);
  const onchange = GodotRuntime.get_func(change_cb);
  GodotInputGamepads.init(onchange);
 }
 
 function _godot_js_input_gamepad_sample() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(101, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(102, 1);
  GodotInputGamepads.sample();
  return 0;
 }
 
 function _godot_js_input_gamepad_sample_count() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(102, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(103, 1);
  return GodotInputGamepads.get_samples().length;
 }
 
 function _godot_js_input_gamepad_sample_get(p_index, r_btns, r_btns_num, r_axes, r_axes_num, r_standard) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(103, 1, p_index, r_btns, r_btns_num, r_axes, r_axes_num, r_standard);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(104, 1, p_index, r_btns, r_btns_num, r_axes, r_axes_num, r_standard);
  const sample = GodotInputGamepads.get_sample(p_index);
  if (!sample || !sample.connected) {
   return 1;
@@ -10543,7 +10559,7 @@ function _godot_js_input_gamepad_sample_get(p_index, r_btns, r_btns_num, r_axes,
 }
 
 function _godot_js_input_key_cb(callback, code, key) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(104, 1, callback, code, key);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(105, 1, callback, code, key);
  const func = GodotRuntime.get_func(callback);
  function key_cb(pressed, evt) {
   const modifiers = GodotInput.getModifiers(evt);
@@ -10557,7 +10573,7 @@ function _godot_js_input_key_cb(callback, code, key) {
 }
 
 function _godot_js_input_mouse_button_cb(callback) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(105, 1, callback);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(106, 1, callback);
  const func = GodotRuntime.get_func(callback);
  const canvas = GodotConfig.canvas;
  function button_cb(p_pressed, evt) {
@@ -10576,7 +10592,7 @@ function _godot_js_input_mouse_button_cb(callback) {
 }
 
 function _godot_js_input_mouse_move_cb(callback) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(106, 1, callback);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(107, 1, callback);
  const func = GodotRuntime.get_func(callback);
  const canvas = GodotConfig.canvas;
  function move_cb(evt) {
@@ -10593,7 +10609,7 @@ function _godot_js_input_mouse_move_cb(callback) {
 }
 
 function _godot_js_input_mouse_wheel_cb(callback) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(107, 1, callback);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(108, 1, callback);
  const func = GodotRuntime.get_func(callback);
  function wheel_cb(evt) {
   if (func(evt["deltaX"] || 0, evt["deltaY"] || 0)) {
@@ -10604,7 +10620,7 @@ function _godot_js_input_mouse_wheel_cb(callback) {
 }
 
 function _godot_js_input_paste_cb(callback) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(108, 1, callback);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(109, 1, callback);
  const func = GodotRuntime.get_func(callback);
  GodotEventListeners.add(window, "paste", function(evt) {
   const text = evt.clipboardData.getData("text");
@@ -10615,7 +10631,7 @@ function _godot_js_input_paste_cb(callback) {
 }
 
 function _godot_js_input_touch_cb(callback, ids, coords) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(109, 1, callback, ids, coords);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(110, 1, callback, ids, coords);
  const func = GodotRuntime.get_func(callback);
  const canvas = GodotConfig.canvas;
  function touch_cb(type, evt) {
@@ -10643,7 +10659,7 @@ function _godot_js_input_touch_cb(callback, ids, coords) {
 }
 
 function _godot_js_input_vibrate_handheld(p_duration_ms) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(110, 1, p_duration_ms);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(111, 1, p_duration_ms);
  if (typeof navigator.vibrate !== "function") {
   GodotRuntime.print("This browser does not support vibration.");
  } else {
@@ -10652,12 +10668,12 @@ function _godot_js_input_vibrate_handheld(p_duration_ms) {
 }
 
 function _godot_js_is_ime_focused() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(111, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(112, 1);
  return GodotIME.active;
 }
 
 function _godot_js_os_download_buffer(p_ptr, p_size, p_name, p_mime) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(112, 1, p_ptr, p_size, p_name, p_mime);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(113, 1, p_ptr, p_size, p_name, p_mime);
  const buf = GodotRuntime.heapSlice(GROWABLE_HEAP_I8(), p_ptr, p_size);
  const name = GodotRuntime.parseString(p_name);
  const mime = GodotRuntime.parseString(p_mime);
@@ -10676,7 +10692,7 @@ function _godot_js_os_download_buffer(p_ptr, p_size, p_name, p_mime) {
 }
 
 function _godot_js_os_execute(p_json) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(113, 1, p_json);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(114, 1, p_json);
  const json_args = GodotRuntime.parseString(p_json);
  const args = JSON.parse(json_args);
  if (GodotConfig.on_execute) {
@@ -10687,18 +10703,18 @@ function _godot_js_os_execute(p_json) {
 }
 
 function _godot_js_os_finish_async(p_callback) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(114, 1, p_callback);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(115, 1, p_callback);
  const func = GodotRuntime.get_func(p_callback);
  GodotOS.finish_async(func);
 }
 
 function _godot_js_os_fs_is_persistent() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(115, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(116, 1);
  return GodotFS.is_persistent();
 }
 
 function _godot_js_os_fs_sync(callback) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(116, 1, callback);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(117, 1, callback);
  const func = GodotRuntime.get_func(callback);
  GodotOS._fs_sync_promise = GodotFS.sync();
  GodotOS._fs_sync_promise.then(function(err) {
@@ -10707,7 +10723,7 @@ function _godot_js_os_fs_sync(callback) {
 }
 
 function _godot_js_os_has_feature(p_ftr) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(117, 1, p_ftr);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(118, 1, p_ftr);
  const ftr = GodotRuntime.parseString(p_ftr);
  const ua = navigator.userAgent;
  if (ftr === "web_macos") {
@@ -10729,18 +10745,18 @@ function _godot_js_os_has_feature(p_ftr) {
 }
 
 function _godot_js_os_hw_concurrency_get() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(118, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(119, 1);
  const concurrency = navigator.hardwareConcurrency || 1;
  return concurrency < 2 ? concurrency : 2;
 }
 
 function _godot_js_os_request_quit_cb(p_callback) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(119, 1, p_callback);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(120, 1, p_callback);
  GodotOS.request_quit = GodotRuntime.get_func(p_callback);
 }
 
 function _godot_js_os_shell_open(p_uri) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(120, 1, p_uri);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(121, 1, p_uri);
  window.open(GodotRuntime.parseString(p_uri), "_blank");
 }
 
@@ -10770,7 +10786,7 @@ var GodotPWA = {
 };
 
 function _godot_js_pwa_cb(p_update_cb) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(121, 1, p_update_cb);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(122, 1, p_update_cb);
  if ("serviceWorker" in navigator) {
   const cb = GodotRuntime.get_func(p_update_cb);
   navigator.serviceWorker.getRegistration().then(GodotPWA.updateState.bind(null, cb));
@@ -10778,7 +10794,7 @@ function _godot_js_pwa_cb(p_update_cb) {
 }
 
 function _godot_js_pwa_update() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(122, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(123, 1);
  if ("serviceWorker" in navigator && GodotPWA.hasUpdate) {
   navigator.serviceWorker.getRegistration().then(function(reg) {
    if (!reg || !reg.waiting) {
@@ -10848,7 +10864,7 @@ var GodotRTCDataChannel = {
 };
 
 function _godot_js_rtc_datachannel_close(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(123, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(124, 1, p_id);
  const ref = IDHandler.get(p_id);
  if (!ref) {
   return;
@@ -10857,7 +10873,7 @@ function _godot_js_rtc_datachannel_close(p_id) {
 }
 
 function _godot_js_rtc_datachannel_connect(p_id, p_ref, p_on_open, p_on_message, p_on_error, p_on_close) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(124, 1, p_id, p_ref, p_on_open, p_on_message, p_on_error, p_on_close);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(125, 1, p_id, p_ref, p_on_open, p_on_message, p_on_error, p_on_close);
  const onopen = GodotRuntime.get_func(p_on_open).bind(null, p_ref);
  const onmessage = GodotRuntime.get_func(p_on_message).bind(null, p_ref);
  const onerror = GodotRuntime.get_func(p_on_error).bind(null, p_ref);
@@ -10866,33 +10882,33 @@ function _godot_js_rtc_datachannel_connect(p_id, p_ref, p_on_open, p_on_message,
 }
 
 function _godot_js_rtc_datachannel_destroy(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(125, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(126, 1, p_id);
  GodotRTCDataChannel.close(p_id);
  IDHandler.remove(p_id);
 }
 
 function _godot_js_rtc_datachannel_get_buffered_amount(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(126, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(127, 1, p_id);
  return GodotRTCDataChannel.get_prop(p_id, "bufferedAmount", 0);
 }
 
 function _godot_js_rtc_datachannel_id_get(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(127, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(128, 1, p_id);
  return GodotRTCDataChannel.get_prop(p_id, "id", 65535);
 }
 
 function _godot_js_rtc_datachannel_is_negotiated(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(128, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(129, 1, p_id);
  return GodotRTCDataChannel.get_prop(p_id, "negotiated", 65535);
 }
 
 function _godot_js_rtc_datachannel_is_ordered(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(129, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(130, 1, p_id);
  return GodotRTCDataChannel.get_prop(p_id, "ordered", true);
 }
 
 function _godot_js_rtc_datachannel_label_get(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(130, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(131, 1, p_id);
  const ref = IDHandler.get(p_id);
  if (!ref || !ref.label) {
   return 0;
@@ -10901,7 +10917,7 @@ function _godot_js_rtc_datachannel_label_get(p_id) {
 }
 
 function _godot_js_rtc_datachannel_max_packet_lifetime_get(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(131, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(132, 1, p_id);
  const ref = IDHandler.get(p_id);
  if (!ref) {
   return 65535;
@@ -10915,7 +10931,7 @@ function _godot_js_rtc_datachannel_max_packet_lifetime_get(p_id) {
 }
 
 function _godot_js_rtc_datachannel_max_retransmits_get(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(132, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(133, 1, p_id);
  return GodotRTCDataChannel.get_prop(p_id, "maxRetransmits", 65535);
 }
 
@@ -10928,7 +10944,7 @@ function _godot_js_rtc_datachannel_protocol_get(p_id) {
 }
 
 function _godot_js_rtc_datachannel_ready_state_get(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(133, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(134, 1, p_id);
  const ref = IDHandler.get(p_id);
  if (!ref) {
   return 3;
@@ -10950,7 +10966,7 @@ function _godot_js_rtc_datachannel_ready_state_get(p_id) {
 }
 
 function _godot_js_rtc_datachannel_send(p_id, p_buffer, p_length, p_raw) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(134, 1, p_id, p_buffer, p_length, p_raw);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(135, 1, p_id, p_buffer, p_length, p_raw);
  const ref = IDHandler.get(p_id);
  if (!ref) {
   return 1;
@@ -11092,7 +11108,7 @@ var GodotRTCPeerConnection = {
 };
 
 function _godot_js_rtc_pc_close(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(135, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(136, 1, p_id);
  const ref = IDHandler.get(p_id);
  if (!ref) {
   return;
@@ -11101,7 +11117,7 @@ function _godot_js_rtc_pc_close(p_id) {
 }
 
 function _godot_js_rtc_pc_create(p_config, p_ref, p_on_connection_state_change, p_on_ice_gathering_state_change, p_on_signaling_state_change, p_on_ice_candidate, p_on_datachannel) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(136, 1, p_config, p_ref, p_on_connection_state_change, p_on_ice_gathering_state_change, p_on_signaling_state_change, p_on_ice_candidate, p_on_datachannel);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(137, 1, p_config, p_ref, p_on_connection_state_change, p_on_ice_gathering_state_change, p_on_signaling_state_change, p_on_ice_candidate, p_on_datachannel);
  const wrap = function(p_func) {
   return GodotRuntime.get_func(p_func).bind(null, p_ref);
  };
@@ -11109,7 +11125,7 @@ function _godot_js_rtc_pc_create(p_config, p_ref, p_on_connection_state_change, 
 }
 
 function _godot_js_rtc_pc_datachannel_create(p_id, p_label, p_config) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(137, 1, p_id, p_label, p_config);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(138, 1, p_id, p_label, p_config);
  try {
   const ref = IDHandler.get(p_id);
   if (!ref) {
@@ -11126,12 +11142,12 @@ function _godot_js_rtc_pc_datachannel_create(p_id, p_label, p_config) {
 }
 
 function _godot_js_rtc_pc_destroy(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(138, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(139, 1, p_id);
  GodotRTCPeerConnection.destroy(p_id);
 }
 
 function _godot_js_rtc_pc_ice_candidate_add(p_id, p_mid_name, p_mline_idx, p_sdp) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(139, 1, p_id, p_mid_name, p_mline_idx, p_sdp);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(140, 1, p_id, p_mid_name, p_mline_idx, p_sdp);
  const ref = IDHandler.get(p_id);
  if (!ref) {
   return;
@@ -11146,7 +11162,7 @@ function _godot_js_rtc_pc_ice_candidate_add(p_id, p_mid_name, p_mline_idx, p_sdp
 }
 
 function _godot_js_rtc_pc_local_description_set(p_id, p_type, p_sdp, p_obj, p_on_error) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(140, 1, p_id, p_type, p_sdp, p_obj, p_on_error);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(141, 1, p_id, p_type, p_sdp, p_obj, p_on_error);
  const ref = IDHandler.get(p_id);
  if (!ref) {
   return;
@@ -11163,7 +11179,7 @@ function _godot_js_rtc_pc_local_description_set(p_id, p_type, p_sdp, p_obj, p_on
 }
 
 function _godot_js_rtc_pc_offer_create(p_id, p_obj, p_on_session, p_on_error) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(141, 1, p_id, p_obj, p_on_session, p_on_error);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(142, 1, p_id, p_obj, p_on_session, p_on_error);
  const ref = IDHandler.get(p_id);
  if (!ref) {
   return;
@@ -11178,7 +11194,7 @@ function _godot_js_rtc_pc_offer_create(p_id, p_obj, p_on_session, p_on_error) {
 }
 
 function _godot_js_rtc_pc_remote_description_set(p_id, p_type, p_sdp, p_obj, p_session_created, p_on_error) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(142, 1, p_id, p_type, p_sdp, p_obj, p_session_created, p_on_error);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(143, 1, p_id, p_type, p_sdp, p_obj, p_session_created, p_on_error);
  const ref = IDHandler.get(p_id);
  if (!ref) {
   return;
@@ -11203,24 +11219,24 @@ function _godot_js_rtc_pc_remote_description_set(p_id, p_type, p_sdp, p_obj, p_s
 }
 
 function _godot_js_set_ime_active(p_active) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(143, 1, p_active);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(144, 1, p_active);
  GodotIME.ime_active(p_active);
 }
 
 function _godot_js_set_ime_cb(p_ime_cb, p_key_cb, code, key) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(144, 1, p_ime_cb, p_key_cb, code, key);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(145, 1, p_ime_cb, p_key_cb, code, key);
  const ime_cb = GodotRuntime.get_func(p_ime_cb);
  const key_cb = GodotRuntime.get_func(p_key_cb);
  GodotIME.init(ime_cb, key_cb, code, key);
 }
 
 function _godot_js_set_ime_position(p_x, p_y) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(145, 1, p_x, p_y);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(146, 1, p_x, p_y);
  GodotIME.ime_position(p_x, p_y);
 }
 
 function _godot_js_tts_get_voices(p_callback) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(146, 1, p_callback);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(147, 1, p_callback);
  const func = GodotRuntime.get_func(p_callback);
  try {
   const arr = [];
@@ -11235,27 +11251,27 @@ function _godot_js_tts_get_voices(p_callback) {
 }
 
 function _godot_js_tts_is_paused() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(147, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(148, 1);
  return window.speechSynthesis.paused;
 }
 
 function _godot_js_tts_is_speaking() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(148, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(149, 1);
  return window.speechSynthesis.speaking;
 }
 
 function _godot_js_tts_pause() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(149, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(150, 1);
  window.speechSynthesis.pause();
 }
 
 function _godot_js_tts_resume() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(150, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(151, 1);
  window.speechSynthesis.resume();
 }
 
 function _godot_js_tts_speak(p_text, p_voice, p_volume, p_pitch, p_rate, p_utterance_id, p_callback) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(151, 1, p_text, p_voice, p_volume, p_pitch, p_rate, p_utterance_id, p_callback);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(152, 1, p_text, p_voice, p_volume, p_pitch, p_rate, p_utterance_id, p_callback);
  const func = GodotRuntime.get_func(p_callback);
  function listener_end(evt) {
   evt.currentTarget.cb(1, /*TTS_UTTERANCE_ENDED*/ evt.currentTarget.id, 0);
@@ -11292,7 +11308,7 @@ function _godot_js_tts_speak(p_text, p_voice, p_volume, p_pitch, p_rate, p_utter
 }
 
 function _godot_js_tts_stop() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(152, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(153, 1);
  window.speechSynthesis.cancel();
  window.speechSynthesis.resume();
 }
@@ -11395,19 +11411,19 @@ var GodotWebSocket = {
 };
 
 function _godot_js_websocket_buffered_amount(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(153, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(154, 1, p_id);
  return GodotWebSocket.bufferedAmount(p_id);
 }
 
 function _godot_js_websocket_close(p_id, p_code, p_reason) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(154, 1, p_id, p_code, p_reason);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(155, 1, p_id, p_code, p_reason);
  const code = p_code;
  const reason = GodotRuntime.parseString(p_reason);
  GodotWebSocket.close(p_id, code, reason);
 }
 
 function _godot_js_websocket_create(p_ref, p_url, p_proto, p_on_open, p_on_message, p_on_error, p_on_close) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(155, 1, p_ref, p_url, p_proto, p_on_open, p_on_message, p_on_error, p_on_close);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(156, 1, p_ref, p_url, p_proto, p_on_open, p_on_message, p_on_error, p_on_close);
  const on_open = GodotRuntime.get_func(p_on_open).bind(null, p_ref);
  const on_message = GodotRuntime.get_func(p_on_message).bind(null, p_ref);
  const on_error = GodotRuntime.get_func(p_on_error).bind(null, p_ref);
@@ -11429,12 +11445,12 @@ function _godot_js_websocket_create(p_ref, p_url, p_proto, p_on_open, p_on_messa
 }
 
 function _godot_js_websocket_destroy(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(156, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(157, 1, p_id);
  GodotWebSocket.destroy(p_id);
 }
 
 function _godot_js_websocket_send(p_id, p_buf, p_buf_len, p_raw) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(157, 1, p_id, p_buf, p_buf_len, p_raw);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(158, 1, p_id, p_buf, p_buf_len, p_raw);
  const bytes_array = new Uint8Array(p_buf_len);
  let i = 0;
  for (i = 0; i < p_buf_len; i++) {
@@ -11538,7 +11554,7 @@ var GodotJSWrapper = {
 };
 
 function _godot_js_wrapper_create_cb(p_ref, p_func) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(158, 1, p_ref, p_func);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(159, 1, p_ref, p_func);
  const func = GodotRuntime.get_func(p_func);
  let id = 0;
  const cb = function() {
@@ -11559,7 +11575,7 @@ function _godot_js_wrapper_create_cb(p_ref, p_func) {
 }
 
 function _godot_js_wrapper_create_object(p_object, p_args, p_argc, p_convert_callback, p_exchange, p_lock, p_free_lock_callback) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(159, 1, p_object, p_args, p_argc, p_convert_callback, p_exchange, p_lock, p_free_lock_callback);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(160, 1, p_object, p_args, p_argc, p_convert_callback, p_exchange, p_lock, p_free_lock_callback);
  const name = GodotRuntime.parseString(p_object);
  if (typeof (window[name]) === "undefined") {
   return -1;
@@ -11585,7 +11601,7 @@ function _godot_js_wrapper_create_object(p_object, p_args, p_argc, p_convert_cal
 }
 
 function _godot_js_wrapper_interface_get(p_name) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(160, 1, p_name);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(161, 1, p_name);
  const name = GodotRuntime.parseString(p_name);
  if (typeof (window[name]) !== "undefined") {
   return GodotJSWrapper.get_proxied(window[name]);
@@ -11594,7 +11610,7 @@ function _godot_js_wrapper_interface_get(p_name) {
 }
 
 function _godot_js_wrapper_object_call(p_id, p_method, p_args, p_argc, p_convert_callback, p_exchange, p_lock, p_free_lock_callback) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(161, 1, p_id, p_method, p_args, p_argc, p_convert_callback, p_exchange, p_lock, p_free_lock_callback);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(162, 1, p_id, p_method, p_args, p_argc, p_convert_callback, p_exchange, p_lock, p_free_lock_callback);
  const obj = GodotJSWrapper.get_proxied_value(p_id);
  if (obj === undefined) {
   return -1;
@@ -11621,7 +11637,7 @@ function _godot_js_wrapper_object_call(p_id, p_method, p_args, p_argc, p_convert
 }
 
 function _godot_js_wrapper_object_get(p_id, p_exchange, p_prop) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(162, 1, p_id, p_exchange, p_prop);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(163, 1, p_id, p_exchange, p_prop);
  const obj = GodotJSWrapper.get_proxied_value(p_id);
  if (obj === undefined) {
   return 0;
@@ -11639,7 +11655,7 @@ function _godot_js_wrapper_object_get(p_id, p_exchange, p_prop) {
 }
 
 function _godot_js_wrapper_object_getvar(p_id, p_type, p_exchange) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(163, 1, p_id, p_type, p_exchange);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(164, 1, p_id, p_type, p_exchange);
  const obj = GodotJSWrapper.get_proxied_value(p_id);
  if (obj === undefined) {
   return -1;
@@ -11657,7 +11673,7 @@ function _godot_js_wrapper_object_getvar(p_id, p_type, p_exchange) {
 }
 
 function _godot_js_wrapper_object_set(p_id, p_name, p_type, p_exchange) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(164, 1, p_id, p_name, p_type, p_exchange);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(165, 1, p_id, p_name, p_type, p_exchange);
  const obj = GodotJSWrapper.get_proxied_value(p_id);
  if (obj === undefined) {
   return;
@@ -11671,12 +11687,12 @@ function _godot_js_wrapper_object_set(p_id, p_name, p_type, p_exchange) {
 }
 
 function _godot_js_wrapper_object_set_cb_ret(p_val_type, p_val_ex) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(165, 1, p_val_type, p_val_ex);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(166, 1, p_val_type, p_val_ex);
  GodotJSWrapper.cb_ret = GodotJSWrapper.variant2js(p_val_type, p_val_ex);
 }
 
 function _godot_js_wrapper_object_setvar(p_id, p_key_type, p_key_ex, p_val_type, p_val_ex) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(166, 1, p_id, p_key_type, p_key_ex, p_val_type, p_val_ex);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(167, 1, p_id, p_key_type, p_key_ex, p_val_type, p_val_ex);
  const obj = GodotJSWrapper.get_proxied_value(p_id);
  if (obj === undefined) {
   return -1;
@@ -11692,7 +11708,7 @@ function _godot_js_wrapper_object_setvar(p_id, p_key_type, p_key_ex, p_val_type,
 }
 
 function _godot_js_wrapper_object_unref(p_id) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(167, 1, p_id);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(168, 1, p_id);
  const proxy = IDHandler.get(p_id);
  if (proxy !== undefined) {
   proxy.unref();
@@ -11702,7 +11718,7 @@ function _godot_js_wrapper_object_unref(p_id) {
 var GodotWebGL2 = {};
 
 function _godot_webgl2_glFramebufferTextureMultisampleMultiviewOVR(target, attachment, texture, level, samples, base_view_index, num_views) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(168, 1, target, attachment, texture, level, samples, base_view_index, num_views);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(169, 1, target, attachment, texture, level, samples, base_view_index, num_views);
  const context = GL.currentContext;
  if (typeof context.oculusMultiviewExt === "undefined") {
   const /** OCULUS_multiview */ ext = context.GLctx.getExtension("OCULUS_multiview");
@@ -11717,7 +11733,7 @@ function _godot_webgl2_glFramebufferTextureMultisampleMultiviewOVR(target, attac
 }
 
 function _godot_webgl2_glFramebufferTextureMultiviewOVR(target, attachment, texture, level, base_view_index, num_views) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(169, 1, target, attachment, texture, level, base_view_index, num_views);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(170, 1, target, attachment, texture, level, base_view_index, num_views);
  const context = GL.currentContext;
  if (typeof context.multiviewExt === "undefined") {
   const /** OVR_multiview2 */ ext = context.GLctx.getExtension("OVR_multiview2");
@@ -11732,7 +11748,7 @@ function _godot_webgl2_glFramebufferTextureMultiviewOVR(target, attachment, text
 }
 
 function _godot_webgl2_glGetBufferSubData(target, offset, size, data) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(170, 1, target, offset, size, data);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(171, 1, target, offset, size, data);
  const gl_context_handle = _emscripten_webgl_get_current_context();
  const gl = GL.getContext(gl_context_handle);
  if (gl) {
@@ -11886,7 +11902,7 @@ var GodotWebXR = {
 };
 
 function _godot_webxr_get_bounds_geometry(r_points) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(171, 1, r_points);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(172, 1, r_points);
  if (!GodotWebXR.space || !GodotWebXR.space.boundsGeometry) {
   return 0;
  }
@@ -11906,7 +11922,7 @@ function _godot_webxr_get_bounds_geometry(r_points) {
 }
 
 function _godot_webxr_get_color_texture() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(172, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(173, 1);
  const subimage = GodotWebXR.getSubImage();
  if (subimage === null) {
   return 0;
@@ -11915,7 +11931,7 @@ function _godot_webxr_get_color_texture() {
 }
 
 function _godot_webxr_get_depth_texture() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(173, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(174, 1);
  const subimage = GodotWebXR.getSubImage();
  if (subimage === null) {
   return 0;
@@ -11927,7 +11943,7 @@ function _godot_webxr_get_depth_texture() {
 }
 
 function _godot_webxr_get_frame_rate() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(174, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(175, 1);
  if (!GodotWebXR.session || GodotWebXR.session.frameRate === undefined) {
   return 0;
  }
@@ -11935,7 +11951,7 @@ function _godot_webxr_get_frame_rate() {
 }
 
 function _godot_webxr_get_projection_for_view(p_view, r_transform) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(175, 1, p_view, r_transform);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(176, 1, p_view, r_transform);
  if (!GodotWebXR.session || !GodotWebXR.pose) {
   return false;
  }
@@ -11947,7 +11963,7 @@ function _godot_webxr_get_projection_for_view(p_view, r_transform) {
 }
 
 function _godot_webxr_get_render_target_size(r_size) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(176, 1, r_size);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(177, 1, r_size);
  const subimage = GodotWebXR.getSubImage();
  if (subimage === null) {
   return false;
@@ -11958,7 +11974,7 @@ function _godot_webxr_get_render_target_size(r_size) {
 }
 
 function _godot_webxr_get_supported_frame_rates(r_frame_rates) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(177, 1, r_frame_rates);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(178, 1, r_frame_rates);
  if (!GodotWebXR.session || GodotWebXR.session.supportedFrameRates === undefined) {
   return 0;
  }
@@ -11975,7 +11991,7 @@ function _godot_webxr_get_supported_frame_rates(r_frame_rates) {
 }
 
 function _godot_webxr_get_transform_for_view(p_view, r_transform) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(178, 1, p_view, r_transform);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(179, 1, p_view, r_transform);
  if (!GodotWebXR.session || !GodotWebXR.pose) {
   return false;
  }
@@ -11993,7 +12009,7 @@ function _godot_webxr_get_transform_for_view(p_view, r_transform) {
 }
 
 function _godot_webxr_get_velocity_texture() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(179, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(180, 1);
  const subimage = GodotWebXR.getSubImage();
  if (subimage === null) {
   return 0;
@@ -12005,7 +12021,7 @@ function _godot_webxr_get_velocity_texture() {
 }
 
 function _godot_webxr_get_view_count() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(180, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(181, 1);
  if (!GodotWebXR.session || !GodotWebXR.pose) {
   return 1;
  }
@@ -12014,7 +12030,7 @@ function _godot_webxr_get_view_count() {
 }
 
 function _godot_webxr_get_visibility_state() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(181, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(182, 1);
  if (!GodotWebXR.session || !GodotWebXR.session.visibilityState) {
   return 0;
  }
@@ -12022,7 +12038,7 @@ function _godot_webxr_get_visibility_state() {
 }
 
 var _godot_webxr_initialize = function(p_session_mode, p_required_features, p_optional_features, p_requested_reference_spaces, p_on_session_started, p_on_session_ended, p_on_session_failed, p_on_input_event, p_on_simple_event) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(182, 1, p_session_mode, p_required_features, p_optional_features, p_requested_reference_spaces, p_on_session_started, p_on_session_ended, p_on_session_failed, p_on_input_event, p_on_simple_event);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(183, 1, p_session_mode, p_required_features, p_optional_features, p_requested_reference_spaces, p_on_session_started, p_on_session_ended, p_on_session_failed, p_on_input_event, p_on_simple_event);
  GodotWebXR.monkeyPatchRequestAnimationFrame(true);
  const session_mode = GodotRuntime.parseString(p_session_mode);
  const required_features = GodotRuntime.parseString(p_required_features).split(",").map(s => s.trim()).filter(s => s !== "");
@@ -12112,7 +12128,7 @@ var _godot_webxr_initialize = function(p_session_mode, p_required_features, p_op
 };
 
 function _godot_webxr_is_session_supported(p_session_mode, p_callback) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(183, 1, p_session_mode, p_callback);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(184, 1, p_session_mode, p_callback);
  const session_mode = GodotRuntime.parseString(p_session_mode);
  const cb = GodotRuntime.get_func(p_callback);
  if (navigator.xr) {
@@ -12129,12 +12145,12 @@ function _godot_webxr_is_session_supported(p_session_mode, p_callback) {
 }
 
 function _godot_webxr_is_supported() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(184, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(185, 1);
  return !!navigator.xr;
 }
 
 var _godot_webxr_uninitialize = function() {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(185, 1);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(186, 1);
  if (GodotWebXR.session) {
   GodotWebXR.session.end().catch( e => {});
  }
@@ -12153,7 +12169,7 @@ var _godot_webxr_uninitialize = function() {
 };
 
 function _godot_webxr_update_input_source(p_input_source_id, r_target_pose, r_target_ray_mode, r_touch_index, r_has_grip_pose, r_grip_pose, r_has_standard_mapping, r_button_count, r_buttons, r_axes_count, r_axes, r_has_hand_data, r_hand_joints, r_hand_radii) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(186, 1, p_input_source_id, r_target_pose, r_target_ray_mode, r_touch_index, r_has_grip_pose, r_grip_pose, r_has_standard_mapping, r_button_count, r_buttons, r_axes_count, r_axes, r_has_hand_data, r_hand_joints, r_hand_radii);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(187, 1, p_input_source_id, r_target_pose, r_target_ray_mode, r_touch_index, r_has_grip_pose, r_grip_pose, r_has_standard_mapping, r_button_count, r_buttons, r_axes_count, r_axes, r_has_hand_data, r_hand_joints, r_hand_radii);
  if (!GodotWebXR.session || !GodotWebXR.frame) {
   return 0;
  }
@@ -12235,7 +12251,7 @@ function _godot_webxr_update_input_source(p_input_source_id, r_target_pose, r_ta
 }
 
 function _godot_webxr_update_target_frame_rate(p_frame_rate) {
- if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(187, 1, p_frame_rate);
+ if (ENVIRONMENT_IS_PTHREAD) return proxyToMainThread(188, 1, p_frame_rate);
  if (!GodotWebXR.session || GodotWebXR.session.updateTargetFrameRate === undefined) {
   return;
  }
@@ -12682,7 +12698,7 @@ GodotOS.atexit(function(resolve, reject) {
 
 GodotJSWrapper.proxies = new Map;
 
-var proxiedFunctionTable = [ _proc_exit, exitOnMainThread, pthreadCreateProxied, ___syscall__newselect, ___syscall_accept4, ___syscall_bind, ___syscall_chdir, ___syscall_chmod, ___syscall_connect, ___syscall_faccessat, ___syscall_fchmod, ___syscall_fcntl64, ___syscall_fstat64, ___syscall_getcwd, ___syscall_getdents64, ___syscall_getsockname, ___syscall_getsockopt, ___syscall_ioctl, ___syscall_listen, ___syscall_lstat64, ___syscall_mkdirat, ___syscall_newfstatat, ___syscall_openat, ___syscall_poll, ___syscall_readlinkat, ___syscall_recvfrom, ___syscall_renameat, ___syscall_rmdir, ___syscall_sendto, ___syscall_socket, ___syscall_stat64, ___syscall_statfs64, ___syscall_symlink, ___syscall_unlinkat, __emscripten_runtime_keepalive_clear, __setitimer_js, _emscripten_force_exit, setCanvasElementSizeMainThread, _emscripten_webgl_destroy_context, _emscripten_webgl_create_context_proxied, _emscripten_webgl_enable_extension, _environ_get, _environ_sizes_get, _fd_close, _fd_fdstat_get, _fd_read, _fd_seek, _fd_write, _getaddrinfo, _godot_audio_has_worklet, _godot_audio_init, _godot_audio_input_start, _godot_audio_input_stop, _godot_audio_is_available, _godot_audio_resume, _godot_audio_worklet_create, _godot_audio_worklet_start, _godot_js_config_canvas_id_get, _godot_js_config_locale_get, _godot_js_display_alert, _godot_js_display_canvas_focus, _godot_js_display_canvas_is_focused, _godot_js_display_clipboard_get, _godot_js_display_clipboard_set, _godot_js_display_cursor_is_hidden, _godot_js_display_cursor_is_locked, _godot_js_display_cursor_lock_set, _godot_js_display_cursor_set_custom_shape, _godot_js_display_cursor_set_shape, _godot_js_display_cursor_set_visible, _godot_js_display_desired_size_set, _godot_js_display_fullscreen_cb, _godot_js_display_fullscreen_exit, _godot_js_display_fullscreen_request, _godot_js_display_has_webgl, _godot_js_display_is_swap_ok_cancel, _godot_js_display_notification_cb, _godot_js_display_pixel_ratio_get, _godot_js_display_screen_dpi_get, _godot_js_display_screen_size_get, _godot_js_display_setup_canvas, _godot_js_display_size_update, _godot_js_display_touchscreen_is_available, _godot_js_display_tts_available, _godot_js_display_vk_available, _godot_js_display_vk_cb, _godot_js_display_vk_hide, _godot_js_display_vk_show, _godot_js_display_window_blur_cb, _godot_js_display_window_icon_set, _godot_js_display_window_size_get, _godot_js_display_window_title_set, _godot_js_fetch_create, _godot_js_fetch_free, _godot_js_fetch_http_status_get, _godot_js_fetch_is_chunked, _godot_js_fetch_read_chunk, _godot_js_fetch_read_headers, _godot_js_fetch_state_get, _godot_js_input_drop_files_cb, _godot_js_input_gamepad_cb, _godot_js_input_gamepad_sample, _godot_js_input_gamepad_sample_count, _godot_js_input_gamepad_sample_get, _godot_js_input_key_cb, _godot_js_input_mouse_button_cb, _godot_js_input_mouse_move_cb, _godot_js_input_mouse_wheel_cb, _godot_js_input_paste_cb, _godot_js_input_touch_cb, _godot_js_input_vibrate_handheld, _godot_js_is_ime_focused, _godot_js_os_download_buffer, _godot_js_os_execute, _godot_js_os_finish_async, _godot_js_os_fs_is_persistent, _godot_js_os_fs_sync, _godot_js_os_has_feature, _godot_js_os_hw_concurrency_get, _godot_js_os_request_quit_cb, _godot_js_os_shell_open, _godot_js_pwa_cb, _godot_js_pwa_update, _godot_js_rtc_datachannel_close, _godot_js_rtc_datachannel_connect, _godot_js_rtc_datachannel_destroy, _godot_js_rtc_datachannel_get_buffered_amount, _godot_js_rtc_datachannel_id_get, _godot_js_rtc_datachannel_is_negotiated, _godot_js_rtc_datachannel_is_ordered, _godot_js_rtc_datachannel_label_get, _godot_js_rtc_datachannel_max_packet_lifetime_get, _godot_js_rtc_datachannel_max_retransmits_get, _godot_js_rtc_datachannel_ready_state_get, _godot_js_rtc_datachannel_send, _godot_js_rtc_pc_close, _godot_js_rtc_pc_create, _godot_js_rtc_pc_datachannel_create, _godot_js_rtc_pc_destroy, _godot_js_rtc_pc_ice_candidate_add, _godot_js_rtc_pc_local_description_set, _godot_js_rtc_pc_offer_create, _godot_js_rtc_pc_remote_description_set, _godot_js_set_ime_active, _godot_js_set_ime_cb, _godot_js_set_ime_position, _godot_js_tts_get_voices, _godot_js_tts_is_paused, _godot_js_tts_is_speaking, _godot_js_tts_pause, _godot_js_tts_resume, _godot_js_tts_speak, _godot_js_tts_stop, _godot_js_websocket_buffered_amount, _godot_js_websocket_close, _godot_js_websocket_create, _godot_js_websocket_destroy, _godot_js_websocket_send, _godot_js_wrapper_create_cb, _godot_js_wrapper_create_object, _godot_js_wrapper_interface_get, _godot_js_wrapper_object_call, _godot_js_wrapper_object_get, _godot_js_wrapper_object_getvar, _godot_js_wrapper_object_set, _godot_js_wrapper_object_set_cb_ret, _godot_js_wrapper_object_setvar, _godot_js_wrapper_object_unref, _godot_webgl2_glFramebufferTextureMultisampleMultiviewOVR, _godot_webgl2_glFramebufferTextureMultiviewOVR, _godot_webgl2_glGetBufferSubData, _godot_webxr_get_bounds_geometry, _godot_webxr_get_color_texture, _godot_webxr_get_depth_texture, _godot_webxr_get_frame_rate, _godot_webxr_get_projection_for_view, _godot_webxr_get_render_target_size, _godot_webxr_get_supported_frame_rates, _godot_webxr_get_transform_for_view, _godot_webxr_get_velocity_texture, _godot_webxr_get_view_count, _godot_webxr_get_visibility_state, _godot_webxr_initialize, _godot_webxr_is_session_supported, _godot_webxr_is_supported, _godot_webxr_uninitialize, _godot_webxr_update_input_source, _godot_webxr_update_target_frame_rate ];
+var proxiedFunctionTable = [ _proc_exit, exitOnMainThread, pthreadCreateProxied, ___syscall__newselect, ___syscall_accept4, ___syscall_bind, ___syscall_chdir, ___syscall_chmod, ___syscall_connect, ___syscall_faccessat, ___syscall_fchmod, ___syscall_fcntl64, ___syscall_fstat64, ___syscall_ftruncate64, ___syscall_getcwd, ___syscall_getdents64, ___syscall_getsockname, ___syscall_getsockopt, ___syscall_ioctl, ___syscall_listen, ___syscall_lstat64, ___syscall_mkdirat, ___syscall_mknodat, ___syscall_newfstatat, ___syscall_openat, ___syscall_poll, ___syscall_readlinkat, ___syscall_recvfrom, ___syscall_renameat, ___syscall_rmdir, ___syscall_sendto, ___syscall_socket, ___syscall_stat64, ___syscall_statfs64, ___syscall_symlink, ___syscall_unlinkat, __emscripten_runtime_keepalive_clear, _emscripten_force_exit, setCanvasElementSizeMainThread, _emscripten_webgl_destroy_context, _emscripten_webgl_create_context_proxied, _emscripten_webgl_enable_extension, _environ_get, _environ_sizes_get, _fd_close, _fd_fdstat_get, _fd_read, _fd_seek, _fd_write, _getaddrinfo, _godot_audio_has_worklet, _godot_audio_init, _godot_audio_input_start, _godot_audio_input_stop, _godot_audio_is_available, _godot_audio_resume, _godot_audio_worklet_create, _godot_audio_worklet_start, _godot_js_config_canvas_id_get, _godot_js_config_locale_get, _godot_js_display_alert, _godot_js_display_canvas_focus, _godot_js_display_canvas_is_focused, _godot_js_display_clipboard_get, _godot_js_display_clipboard_set, _godot_js_display_cursor_is_hidden, _godot_js_display_cursor_is_locked, _godot_js_display_cursor_lock_set, _godot_js_display_cursor_set_custom_shape, _godot_js_display_cursor_set_shape, _godot_js_display_cursor_set_visible, _godot_js_display_desired_size_set, _godot_js_display_fullscreen_cb, _godot_js_display_fullscreen_exit, _godot_js_display_fullscreen_request, _godot_js_display_has_webgl, _godot_js_display_is_swap_ok_cancel, _godot_js_display_notification_cb, _godot_js_display_pixel_ratio_get, _godot_js_display_screen_dpi_get, _godot_js_display_screen_size_get, _godot_js_display_setup_canvas, _godot_js_display_size_update, _godot_js_display_touchscreen_is_available, _godot_js_display_tts_available, _godot_js_display_vk_available, _godot_js_display_vk_cb, _godot_js_display_vk_hide, _godot_js_display_vk_show, _godot_js_display_window_blur_cb, _godot_js_display_window_icon_set, _godot_js_display_window_size_get, _godot_js_display_window_title_set, _godot_js_fetch_create, _godot_js_fetch_free, _godot_js_fetch_http_status_get, _godot_js_fetch_is_chunked, _godot_js_fetch_read_chunk, _godot_js_fetch_read_headers, _godot_js_fetch_state_get, _godot_js_input_drop_files_cb, _godot_js_input_gamepad_cb, _godot_js_input_gamepad_sample, _godot_js_input_gamepad_sample_count, _godot_js_input_gamepad_sample_get, _godot_js_input_key_cb, _godot_js_input_mouse_button_cb, _godot_js_input_mouse_move_cb, _godot_js_input_mouse_wheel_cb, _godot_js_input_paste_cb, _godot_js_input_touch_cb, _godot_js_input_vibrate_handheld, _godot_js_is_ime_focused, _godot_js_os_download_buffer, _godot_js_os_execute, _godot_js_os_finish_async, _godot_js_os_fs_is_persistent, _godot_js_os_fs_sync, _godot_js_os_has_feature, _godot_js_os_hw_concurrency_get, _godot_js_os_request_quit_cb, _godot_js_os_shell_open, _godot_js_pwa_cb, _godot_js_pwa_update, _godot_js_rtc_datachannel_close, _godot_js_rtc_datachannel_connect, _godot_js_rtc_datachannel_destroy, _godot_js_rtc_datachannel_get_buffered_amount, _godot_js_rtc_datachannel_id_get, _godot_js_rtc_datachannel_is_negotiated, _godot_js_rtc_datachannel_is_ordered, _godot_js_rtc_datachannel_label_get, _godot_js_rtc_datachannel_max_packet_lifetime_get, _godot_js_rtc_datachannel_max_retransmits_get, _godot_js_rtc_datachannel_ready_state_get, _godot_js_rtc_datachannel_send, _godot_js_rtc_pc_close, _godot_js_rtc_pc_create, _godot_js_rtc_pc_datachannel_create, _godot_js_rtc_pc_destroy, _godot_js_rtc_pc_ice_candidate_add, _godot_js_rtc_pc_local_description_set, _godot_js_rtc_pc_offer_create, _godot_js_rtc_pc_remote_description_set, _godot_js_set_ime_active, _godot_js_set_ime_cb, _godot_js_set_ime_position, _godot_js_tts_get_voices, _godot_js_tts_is_paused, _godot_js_tts_is_speaking, _godot_js_tts_pause, _godot_js_tts_resume, _godot_js_tts_speak, _godot_js_tts_stop, _godot_js_websocket_buffered_amount, _godot_js_websocket_close, _godot_js_websocket_create, _godot_js_websocket_destroy, _godot_js_websocket_send, _godot_js_wrapper_create_cb, _godot_js_wrapper_create_object, _godot_js_wrapper_interface_get, _godot_js_wrapper_object_call, _godot_js_wrapper_object_get, _godot_js_wrapper_object_getvar, _godot_js_wrapper_object_set, _godot_js_wrapper_object_set_cb_ret, _godot_js_wrapper_object_setvar, _godot_js_wrapper_object_unref, _godot_webgl2_glFramebufferTextureMultisampleMultiviewOVR, _godot_webgl2_glFramebufferTextureMultiviewOVR, _godot_webgl2_glGetBufferSubData, _godot_webxr_get_bounds_geometry, _godot_webxr_get_color_texture, _godot_webxr_get_depth_texture, _godot_webxr_get_frame_rate, _godot_webxr_get_projection_for_view, _godot_webxr_get_render_target_size, _godot_webxr_get_supported_frame_rates, _godot_webxr_get_transform_for_view, _godot_webxr_get_velocity_texture, _godot_webxr_get_view_count, _godot_webxr_get_visibility_state, _godot_webxr_initialize, _godot_webxr_is_session_supported, _godot_webxr_is_supported, _godot_webxr_uninitialize, _godot_webxr_update_input_source, _godot_webxr_update_target_frame_rate ];
 
 function checkIncomingModuleAPI() {
  ignoredModuleProp("fetchSettings");
@@ -12704,6 +12720,7 @@ var wasmImports = {
  /** @export */ __syscall_fchmod: ___syscall_fchmod,
  /** @export */ __syscall_fcntl64: ___syscall_fcntl64,
  /** @export */ __syscall_fstat64: ___syscall_fstat64,
+ /** @export */ __syscall_ftruncate64: ___syscall_ftruncate64,
  /** @export */ __syscall_getcwd: ___syscall_getcwd,
  /** @export */ __syscall_getdents64: ___syscall_getdents64,
  /** @export */ __syscall_getsockname: ___syscall_getsockname,
@@ -12712,6 +12729,7 @@ var wasmImports = {
  /** @export */ __syscall_listen: ___syscall_listen,
  /** @export */ __syscall_lstat64: ___syscall_lstat64,
  /** @export */ __syscall_mkdirat: ___syscall_mkdirat,
+ /** @export */ __syscall_mknodat: ___syscall_mknodat,
  /** @export */ __syscall_newfstatat: ___syscall_newfstatat,
  /** @export */ __syscall_openat: ___syscall_openat,
  /** @export */ __syscall_poll: ___syscall_poll,
@@ -12735,7 +12753,6 @@ var wasmImports = {
  /** @export */ _emscripten_throw_longjmp: __emscripten_throw_longjmp,
  /** @export */ _gmtime_js: __gmtime_js,
  /** @export */ _localtime_js: __localtime_js,
- /** @export */ _setitimer_js: __setitimer_js,
  /** @export */ _tzset_js: __tzset_js,
  /** @export */ abort: _abort,
  /** @export */ emscripten_cancel_main_loop: _emscripten_cancel_main_loop,
@@ -13091,8 +13108,6 @@ var __emscripten_thread_free_data = createExportWrapper("_emscripten_thread_free
 
 var __emscripten_thread_exit = Module["__emscripten_thread_exit"] = createExportWrapper("_emscripten_thread_exit");
 
-var __emscripten_timeout = createExportWrapper("_emscripten_timeout");
-
 var __emscripten_check_mailbox = createExportWrapper("_emscripten_check_mailbox");
 
 var _setThrew = createExportWrapper("setThrew");
@@ -13429,8 +13444,7 @@ const Features = { // eslint-disable-line no-unused-vars
 	 *
 	 * @returns {Array<string>} A list of human-readable missing features.
 	 * @function Engine.getMissingFeatures
-	 * @typedef {{ threads: boolean }} SupportedFeatures
-	 * @param {SupportedFeatures} supportedFeatures
+	 * @param {{threads: (boolean|undefined)}} supportedFeatures
 	 */
 	getMissingFeatures: function (supportedFeatures = {}) {
 		const {
