@@ -46,7 +46,6 @@ shader_parameter/size = Vector2(20, 5.875)
 random_pitch = 1.05
 streams_count = 1
 stream_0/stream = ExtResource("6_pt1ei")
-stream_0/weight = 1.0
 
 [node name="Entity" type="Area2D"]
 input_pickable = false

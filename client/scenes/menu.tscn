@@ -17,7 +17,6 @@ clip_0/auto_advance = 0
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_tlmvn"]
 streams_count = 1
 stream_0/stream = ExtResource("5_a6wd8")
-stream_0/weight = 1.0
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -108,7 +107,6 @@ text = "Join"
 
 [node name="AudioStreamPlayer Music" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamInteractive_1ww8b")
-autoplay = true
 
 [node name="UI Audio" type="Node" parent="."]
 
