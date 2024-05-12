@@ -107,6 +107,7 @@ text = "Join"
 
 [node name="AudioStreamPlayer Music" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamInteractive_1ww8b")
+autoplay = true
 
 [node name="UI Audio" type="Node" parent="."]
 
