@@ -108,7 +108,7 @@ bus = &"SFX"
 
 [node name="ShootInteractive" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_hri2s")
-bus = &"SFX"
+bus = &"Minigun"
 
 [node name="GhostSprite" type="Sprite2D" parent="."]
 visible = false
