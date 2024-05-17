@@ -46,6 +46,8 @@ func _physics_process(delta):
 			if connecting:
 				get_tree().change_scene_to_packed(preload('res://scenes/game.tscn'))
 				
+				Music.get_stream_playback().switch_to_clip_by_name("Trans 1 to 2")
+				
 				local_player_error = null
 				
 				connecting = false
@@ -67,6 +69,8 @@ func _physics_process(delta):
 			
 			if error == null:
 				get_tree().change_scene_to_packed(preload('res://scenes/menu.tscn'))
+				
+				Music.get_stream_playback().switch_to_clip_by_name("Mus 1")
 			else:
 				error.text = local_player_error
 				error.visible = true

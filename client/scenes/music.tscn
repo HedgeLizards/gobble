@@ -1,0 +1,64 @@
+[gd_scene load_steps=7 format=3 uid="uid://bbxm80ji3f71y"]
+
+[ext_resource type="AudioStream" uid="uid://dpjyhmxoa1qh5" path="res://sounds/MUS_1.ogg" id="1_4xp28"]
+[ext_resource type="AudioStream" uid="uid://667owapmjk4c" path="res://sounds/MUS_TRANS_1TO2.ogg" id="2_c4rrw"]
+[ext_resource type="AudioStream" uid="uid://uiyrt5gx412b" path="res://sounds/MUS_2.ogg" id="3_al60i"]
+[ext_resource type="AudioStream" uid="uid://r0kwwp3foqdi" path="res://sounds/MUS_TRANS_2TO3.ogg" id="4_jbi66"]
+[ext_resource type="AudioStream" uid="uid://bpl8mfur8amnk" path="res://sounds/MUS_3.ogg" id="5_dif62"]
+
+[sub_resource type="AudioStreamInteractive" id="AudioStreamInteractive_1ww8b"]
+clip_count = 5
+clip_0/name = &"Mus 1"
+clip_0/stream = ExtResource("1_4xp28")
+clip_0/auto_advance = 0
+clip_1/name = &"Trans 1 to 2"
+clip_1/stream = ExtResource("2_c4rrw")
+clip_1/auto_advance = 1
+clip_1/next_clip = 2
+clip_2/name = &"Mus 2"
+clip_2/stream = ExtResource("3_al60i")
+clip_2/auto_advance = 0
+clip_3/name = &"Trans 2 to 3"
+clip_3/stream = ExtResource("4_jbi66")
+clip_3/auto_advance = 1
+clip_3/next_clip = 4
+clip_4/name = &"Mus 3"
+clip_4/stream = ExtResource("5_dif62")
+clip_4/auto_advance = 0
+_transitions = {
+Vector2i(0, 1): {
+"fade_beats": 1,
+"fade_mode": 4,
+"from_time": 1,
+"to_time": 1
+},
+Vector2i(1, 2): {
+"fade_beats": 1,
+"fade_mode": 4,
+"from_time": 3,
+"to_time": 1
+},
+Vector2i(2, 3): {
+"fade_beats": 1,
+"fade_mode": 4,
+"from_time": 1,
+"to_time": 1
+},
+Vector2i(3, 4): {
+"fade_beats": 1,
+"fade_mode": 4,
+"from_time": 3,
+"to_time": 1
+},
+Vector2i(4, 1): {
+"fade_beats": 4,
+"fade_mode": 4,
+"from_time": 1,
+"to_time": 1
+}
+}
+
+[node name="Music" type="AudioStreamPlayer"]
+stream = SubResource("AudioStreamInteractive_1ww8b")
+autoplay = true
+bus = &"Music"

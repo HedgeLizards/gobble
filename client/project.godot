@@ -20,6 +20,7 @@ config/icon="res://assets/Gobbles/Skins/Gobble_body1.png"
 WebSocket="*res://scripts/web_socket.gd"
 Globals="*res://scripts/globals.gd"
 Weapons="*res://scripts/weapons.gd"
+Music="*res://scenes/music.tscn"
 
 [debug]
 
