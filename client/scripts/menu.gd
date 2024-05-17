@@ -24,7 +24,7 @@ var skin_index:
 
 func _ready():
 	scale *= DisplayServer.screen_get_scale()
- 	
+	
 	if WebSocket.local_player_name != null:
 		$VBoxContainer/Identity/Name.text = WebSocket.local_player_name
 		$VBoxContainer/Identity/Name.caret_column = WebSocket.local_player_name.length()
