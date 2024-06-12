@@ -105,6 +105,17 @@ theme_override_fonts/font = ExtResource("5_dh7dy")
 theme_override_font_sizes/font_size = 32
 text = "Join"
 
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Touch controls:"
+
+[node name="TouchEnabled" type="CheckBox" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="AudioStreamPlayer Music" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamInteractive_1ww8b")
 autoplay = true
