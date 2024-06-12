@@ -1,3 +1,4 @@
 *
 !.gitignore
 !coi-serviceworker.min.js
+!host.py

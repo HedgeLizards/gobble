@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://k8sjvowfj3al"]
+[gd_scene load_steps=9 format=3 uid="uid://k8sjvowfj3al"]
 
 [ext_resource type="Script" path="res://scripts/ui.gd" id="1_oecsf"]
 [ext_resource type="FontFile" uid="uid://chhjx2uirpf3r" path="res://assets/UI/Quicksand-Bold.otf" id="2_2jikd"]
 [ext_resource type="Texture2D" uid="uid://0jg66g75c0oi" path="res://assets/UI/spr_Coin_Final_UI.png" id="2_hk0q8"]
 [ext_resource type="Script" path="res://scripts/ui_cards.gd" id="4_cjqhq"]
+[ext_resource type="Texture2D" uid="uid://lurwduta8pjj" path="res://assets/UI/joystick_area.png" id="4_rshpw"]
 [ext_resource type="AudioStream" uid="uid://cfgof6jfllj37" path="res://sounds/UI_Arrow.wav" id="5_5e4jj"]
+[ext_resource type="Script" path="res://scripts/walk_joystick.gd" id="5_jkn1c"]
 [ext_resource type="AudioStream" uid="uid://dai8wwpv6umpn" path="res://sounds/UI_Typing.wav" id="6_q1vvy"]
 
 [node name="UI" type="CanvasLayer"]
@@ -72,6 +74,20 @@ bus = &"UI"
 stream = ExtResource("6_q1vvy")
 bus = &"UI"
 
+[node name="WalkJoystick" type="TextureRect" parent="."]
+visible = false
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = -267.0
+offset_right = 267.0
+offset_bottom = -11.0
+grow_vertical = 0
+texture = ExtResource("4_rshpw")
+script = ExtResource("5_jkn1c")
+
 [connection signal="gui_input" from="Gold" to="." method="_on_gold_gui_input"]
 [connection signal="resized" from="Gold" to="." method="_on_gold_resized"]
 [connection signal="timeout" from="Notice/Timer" to="." method="hide_notice"]
+[connection signal="gui_input" from="WalkJoystick" to="WalkJoystick" method="_on_gui_input"]

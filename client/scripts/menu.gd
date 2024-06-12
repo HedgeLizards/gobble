@@ -149,7 +149,8 @@ func _on_join_pressed():
 	WebSocket.local_player_skin = skins[skin_index]
 	WebSocket.local_player_host = $VBoxContainer/Connection/Host.text
 	WebSocket.local_player_port = $VBoxContainer/Connection/Port.text
-	
+	print("touch: ", %TouchEnabled.button_pressed)
+	Globals.touch_controls_enabled = %TouchEnabled.button_pressed
 	WebSocket.connect_to_host($VBoxContainer/Error)
 
 
