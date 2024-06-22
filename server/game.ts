@@ -5,6 +5,7 @@ import { Vec2 } from "./vec2.js";
 import { EnemyKind } from "./enemykind.js";
 import { Wave, planWave } from "./waves.js";
 import { ActionMessage, WorldMessage, CreatePlayerMessage } from "./messages.js";
+import { Building } from "./building.js";
 
 enum State {
 	Start = "Start", // no players
@@ -23,6 +24,8 @@ export class Game {
 	removed: Array<string>
 	gold: number
 	size: Vec2
+	grid: (Building | null)[][]
+	buildings: Building[]
 	state: State
 	timeToWave: number
 	timeToSpawn: number
@@ -38,6 +41,9 @@ export class Game {
 		this.removed = [];
 		this.gold = 0;
 		this.size = new Vec2(96, 96);
+		this.grid = Array.from({ length: this.size.y }, () => Array(this.size.x).fill(null));
+		this.buildings = [];
+		this.addBuilding(0, "SwordStone", this.center().sub(new Vec2(1, 1)));
 
 		this.state = State.Start;
 		this.timeToWave = 0;
@@ -50,7 +56,7 @@ export class Game {
 		if (this.players.has(id)){
 			return "id " + id + " is already taken";
 		}
-		let player = new Player(id, {...data, pos: this.center(), alive: this.acceptNewPlayers(), health: data.maxhealth, weapon: "Handgun"});
+		let player = new Player(id, {...data, pos: this.center().add(new Vec2(0, 1.5)), alive: this.acceptNewPlayers(), health: data.maxhealth, weapon: "Handgun"});
 		console.log("new player", player.name, player);
 		this.players.set(player.id, player);
 		return null;
@@ -100,10 +106,54 @@ export class Game {
 
 	}
 
+	addBuilding(cost: number, kind: string, pos: Vec2) {
+		if (cost > this.gold) {
+			return false;
+		}
+
+		const building = new Building(kind, pos);
+
+		for (let r = 0; r < building.size.y; r++) {
+			for (let c = 0; c < building.size.x; c++) {
+				if (this.grid[pos.y + r][pos.x + c] !== null) {
+					return false;
+				}
+			}
+		}
+
+		this.gold -= cost;
+
+		for (let r = 0; r < building.size.y; r++) {
+			for (let c = 0; c < building.size.x; c++) {
+				this.grid[pos.y + r][pos.x + c] = building;
+			}
+		}
+
+		this.buildings.push(building);
+
+		return true;
+	}
+
+	removeBuilding(building: Building, index: number) {
+		for (let r = 0; r < building.size.y; r++) {
+			for (let c = 0; c < building.size.x; c++) {
+				this.grid[building.pos.y + r][building.pos.x + c] = null;
+			}
+		}
+
+		this.buildings.splice(index, 1);
+	}
+
 	update(delta: number): ActionMessage[] {
 		let actions: ActionMessage[] = [];
 		if (this.players.size === 0) {
-			this.state = State.Start;
+			if (this.state !== State.Start) {
+				this.state = State.Start;
+				for (let i = this.buildings.length - 1; i > 0; i--) {
+					this.removeBuilding(this.buildings[i], i);
+				}
+				this.gold = 0;
+			}
 			return [];
 		}
 		if (this.state === State.Start) {
@@ -111,6 +161,10 @@ export class Game {
 				player.reset();
 			}
 			this.waveNum = 0;
+			for (let i = this.buildings.length - 1; i > 0; i--) {
+				actions.push({type: "buildingDeleted", pos: this.buildings[i].pos});
+				this.removeBuilding(this.buildings[i], i);
+			}
 			this.gold = 0;
 			this.removed.push(...this.enemies.keys())
 			this.enemies = new Map();
@@ -164,7 +218,12 @@ export class Game {
 
 			}
 		}
-
+		for (const building of this.buildings) {
+			const action = building.update(delta, this);
+			if (action !== null) {
+				actions.push(action);
+			}
+		}
 		if (this.removed.length > 0) {
 			actions.push({type: "entitiesDeleted", ids: this.removed, gold: this.gold});
 			this.removed = [];
@@ -202,7 +261,12 @@ export class Game {
 	}
 
 	viewWorld(): WorldMessage {
-		return {type: "world", size: this.size, gold: this.gold};
+		return {
+			type: "world",
+			size: this.size,
+			buildings: this.buildings.map((building) => ({ kind: building.kind, pos: building.pos })),
+			gold: this.gold,
+		};
 	}
 }
 

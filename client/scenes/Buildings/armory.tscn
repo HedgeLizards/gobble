@@ -1,0 +1,78 @@
+[gd_scene load_steps=11 format=3 uid="uid://b7h2rg5giktv7"]
+
+[ext_resource type="Script" path="res://scripts/armory.gd" id="1_f78wt"]
+[ext_resource type="Texture2D" uid="uid://dffs0ckgt2n5b" path="res://assets/Buildings/Building_Armory_Spritesheet.png" id="1_jaw5c"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7r4iw"]
+size = Vector2(16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7m01t"]
+atlas = ExtResource("1_jaw5c")
+region = Rect2(0, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eahmt"]
+atlas = ExtResource("1_jaw5c")
+region = Rect2(16, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7edk6"]
+atlas = ExtResource("1_jaw5c")
+region = Rect2(32, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k0p80"]
+atlas = ExtResource("1_jaw5c")
+region = Rect2(48, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lfnsy"]
+atlas = ExtResource("1_jaw5c")
+region = Rect2(64, 0, 16, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5x38m"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7m01t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eahmt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7edk6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k0p80")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lfnsy")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2famk"]
+size = Vector2(24, 40)
+
+[node name="Armory" type="StaticBody2D"]
+script = ExtResource("1_f78wt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_7r4iw")
+disabled = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_5x38m")
+frame = 4
+offset = Vector2(0, -16)
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(0, -16)
+input_pickable = false
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_2famk")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

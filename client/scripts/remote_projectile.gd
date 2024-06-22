@@ -37,8 +37,8 @@ func _physics_process(delta):
 	if distance < 0:
 		queue_free()
 
-func _on_body_entered(body: Node2D) -> void:
-	if is_enemy && body.has_method("is_me") and body.is_me() and body.is_alive():
+func _on_body_entered(_body: Node2D) -> void:
+	if is_enemy:
 		body_entered.disconnect(_on_body_entered)
 		WebSocket.send({
 			"type": "impactProjectile",

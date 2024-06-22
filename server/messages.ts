@@ -2,6 +2,7 @@
 
 import { define, coerce, union, literal, number, object, string, tuple, boolean, array, optional, enums, Infer } from 'superstruct'
 import { Vec2 } from './vec2.js';
+import { kinds } from './building.js';
 import { Activity } from './player.js';
 
 const Vec2_ = coerce(define<Vec2>("Vec2", (o: any) => o instanceof Vec2), tuple([number(), number()]), ([x, y]) => new Vec2(x, y));
@@ -45,8 +46,24 @@ const ImpactProjectile = object({
 	pos: Vec2_,
 	damage: number(),
 	weapon: string(),
+});
+const CreateBuilding = object({
+	type: literal("createBuilding"),
+	cost: number(),
+	kind: enums(Object.keys(kinds)),
+	pos: Vec2_,
+});
+const BuyGun = object({
+	type: literal("buyGun"),
+	cost: number(),
+	buyerId: PlayerId,
+	weapon: string(),
+});
+const EmptyBank = object({
+	type: literal("emptyBank"),
+	pos: Vec2_,
 })
-export const ClientMessage = union([CreatePlayerMessage, UpdatePlayerMessage, CreateProjectiles, ImpactProjectile]);
+export const ClientMessage = union([CreatePlayerMessage, UpdatePlayerMessage, CreateProjectiles, ImpactProjectile, CreateBuilding, BuyGun, EmptyBank]);
 export type ClientMessage = Infer<typeof ClientMessage>;
 
 export type ActionMessage =
@@ -54,6 +71,10 @@ export type ActionMessage =
 	{type: "entitiesDeleted", ids: string[], gold: number} |
 	{type: "projectileCreated", id: string, creatorId: string, pos: Vec2, rotation: number, isEnemy: boolean, weapon: string} |
 	{type: "projectileImpacted", id: string, creatorId: string, impactedIds: string[], pos: Vec2, damage: number, weapon: string} |
+	{type: "buildingCreated", kind: string, pos: Vec2, gold: number} |
+	{type: "buildingUpdated", pos: Vec2, interest: number, gold?: number} |
+	{type: "buildingDeleted", pos: Vec2} |
+	{type: "gunBought", buyerId: string, weapon: string, gold: number} |
 	{type: "waveStart", waveNum: number} |
 	{type: "waveEnd", waveNum: number} |
 	{type: "gameOver"};
@@ -61,4 +82,4 @@ export type ActionMessage =
 export type ServerMessage = {type: "update", actions: ActionMessage[]}
 	| {type: "welcome", tickDuration: number, world: WorldMessage};
 
-export type WorldMessage = {type: "world", size: Vec2, gold: number};
+export type WorldMessage = {type: "world", size: Vec2, buildings: { kind: string, pos: Vec2 }[], gold: number};

@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://011l66vx15oa"]
+[gd_scene load_steps=6 format=3 uid="uid://011l66vx15oa"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_uuqp6"]
 [ext_resource type="PackedScene" uid="uid://ck2q3henidk1g" path="res://scenes/me.tscn" id="2_m0nq5"]
-[ext_resource type="PackedScene" uid="uid://ctas0hp1umgpj" path="res://scenes/World/Swordstone.tscn" id="3_eiuly"]
 [ext_resource type="Texture2D" uid="uid://bs6jstdyrmwss" path="res://assets/World/GrassTile.png" id="4_jlxtf"]
 [ext_resource type="PackedScene" uid="uid://k8sjvowfj3al" path="res://scenes/ui.tscn" id="5_xpa2o"]
 [ext_resource type="PackedScene" uid="uid://dtamcwxmy65pt" path="res://scenes/shockwave.tscn" id="6_g3dv6"]
@@ -24,11 +23,9 @@ offset_right = 2048.0
 offset_bottom = 2048.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("4_jlxtf")
 stretch_mode = 1
-
-[node name="SwordStone" parent="." instance=ExtResource("3_eiuly")]
-unique_name_in_owner = true
 
 [node name="Entities" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -43,3 +40,6 @@ z_index = 1
 y_sort_enabled = true
 
 [node name="Shockwave" parent="Projectiles" instance=ExtResource("6_g3dv6")]
+
+[node name="Buildings" type="Node2D" parent="."]
+y_sort_enabled = true

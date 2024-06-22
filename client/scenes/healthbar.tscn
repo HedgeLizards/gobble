@@ -45,10 +45,12 @@ script = ExtResource("1_efs5s")
 auto_translate_mode = 1
 offset_right = 20.0
 offset_bottom = 5.875
+mouse_filter = 2
 color = Color(0.662745, 0.286275, 0.286275, 1)
 
 [node name="Healthy" type="ColorRect" parent="."]
 auto_translate_mode = 1
 offset_right = 20.0
 offset_bottom = 5.875
+mouse_filter = 2
 color = Color(0.545098, 0.568627, 0.313726, 1)

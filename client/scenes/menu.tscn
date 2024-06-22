@@ -50,6 +50,7 @@ placeholder_text = "Enter your name..."
 texture_filter = 1
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 texture_normal = ExtResource("2_cw6uy")
 stretch_mode = 0
 
@@ -62,6 +63,7 @@ layout_mode = 2
 texture_filter = 1
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 texture_normal = ExtResource("2_cw6uy")
 stretch_mode = 0
 flip_h = true
@@ -94,6 +96,7 @@ placeholder_text = "Port..."
 
 [node name="Join" type="Button" parent="VBoxContainer/Connection"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_fonts/font = ExtResource("5_dh7dy")
 theme_override_font_sizes/font_size = 32
 text = "Join"

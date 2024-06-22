@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bfxjkao6gpoye"
-path="res://.godot/imported/Sparkle4.png-3b51e09bf139860b4cbfd375809d47d2.ctex"
+uid="uid://cpghkoih5dx0n"
+path="res://.godot/imported/Sparkle3.png-1f0234f12ae7965c8a339d9956e79913.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/World/Particles/Sparkle4.png"
-dest_files=["res://.godot/imported/Sparkle4.png-3b51e09bf139860b4cbfd375809d47d2.ctex"]
+source_file="res://assets/Buildings/Particles/Sparkle3.png"
+dest_files=["res://.godot/imported/Sparkle3.png-1f0234f12ae7965c8a339d9956e79913.ctex"]
 
 [params]
 

@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://k8sjvowfj3al"]
+[gd_scene load_steps=7 format=3 uid="uid://k8sjvowfj3al"]
 
 [ext_resource type="Script" path="res://scripts/ui.gd" id="1_oecsf"]
 [ext_resource type="FontFile" uid="uid://chhjx2uirpf3r" path="res://assets/UI/Quicksand-Bold.otf" id="2_2jikd"]
 [ext_resource type="Texture2D" uid="uid://0jg66g75c0oi" path="res://assets/UI/spr_Coin_Final_UI.png" id="2_hk0q8"]
+[ext_resource type="Script" path="res://scripts/ui_cards.gd" id="4_cjqhq"]
+[ext_resource type="AudioStream" uid="uid://cfgof6jfllj37" path="res://sounds/UI_Arrow.wav" id="5_5e4jj"]
+[ext_resource type="AudioStream" uid="uid://dai8wwpv6umpn" path="res://sounds/UI_Typing.wav" id="6_q1vvy"]
 
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_oecsf")
@@ -15,6 +18,7 @@ anchor_right = 0.025
 anchor_bottom = 0.025
 offset_right = 49.0
 offset_bottom = 38.0
+mouse_filter = 2
 theme_override_constants/separation = 8
 
 [node name="TextureRect" type="TextureRect" parent="Gold"]
@@ -37,14 +41,33 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_fonts/normal_font = ExtResource("2_2jikd")
 theme_override_font_sizes/normal_font_size = 48
 bbcode_enabled = true
 fit_content = true
 autowrap_mode = 0
 
-[node name="NoticeTimer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="Notice"]
 one_shot = true
 
+[node name="Cards" type="Control" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("4_cjqhq")
+
+[node name="CardsToggle" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_5e4jj")
+
+[node name="CardClick" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_q1vvy")
+
 [connection signal="resized" from="Gold" to="." method="_on_gold_resized"]
-[connection signal="timeout" from="NoticeTimer" to="." method="hide_notice"]
+[connection signal="timeout" from="Notice/Timer" to="." method="hide_notice"]

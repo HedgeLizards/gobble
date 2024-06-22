@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b6s43weiyi617"
-path="res://.godot/imported/Building_Armory.png-8898e249f6977139174549bbb31e59d9.ctex"
+uid="uid://cak2oxqujqmix"
+path="res://.godot/imported/Sparkle2.png-9a98a75fc354694a1852129c7e90b72e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Buildings/Building_Armory.png"
-dest_files=["res://.godot/imported/Building_Armory.png-8898e249f6977139174549bbb31e59d9.ctex"]
+source_file="res://assets/Buildings/Particles/Sparkle2.png"
+dest_files=["res://.godot/imported/Sparkle2.png-9a98a75fc354694a1852129c7e90b72e.ctex"]
 
 [params]
 

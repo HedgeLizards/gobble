@@ -6,6 +6,14 @@ const Entity = preload("res://scenes/remote_entity.tscn")
 const RemoteProjectile = preload("res://scenes/remote_projectile.tscn")
 const Shockwave = preload("res://scenes/shockwave.tscn")
 const CoinParticles = preload("res://scenes/Particles/coin_particles.tscn")
+const buildings = {
+	"SwordStone": preload("res://scenes/Buildings/Swordstone.tscn"),
+	"Armory": preload("res://scenes/Buildings/armory.tscn"),
+	"Bank": preload("res://scenes/Buildings/bank.tscn"),
+	"Wall": preload("res://scenes/Buildings/wall.tscn"),
+}
+const Armory = preload("res://scripts/armory.gd")
+
 var entities = {}
 var remote_projectiles = {}
 var world_size = Vector2(1, 1)
@@ -15,6 +23,8 @@ func _init():
 	visible = false
 
 func _ready():
+	Input.set_custom_mouse_cursor(preload("res://assets/UI/UI_Crosshair_1.png"), Input.CURSOR_ARROW, Vector2(5, 5))
+	
 	%Me.get_node("Sprite2D").texture = load("%s/%s" % [SKINS_PATH, WebSocket.local_player_skin])
 	
 	WebSocket.send({
@@ -29,6 +39,16 @@ func _unhandled_key_input(event):
 	if event.keycode == KEY_ESCAPE and event.pressed and not event.echo:
 		WebSocket.socket.close()
 
+func _exit_tree():
+	for card in Armory.card_set:
+		card.cost = card.get("originalCost", card.cost)
+		card.erase("originalCost")
+		
+		if card.id == "Handgun":
+			card.disabled = true
+		else:
+			card.erase("disabled")
+
 func process_data(data):
 	if data["type"] == "update":
 		update(data["actions"])
@@ -36,11 +56,20 @@ func process_data(data):
 		var s = data["world"]["size"]
 		world_tile_size = Vector2(s[0], s[1])
 		world_size = world_tile_size * Globals.SCALE
-		%Me.position = world_size / 2
+		%Me.position = world_size / 2.0 + Vector2(0.0, 1.5) * Globals.SCALE
 		var camera = %Me.get_node("Camera2D")
 		camera.limit_right = world_size.x
 		camera.limit_bottom = world_size.y
-		%SwordStone.position = world_size / 2
+		for r in range(world_tile_size.y):
+			var row = []
+			for c in range(world_tile_size.x):
+				row.push_back(null)
+			$UI.grid.push_back(row)
+		for building in data["world"]["buildings"]:
+			var instance = buildings[building.kind].instantiate()
+			instance.cell = Vector2(building.pos[0], building.pos[1])
+			$UI.add_building_to_grid(instance)
+			$Buildings.add_child(instance)
 		$UI.gold = data["world"]["gold"]
 		visible = true
 
@@ -91,6 +120,7 @@ func update(actions):
 			for id in action["ids"]:
 				if id == WebSocket.local_player_id:
 					%Me.alive = false
+					_exit_tree()
 				elif entities.has(id):
 					var entity = entities[id]
 					if entity.enemy and action["gold"] > 0:
@@ -136,6 +166,34 @@ func update(actions):
 					%Projectiles.add_child(shockwave)
 				p.queue_free()
 			remote_projectiles.erase(action["id"])
+		elif type == "buildingCreated":
+			var instance = buildings[action.kind].instantiate()
+			instance.cell = Vector2(action.pos[0], action.pos[1])
+			$UI.add_building_to_grid(instance)
+			$Buildings.add_child(instance)
+			$UI.gold = action.gold
+		elif type == "buildingUpdated":
+			var instance = $UI.grid[action.pos[1]][action.pos[0]]
+			instance.card_set[0].description = "Current interest: %d." % action.interest
+			if action.has("gold"):
+				$UI.gold = action.gold
+			elif !$UI/Cards.card_sets.is_empty() and $UI/Cards.card_sets[0] == instance.card_set:
+				$UI/Cards.update_cards()
+		elif type == "buildingDeleted":
+			var instance = $UI.grid[action.pos[1]][action.pos[0]]
+			$UI.remove_building_from_grid(instance)
+			$Buildings.remove_child(instance)
+		elif type == "gunBought":
+			if action.buyerId == WebSocket.local_player_id:
+				%Me.weapon_id = action.weapon
+				for card in Armory.card_set:
+					if card.id == action.weapon:
+						card.originalCost = card.cost
+						card.cost = 0
+						card.disabled = true
+					else:
+						card.erase("disabled")
+			$UI.gold = action.gold
 		elif type == "waveStart":
 			$UI.show_notice("Wave " + str(action.waveNum))
 		elif type == "waveEnd":

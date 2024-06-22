@@ -1,0 +1,81 @@
+[gd_scene load_steps=6 format=3 uid="uid://b8up48pce0axa"]
+
+[ext_resource type="Texture2D" uid="uid://0jg66g75c0oi" path="res://assets/UI/spr_Coin_Final_UI.png" id="1_6ykyq"]
+[ext_resource type="Script" path="res://scripts/ui_card.gd" id="1_8evfw"]
+[ext_resource type="FontFile" uid="uid://chhjx2uirpf3r" path="res://assets/UI/Quicksand-Bold.otf" id="2_hqfsq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7i1ck"]
+resource_local_to_scene = true
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5e8j8"]
+region = Rect2(64, 0, 16, 32)
+
+[node name="UICard" type="PanelContainer"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -174.0
+offset_right = 168.0
+offset_bottom = 174.0
+grow_vertical = 2
+mouse_default_cursor_shape = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7i1ck")
+script = ExtResource("1_8evfw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Cost" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 4
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Cost"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("1_6ykyq")
+
+[node name="Label" type="Label" parent="VBoxContainer/Cost"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_hqfsq")
+theme_override_font_sizes/font_size = 16
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_hqfsq")
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
+custom_minimum_size = Vector2(96, 192)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = SubResource("AtlasTexture_5e8j8")
+stretch_mode = 5
+
+[node name="Description" type="Label" parent="VBoxContainer"]
+custom_minimum_size = Vector2(160, 66)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_hqfsq")
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

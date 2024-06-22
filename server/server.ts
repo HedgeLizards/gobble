@@ -150,6 +150,34 @@ class Serv {
 						type: "projectileImpacted",
 					};
 					this.broadcast({type: "update", actions: [response]});
+				} else if (data.type === "createBuilding") {
+					if (!this.game.addBuilding(data.cost, data.kind, data.pos)) {
+						return;
+					}
+					let response: ActionMessage = {
+						type: "buildingCreated",
+						kind: data.kind,
+						pos: data.pos,
+						gold: this.game.gold,
+					};
+					this.broadcast({type: "update", actions: [response]});
+				} else if (data.type === "buyGun") {
+					if (data.cost > this.game.gold) {
+						return;
+					};
+					this.game.gold -= data.cost;
+					let response: ActionMessage = {
+						type: "gunBought",
+						buyerId: data.buyerId,
+						weapon: data.weapon,
+						gold: this.game.gold,
+					};
+					this.broadcast({type: "update", actions: [response]});
+				} else if (data.type === "emptyBank") {
+					const building = this.game.grid[data.pos.y][data.pos.x];
+					if (building?.kind === "Bank" && building.interest > 0) {
+						building.interest = -building.interest;
+					}
 				}
 			});
 		});

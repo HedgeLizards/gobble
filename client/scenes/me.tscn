@@ -68,7 +68,7 @@ position = Vector2(0, -8)
 shape = SubResource("RectangleShape2D_g3144")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-offset = Vector2(0, -8)
+position = Vector2(0, -8)
 limit_left = 0
 limit_top = 0
 script = ExtResource("2_0fe2v")

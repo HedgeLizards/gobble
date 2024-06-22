@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://lre1l8w0tbrj"
-path="res://.godot/imported/Stone_sword.png-5c5601e9e4425bb75341f1f11b6641b2.ctex"
+uid="uid://kwkr2r5hmavl"
+path="res://.godot/imported/Sparkle5.png-8c05fe0bcb2d0da467e837bc224356d5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/World/Stone_sword.png"
-dest_files=["res://.godot/imported/Stone_sword.png-5c5601e9e4425bb75341f1f11b6641b2.ctex"]
+source_file="res://assets/Buildings/Particles/Sparkle5.png"
+dest_files=["res://.godot/imported/Sparkle5.png-8c05fe0bcb2d0da467e837bc224356d5.ctex"]
 
 [params]
 

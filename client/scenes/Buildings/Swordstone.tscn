@@ -1,13 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://ctas0hp1umgpj"]
+[gd_scene load_steps=4 format=3 uid="uid://ctas0hp1umgpj"]
 
-[ext_resource type="Texture2D" uid="uid://lre1l8w0tbrj" path="res://assets/World/Stone_sword.png" id="1_6loey"]
+[ext_resource type="Texture2D" uid="uid://lre1l8w0tbrj" path="res://assets/Buildings/Stone_sword.png" id="1_6loey"]
+[ext_resource type="Script" path="res://scripts/sword_stone.gd" id="1_meh52"]
 [ext_resource type="PackedScene" uid="uid://oas1hybsa2xs" path="res://scenes/Particles/Sparkle_particles.tscn" id="2_4pr4c"]
 
 [node name="SwordStone" type="Node2D"]
+script = ExtResource("1_meh52")
 
 [node name="StoneSword" type="Sprite2D" parent="."]
-position = Vector2(0, -17)
 texture = ExtResource("1_6loey")
+offset = Vector2(0, -16)
 
 [node name="SparkleParticles" parent="." instance=ExtResource("2_4pr4c")]
 position = Vector2(0, -19)

@@ -4,6 +4,7 @@ const SKINS_PATH = 'res://assets/Gobbles/Skins'
 
 static var skins = []
 static var default_host := "localhost"
+static var multiply_default_stylebox_sizes_by_screen_scale = true
 
 static func _static_init():
 	for filename in DirAccess.get_files_at(SKINS_PATH):
@@ -23,7 +24,74 @@ var skin_index:
 		$VBoxContainer/Identity/Skin.texture = load('%s/%s' % [SKINS_PATH, skins[skin_index]])
 
 func _ready():
-	scale *= DisplayServer.screen_get_scale()
+	Input.set_custom_mouse_cursor(null)
+	
+	var screen_scale = DisplayServer.screen_get_scale()
+	
+	if multiply_default_stylebox_sizes_by_screen_scale:
+		multiply_default_stylebox_sizes_by_screen_scale = false
+		
+		var stylebox_focus = $VBoxContainer/Identity/Name.get_theme_stylebox('focus')
+		var stylebox_normal = $VBoxContainer/Identity/Name.get_theme_stylebox('normal')
+		
+		stylebox_focus.border_width_left *= screen_scale
+		stylebox_focus.border_width_top *= screen_scale
+		stylebox_focus.border_width_right *= screen_scale
+		stylebox_focus.border_width_bottom *= screen_scale
+		stylebox_focus.corner_radius_top_left *= screen_scale
+		stylebox_focus.corner_radius_top_right *= screen_scale
+		stylebox_focus.corner_radius_bottom_left *= screen_scale
+		stylebox_focus.corner_radius_bottom_right *= screen_scale
+		stylebox_focus.expand_margin_left *= screen_scale
+		stylebox_focus.expand_margin_top *= screen_scale
+		stylebox_focus.expand_margin_right *= screen_scale
+		stylebox_focus.expand_margin_bottom *= screen_scale
+		stylebox_focus.content_margin_left *= screen_scale
+		stylebox_focus.content_margin_top *= screen_scale
+		stylebox_focus.content_margin_right *= screen_scale
+		stylebox_focus.content_margin_bottom *= screen_scale
+		
+		stylebox_normal.border_width_bottom *= screen_scale
+		stylebox_normal.corner_radius_top_left *= screen_scale
+		stylebox_normal.corner_radius_top_right *= screen_scale
+		stylebox_normal.corner_radius_bottom_left *= screen_scale
+		stylebox_normal.corner_radius_bottom_right *= screen_scale
+		stylebox_normal.content_margin_left *= screen_scale
+		stylebox_normal.content_margin_top *= screen_scale
+		stylebox_normal.content_margin_right *= screen_scale
+		stylebox_normal.content_margin_bottom *= screen_scale
+	
+	$VBoxContainer.add_theme_constant_override('separation',
+		$VBoxContainer.get_theme_constant('separation') * screen_scale
+	)
+	
+	$VBoxContainer/Identity.add_theme_constant_override('separation',
+		$VBoxContainer/Identity.get_theme_constant('separation') * screen_scale
+	)
+	$VBoxContainer/Identity/Name.add_theme_font_size_override('font_size',
+		$VBoxContainer/Identity/Name.get_theme_font_size('font_size') * screen_scale
+	)
+	$VBoxContainer/Identity/Previous.custom_minimum_size *= screen_scale
+	$VBoxContainer/Identity/Skin.custom_minimum_size *= screen_scale
+	$VBoxContainer/Identity/Next.custom_minimum_size *= screen_scale
+	
+	$VBoxContainer/Error.custom_minimum_size *= screen_scale
+	$VBoxContainer/Error.add_theme_font_size_override('font_size',
+		$VBoxContainer/Error.get_theme_font_size('font_size') * screen_scale
+	)
+	
+	$VBoxContainer/Connection.add_theme_constant_override('separation',
+		$VBoxContainer/Connection.get_theme_constant('separation') * screen_scale
+	)
+	$VBoxContainer/Connection/Host.add_theme_font_size_override('font_size',
+		$VBoxContainer/Connection/Host.get_theme_font_size('font_size') * screen_scale
+	)
+	$VBoxContainer/Connection/Port.add_theme_font_size_override('font_size',
+		$VBoxContainer/Connection/Port.get_theme_font_size('font_size') * screen_scale
+	)
+	$VBoxContainer/Connection/Join.add_theme_font_size_override('font_size',
+		$VBoxContainer/Connection/Join.get_theme_font_size('font_size') * screen_scale
+	)
 	
 	if WebSocket.local_player_name != null:
 		$VBoxContainer/Identity/Name.text = WebSocket.local_player_name

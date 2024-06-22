@@ -18,6 +18,7 @@ var zoom_factor = 1.0:
 		tween_zoom.tween_property(self, 'zoom', calculate_dynamic_zoom(), duration)
 var tween_zoom
 var tween_offset
+
 @onready var base_offset = offset
 
 func _ready():
@@ -32,10 +33,11 @@ func _ready():
 	zoom = calculate_dynamic_zoom()
 
 func calculate_dynamic_zoom():
-	var s = DisplayServer.window_get_size() / DisplayServer.screen_get_scale() / (SCREEN_SIZE_RATIO * zoom_factor)
+	var screen_scale = DisplayServer.screen_get_scale()
+	var s = DisplayServer.window_get_size() / screen_scale  / (SCREEN_SIZE_RATIO * zoom_factor)
 	var z = min(s.x, s.y)
 	
-	return Vector2(z, z) * DisplayServer.screen_get_scale()
+	return Vector2(z, z) * screen_scale
 
 func recoil(toward, strength):
 	offset = base_offset + Vector2(-cos(toward), sin(toward)) * strength
