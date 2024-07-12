@@ -67,13 +67,12 @@ export const ClientMessage = union([CreatePlayerMessage, UpdatePlayerMessage, Cr
 export type ClientMessage = Infer<typeof ClientMessage>;
 
 export type ActionMessage =
-	{type: "entityUpdated", id: string, name?: string, alive: boolean, skin: string, pos: Vec2, aim: number, weapon: string, isEnemy: boolean, health: number, maxhealth: number, activity?: Activity,} |
+	{type: "entityUpdated", id: string, name?: string, alive: boolean, skin: string, pos: Vec2, aim: number, weapon?: string, isEnemy: boolean, health: number, maxhealth: number, activity?: Activity,} |
 	{type: "entitiesDeleted", ids: string[], gold: number} |
 	{type: "projectileCreated", id: string, creatorId: string, pos: Vec2, rotation: number, isEnemy: boolean, weapon: string} |
 	{type: "projectileImpacted", id: string, creatorId: string, impactedIds: string[], pos: Vec2, damage: number, weapon: string} |
-	{type: "buildingCreated", kind: string, pos: Vec2, gold: number} |
-	{type: "buildingUpdated", pos: Vec2, interest: number, gold?: number} |
-	{type: "buildingDeleted", pos: Vec2} |
+	{type: "buildingCreated", kind: string, pos: Vec2, health: number, gold: number} |
+	{type: "buildingUpdated", pos: Vec2, health?: number, interest?: number, gold?: number} |
 	{type: "gunBought", buyerId: string, weapon: string, gold: number} |
 	{type: "waveStart", waveNum: number} |
 	{type: "waveEnd", waveNum: number} |
@@ -82,4 +81,4 @@ export type ActionMessage =
 export type ServerMessage = {type: "update", actions: ActionMessage[]}
 	| {type: "welcome", tickDuration: number, world: WorldMessage};
 
-export type WorldMessage = {type: "world", size: Vec2, buildings: { kind: string, pos: Vec2 }[], gold: number};
+export type WorldMessage = {type: "world", size: Vec2, buildings: { kind: string, pos: Vec2, health: number }[], gold: number};

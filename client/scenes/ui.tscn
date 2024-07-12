@@ -18,7 +18,8 @@ anchor_right = 0.025
 anchor_bottom = 0.025
 offset_right = 49.0
 offset_bottom = 38.0
-mouse_filter = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 2
 theme_override_constants/separation = 8
 
 [node name="TextureRect" type="TextureRect" parent="Gold"]
@@ -65,9 +66,12 @@ script = ExtResource("4_cjqhq")
 
 [node name="CardsToggle" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_5e4jj")
+bus = &"UI"
 
 [node name="CardClick" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_q1vvy")
+bus = &"UI"
 
+[connection signal="gui_input" from="Gold" to="." method="_on_gold_gui_input"]
 [connection signal="resized" from="Gold" to="." method="_on_gold_resized"]
 [connection signal="timeout" from="Notice/Timer" to="." method="hide_notice"]

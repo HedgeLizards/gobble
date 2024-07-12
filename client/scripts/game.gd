@@ -7,7 +7,7 @@ const RemoteProjectile = preload("res://scenes/remote_projectile.tscn")
 const Shockwave = preload("res://scenes/shockwave.tscn")
 const CoinParticles = preload("res://scenes/Particles/coin_particles.tscn")
 const buildings = {
-	"SwordStone": preload("res://scenes/Buildings/Swordstone.tscn"),
+	"SwordStone": preload("res://scenes/Buildings/sword_stone.tscn"),
 	"Armory": preload("res://scenes/Buildings/armory.tscn"),
 	"Bank": preload("res://scenes/Buildings/bank.tscn"),
 	"Wall": preload("res://scenes/Buildings/wall.tscn"),
@@ -68,6 +68,7 @@ func process_data(data):
 		for building in data["world"]["buildings"]:
 			var instance = buildings[building.kind].instantiate()
 			instance.cell = Vector2(building.pos[0], building.pos[1])
+			instance.health = building.health
 			$UI.add_building_to_grid(instance)
 			$Buildings.add_child(instance)
 		$UI.gold = data["world"]["gold"]
@@ -100,6 +101,15 @@ func update(actions):
 					sprite.wobble_amplitude = 1.0
 					sprite.wobble_speed = 10.0
 					sprite.texture = load("%s/%s.png" % [ENEMY_SKINS_PATH, action["skin"]])
+					if action["skin"] == "Tower" || action["skin"] == "Arthur":
+						sprite.offset.y -= 10.0
+						var collision_shape_2d = entity.get_node("CollisionShape2D")
+						collision_shape_2d.position.y -= 10.0
+						collision_shape_2d.scale *= 2.0
+					if action["skin"] == "Chest":
+						$UI.show_notice("A chest has appeared!")
+					if action["skin"] == "Arthur":
+						$UI.show_notice("KING ARTHUR HAS RISEN!")
 				else:
 					sprite.texture = load("%s/%s" % [SKINS_PATH, action["skin"]])
 					var label = entity.get_node("Label")
@@ -114,7 +124,8 @@ func update(actions):
 			entity.health = action.health
 			if not entity.enemy:
 				entity.activity = action.activity
-			entity.weapon_id = action.weapon
+			if action.has("weapon"):
+				entity.weapon_id = action.weapon
 			entity.positions.push_back(PositionSnapshot.new(pos, action.get("aim", 0.0), time))
 		elif type == "entitiesDeleted":
 			for id in action["ids"]:
@@ -123,13 +134,14 @@ func update(actions):
 					_exit_tree()
 				elif entities.has(id):
 					var entity = entities[id]
-					if entity.enemy and action["gold"] > 0:
+					if entity.enemy and action["gold"] > $UI.gold:
 						var coin_particles = CoinParticles.instantiate()
 						var cpu_particles_2d = coin_particles.get_node("CPUParticles2D")
 						cpu_particles_2d.emitting = true
 						cpu_particles_2d.finished.connect(coin_particles.queue_free)
 						coin_particles.position = entity.position
 						add_child(coin_particles)
+						# play sound
 					entity.queue_free()
 					entities.erase(id)
 			$UI.gold = action["gold"]
@@ -174,15 +186,20 @@ func update(actions):
 			$UI.gold = action.gold
 		elif type == "buildingUpdated":
 			var instance = $UI.grid[action.pos[1]][action.pos[0]]
-			instance.card_set[0].description = "Current interest: %d." % action.interest
+			if action.has("health"):
+				instance.health = action.health
+				if instance.health == 0 and instance.name != "SwordStone":
+					var tween = instance.create_tween()
+					tween.tween_property(instance, 'modulate:a', 0.0, 0.2)
+					tween.tween_callback(instance.queue_free)
+					$UI.remove_building_from_grid(instance)
+					# play sound
+			if action.has("interest"):
+				instance.card_set[0].description = "Current interest: %d." % action.interest
+				if not action.has("gold") and not $UI/Cards.card_sets.is_empty() and $UI/Cards.card_sets[0] == instance.card_set:
+					$UI/Cards.update_cards()
 			if action.has("gold"):
 				$UI.gold = action.gold
-			elif !$UI/Cards.card_sets.is_empty() and $UI/Cards.card_sets[0] == instance.card_set:
-				$UI/Cards.update_cards()
-		elif type == "buildingDeleted":
-			var instance = $UI.grid[action.pos[1]][action.pos[0]]
-			$UI.remove_building_from_grid(instance)
-			$Buildings.remove_child(instance)
 		elif type == "gunBought":
 			if action.buyerId == WebSocket.local_player_id:
 				%Me.weapon_id = action.weapon
@@ -215,7 +232,7 @@ func _process(delta):
 	for entity in entities.values():
 		if entity.positions.size() < 2:
 			continue
-		if entity.positions.size() >= 2 && drawnTime >= entity.positions[1].time:
+		if entity.positions.size() >= 2 and drawnTime >= entity.positions[1].time:
 			entity.positions.pop_front()
 		var previous_position = entity.position
 		if entity.positions.size() < 2:

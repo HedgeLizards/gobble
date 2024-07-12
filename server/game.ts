@@ -2,7 +2,7 @@
 import { Player } from "./player.js";
 import { Enemy } from "./enemy.js";
 import { Vec2 } from "./vec2.js";
-import { EnemyKind } from "./enemykind.js";
+import { EnemyKind, Arthur } from "./enemykind.js";
 import { Wave, planWave } from "./waves.js";
 import { ActionMessage, WorldMessage, CreatePlayerMessage } from "./messages.js";
 import { Building } from "./building.js";
@@ -74,10 +74,10 @@ export class Game {
 	spawnEnemy(kind: EnemyKind) {
 		let ratio = Math.random()
 		let pos = pick_random([
-			new Vec2(this.size.x * ratio, 0), // top
-			new Vec2(this.size.x, this.size.y * ratio), // right
-			new Vec2(this.size.x * ratio, this.size.y), // bottom
-			new Vec2(0, this.size.y * ratio), // left
+			new Vec2(this.size.x * ratio, -1), // top
+			new Vec2(this.size.x + 1, this.size.y * ratio), // right
+			new Vec2(this.size.x * ratio, this.size.y + 1), // bottom
+			new Vec2(-1, this.size.y * ratio), // left
 		]);
 		let enemy = new Enemy("E:" + this.nextEnemyId++, pos, kind);
 		this.enemies.set(enemy.id, enemy);
@@ -88,6 +88,9 @@ export class Game {
 		if (enemy) {
 			enemy.health -= damage;
 			if (enemy.health <= 0) {
+				if (enemy.kind === Arthur) {
+					this.buildings[0].newHealth = 1;
+				}
 				this.gold += enemy.kind.gold;
 				this.removed.push(entityId);
 				this.enemies.delete(entityId);
@@ -108,7 +111,7 @@ export class Game {
 
 	addBuilding(cost: number, kind: string, pos: Vec2) {
 		if (cost > this.gold) {
-			return false;
+			return null;
 		}
 
 		const building = new Building(kind, pos);
@@ -116,7 +119,7 @@ export class Game {
 		for (let r = 0; r < building.size.y; r++) {
 			for (let c = 0; c < building.size.x; c++) {
 				if (this.grid[pos.y + r][pos.x + c] !== null) {
-					return false;
+					return null;
 				}
 			}
 		}
@@ -131,7 +134,7 @@ export class Game {
 
 		this.buildings.push(building);
 
-		return true;
+		return building;
 	}
 
 	removeBuilding(building: Building, index: number) {
@@ -161,9 +164,9 @@ export class Game {
 				player.reset();
 			}
 			this.waveNum = 0;
-			for (let i = this.buildings.length - 1; i > 0; i--) {
-				actions.push({type: "buildingDeleted", pos: this.buildings[i].pos});
-				this.removeBuilding(this.buildings[i], i);
+			this.buildings[0].newHealth = 1;
+			for (let i = 1; i < this.buildings.length; i++) {
+				this.buildings[i].newHealth = 0;
 			}
 			this.gold = 0;
 			this.removed.push(...this.enemies.keys())
@@ -208,6 +211,10 @@ export class Game {
 				}
 				for (let enemy of this.enemies.values()) {
 					actions.push(...enemy.update(delta, this))
+					if (enemy.health === 0) {
+						this.removed.push(enemy.id);
+						this.enemies.delete(enemy.id);
+					}
 				}
 			}
 		}
@@ -215,13 +222,21 @@ export class Game {
 			this.timeToRestart -= delta;
 			if (this.timeToRestart <= 0) {
 				this.state = State.Start;
-
 			}
 		}
-		for (const building of this.buildings) {
+		const hasGoldenSword = this.buildings[0].health > 0;
+		for (let i = this.buildings.length - 1; i >= 0; i--) {
+			const building = this.buildings[i];
 			const action = building.update(delta, this);
-			if (action !== null) {
-				actions.push(action);
+			if (action === null) continue;
+			actions.push(action);
+			if (building.health === 0) {
+				if (i > 0) {
+					this.removeBuilding(building, i);
+				} else if (hasGoldenSword) {
+					const enemy = new Enemy("E:" + this.nextEnemyId++, this.center(), Arthur);
+					this.enemies.set(enemy.id, enemy);
+				}
 			}
 		}
 		if (this.removed.length > 0) {
@@ -236,20 +251,18 @@ export class Game {
 		return actions;
 	}
 
-	findNearestTarget(pos: Vec2): [Vec2, {pos: Vec2}, number] {
-		let nearest = this.center();
-		let nearestDist = pos.distanceTo(this.center()) + 1024;
-		let target = {pos: this.center()};
+	findNearestTarget(pos: Vec2): [{pos: Vec2} | null, number] {
+		let nearestDist = this.buildings[0].health > 0 ? pos.distanceTo(this.center()) + 3 : Infinity;
+		let target = null;
 		for (let player of this.players.values()) {
 			if (!player.alive) continue;
 			let dist = pos.distanceTo(player.pos);
 			if (dist < nearestDist) {
-				nearest = player.pos;
 				nearestDist = dist;
 				target = player;
 			}
 		}
-		return [nearest, target, nearestDist];
+		return [target, nearestDist];
 	}
 
 	acceptNewPlayers() {
@@ -264,7 +277,7 @@ export class Game {
 		return {
 			type: "world",
 			size: this.size,
-			buildings: this.buildings.map((building) => ({ kind: building.kind, pos: building.pos })),
+			buildings: this.buildings.map((building) => ({ kind: building.kind, pos: building.pos, health: building.health })),
 			gold: this.gold,
 		};
 	}

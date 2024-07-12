@@ -9,20 +9,8 @@ var damage: float
 var weapon_id: String:
 	set(value):
 		weapon_id = value
-		var sprite = kinds[Weapons.weapons[weapon_id].projectile].sprite.instantiate()
-		add_child(sprite)
-
-const kinds = {
-	"bullet": {
-		"sprite": preload("res://scenes/Projectiles/bullet.tscn")
-	},
-	"arrow": {
-		"sprite": preload("res://scenes/Projectiles/arrow.tscn")
-	},
-	"sword": {
-		"sprite": preload("res://scenes/Projectiles/sword.tscn")
-	}
-}
+		var path = "res://scenes/Projectiles/%s.tscn" % Weapons.weapons[weapon_id].projectile
+		add_child(load(path).instantiate())
 
 func _ready():
 	var weapon = Weapons.weapons[weapon_id]

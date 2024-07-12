@@ -58,6 +58,7 @@ script = ExtResource("2_apa4w")
 
 [node name="walk_particles" parent="Sprite2D" instance=ExtResource("3_a1ro1")]
 unique_name_in_owner = true
+show_behind_parent = true
 position = Vector2(2.08165e-12, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -68,8 +69,8 @@ shape = SubResource("RectangleShape2D_f7u7y")
 unique_name_in_owner = true
 visible = false
 self_modulate = Color(1, 1, 1, 0.501961)
-z_index = 2
 material = SubResource("ShaderMaterial_y5ieu")
+position = Vector2(-10, -26)
 
 [node name="Label" type="Label" parent="."]
 visible = false
@@ -102,6 +103,6 @@ bus = &"SFX"
 max_distance = 500.0
 attenuation = 3.0
 panning_strength = 10.0
-bus = &"SFX"
+bus = &"Minigun"
 
 [connection signal="resized" from="Label" to="." method="_on_label_resized"]

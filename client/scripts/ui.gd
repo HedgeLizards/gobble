@@ -116,6 +116,15 @@ func _ready():
 	set_process(false)
 	set_process_unhandled_input(false)
 
+func _on_gold_gui_input(event):
+	if event is InputEventMouseButton && event.button_index == MOUSE_BUTTON_LEFT && event.pressed:
+		var me = $'../Me'
+		
+		if me.alive:
+			building = !building
+			
+			me.was_placing_building = true # so you don't shoot when clicking the Control
+
 func _on_gold_resized():
 	$Gold.pivot_offset = $Gold.size / 2.0
 

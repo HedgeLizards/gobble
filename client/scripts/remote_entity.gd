@@ -26,7 +26,8 @@ var weapon_id:
 		weapon_id = value
 		weapon = Weapons.weapons[weapon_id]
 		
-		$Weapon/Sprite2D.texture = weapon.texture
+		if weapon.texture != null:
+			$Weapon/Sprite2D.texture = weapon.texture
 		
 		if weapon.stream is AudioStreamInteractive:
 			$ShootInteractive.stream = weapon.stream

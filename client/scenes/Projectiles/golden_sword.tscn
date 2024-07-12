@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://ir2718kjs54d"]
+
+[ext_resource type="Texture2D" uid="uid://b87c05e8rlec3" path="res://assets/Knights/golden_sword.png" id="1_hathf"]
+
+[node name="GoldenSword" type="Sprite2D"]
+rotation = 1.5708
+texture = ExtResource("1_hathf")

@@ -105,12 +105,15 @@ text = "Join"
 
 [node name="AudioStreamPlayer Arrow Click" type="AudioStreamPlayer" parent="UI Audio"]
 stream = ExtResource("5_1ep5v")
+bus = &"UI"
 
 [node name="AudioStreamPlayer Typing" type="AudioStreamPlayer" parent="UI Audio"]
 stream = SubResource("AudioStreamRandomizer_tlmvn")
+bus = &"UI"
 
 [node name="AudioStreamPlayer Join Click" type="AudioStreamPlayer" parent="UI Audio"]
 stream = ExtResource("7_fhamf")
+bus = &"UI"
 
 [connection signal="text_changed" from="VBoxContainer/Identity/Name" to="." method="_on_text_changed"]
 [connection signal="text_submitted" from="VBoxContainer/Identity/Name" to="." method="_on_text_submitted"]

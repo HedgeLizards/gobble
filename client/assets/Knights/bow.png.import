@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://0jjtgv12k0te"
-path="res://.godot/imported/Stone_empty.png-c7862fff20121eb52be7928d9e40ee27.ctex"
+uid="uid://duggtx7lq51o2"
+path="res://.godot/imported/bow.png-4ce8e9440e2954df96a8221b2d0d79db.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/World/Stone_empty.png"
-dest_files=["res://.godot/imported/Stone_empty.png-c7862fff20121eb52be7928d9e40ee27.ctex"]
+source_file="res://assets/Knights/bow.png"
+dest_files=["res://.godot/imported/bow.png-4ce8e9440e2954df96a8221b2d0d79db.ctex"]
 
 [params]
 

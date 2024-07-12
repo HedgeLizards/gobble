@@ -25,20 +25,40 @@ export class Enemy {
 
 	update(delta: number, world: Game): ActionMessage[] {
 		let actions: ActionMessage[] = [];
-		let [nearest, target, dist] = world.findNearestTarget(this.pos);
-		this.target = target;
-		if (dist < this.range()) {
-			if (this.cooldown <= 0) {
-				this.cooldown = this.kind.attackCooldown;
-				if (Math.random() < 0.1) {
-					this.pos = this.pos.add(new Vec2(Math.random(), Math.random()).truncate(this.kind.speed * delta));
+		let [target, dist] = world.findNearestTarget(this.pos);
+		this.target = target === null ? { pos: world.center() } : target;
+		let inRange = target === null ? !this.kind.hasOwnProperty("weapon") : dist < this.range();
+		let newPos = null;
+		if (inRange && this.cooldown <= 0) {
+			this.cooldown = this.kind.attackCooldown;
+			if (!this.kind.attackMove && Math.random() < 0.1) {
+				let direction = new Vec2(Math.random(), Math.random());
+				if (this.pos.x < 3 || this.pos.y < 3 || this.pos.x >= world.size.x - 3 || this.pos.y >= world.size.y - 3) {
+					direction = direction.sub(this.pos.div(world.size));
 				} else {
-					actions.push(...this.attack(target));
+					direction = direction.sub(new Vec2(0.5, 0.5));
 				}
+				newPos = this.pos.add(direction.resize(this.kind.speed * delta));
+			} else if (this.kind.hasOwnProperty("weapon")) {
+				actions.push(...this.attack(this.target));
 			}
-		} else {
-			let movement = this.targetPos().sub(this.pos).truncate(this.kind.speed * delta);
-			this.pos = this.pos.add(movement);
+		}
+		if (!inRange || this.kind.attackMove) {
+			let direction = this.targetPos().sub(this.pos);
+			newPos = this.pos.add(direction.truncate(this.kind.speed * delta));
+		}
+		if (newPos !== null) {
+			let building = world.grid[Math.floor(newPos.y)]?.[Math.floor(newPos.x)];
+			if (building && building.kind !== "SwordStone") {
+				building.newHealth = Math.max(building.newHealth - this.kind.buildingDamage * delta, 0);
+			} else if (building?.kind === "SwordStone" && building.newHealth > 0 && newPos.equals(this.pos)) {
+				building.newHealth = Math.max(building.newHealth - Infinity * delta, 0);
+				if (building.newHealth === 0) {
+					this.health = 0;
+				}
+			} else {
+				this.pos = newPos;
+			}
 		}
 		this.cooldown -= delta;
 		actions.push(this.view());
@@ -76,7 +96,7 @@ export class Enemy {
 			creatorId: this.id,
 			rotation: this.pos.directionTo(target.pos),
 			isEnemy: true,
-			weapon: this.kind.weapon,
+			weapon: this.kind.weapon as string,
 		}];
 	}
 

@@ -75,8 +75,8 @@ script = ExtResource("2_0fe2v")
 
 [node name="HealthBar" parent="." instance=ExtResource("6_n8pr1")]
 unique_name_in_owner = true
-z_index = 2
 material = SubResource("ShaderMaterial_3ki8k")
+position = Vector2(-10, -26)
 
 [node name="Label" type="Label" parent="."]
 z_index = 2
@@ -99,7 +99,7 @@ position = Vector2(9, 1)
 
 [node name="Muzzle" type="Node2D" parent="Weapon"]
 unique_name_in_owner = true
-position = Vector2(25, 0)
+position = Vector2(14, 0)
 
 [node name="Shoot" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamRandomizer_1epfc")

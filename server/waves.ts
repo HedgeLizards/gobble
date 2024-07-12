@@ -1,5 +1,5 @@
 
-import { EnemyKind, Knight, Archer } from "./enemykind.js"
+import { EnemyKind, Knight, Archer, Guardian, Tower, Chest } from "./enemykind.js"
 
 
 class Phase {
@@ -71,20 +71,33 @@ export class Wave {
 	}
 }
 
-const waves: Wave[] = [
-	new Wave(), // wave 0: unused
-	new Wave(new Phase([Knight, 10], [Archer, 6])),
-	new Wave(new Phase([Knight, 20], [Archer, 15])),
-	new Wave(new Phase([Knight, 40], [Archer, 30])),
-	new Wave(new Phase([Knight, 60], [Archer, 50])),
-	new Wave(new Phase([Knight, 80], [Archer, 70])),
-];
-const lateWaves: Wave = new Wave(new Phase([Knight, 100],  [Archer, 100]));
+export function planWave(waveNum: number) {
+	const waveType = (waveNum - 1) % 5;
+	const waveTypeNum = (waveNum - 1 - waveType) / 5;
 
-export function planWave(waveNum: number): Wave {
-	if (waveNum < waves.length) {
-		return waves[waveNum].clone();
-	} else {
-		return lateWaves.clone();
+	switch (waveType) {
+		case 0:
+			return new Wave(
+				new Phase([Knight, 5 + waveTypeNum * 8], [Archer, 3 + waveTypeNum * 6]),
+			);
+		case 1:
+			return new Wave(
+				new Phase([Guardian, 3 + waveTypeNum * 6]),
+				new Phase([Archer, 6 + waveTypeNum * 6]),
+			);
+		case 2:
+			return new Wave(
+				new Phase([Tower, 1 + waveTypeNum * 4]),
+				new Phase([Knight, 10 + waveTypeNum * 8], [Archer, 3 + waveTypeNum * 6], [Chest, 1]),
+			);
+		case 3:
+			return new Wave(
+				new Phase([Guardian, 3 + waveTypeNum * 6]),
+				new Phase([Knight, 5 + waveTypeNum * 8], [Tower, 2 + waveTypeNum * 4]),
+			);
+		case 4:
+			return new Wave(
+				new Phase([Knight, 5 + waveTypeNum * 8], [Archer, 3 + waveTypeNum * 6], [Guardian, 6 + waveTypeNum * 6], [Tower, 1 + waveTypeNum * 4], [Chest, 2]),
+			);
 	}
 }

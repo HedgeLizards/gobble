@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b56qvod7p0c33"]
 
-[ext_resource type="Texture2D" uid="uid://crr2cbddnk7uo" path="res://assets/Knights/Archer_arrow.png" id="1_fw18m"]
+[ext_resource type="Texture2D" uid="uid://crr2cbddnk7uo" path="res://assets/Knights/arrow.png" id="1_fw18m"]
 
 [node name="Arrow" type="Sprite2D"]
 texture = ExtResource("1_fw18m")

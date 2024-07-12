@@ -7,7 +7,7 @@
 [node name="SwordStone" type="Node2D"]
 script = ExtResource("1_meh52")
 
-[node name="StoneSword" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_6loey")
 offset = Vector2(0, -16)
 

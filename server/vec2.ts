@@ -37,8 +37,10 @@ export class Vec2 {
 		return new Vec2(this.x * n, this.y * n);
 	}
 
-	div(n: number): Vec2 {
-		return new Vec2(this.x / n, this.y / n);
+	div(n: number | Vec2): Vec2 {
+		return n instanceof Vec2
+			? new Vec2(this.x / n.x, this.y / n.y)
+			: new Vec2(this.x / n, this.y / n);
 	}
 
 	floor(): Vec2 {
@@ -82,11 +84,12 @@ export class Vec2 {
 	}
 
 	truncate(maxSize: number): Vec2 {
-		let len = this.length();
-		if (len > maxSize) {
-			return this.mul(maxSize / len);
-		} else {
-			return this;
-		}
+		return this.length() > maxSize
+			? this.resize(maxSize)
+			: this;
+	}
+
+	resize(size: number): Vec2 {
+		return this.mul(size / this.length());
 	}
 }

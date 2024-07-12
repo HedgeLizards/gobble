@@ -7,13 +7,14 @@ var weapon_id: String:
 		if value == weapon_id:
 			return
 		
-		if weapon_id == "Minigun" and Input.is_action_pressed("shoot") and $ShootInteractive.playing:
+		if weapon_id == "Minigun" and $ShootInteractive.playing:
 			$ShootInteractive.get_stream_playback().switch_to_clip_by_name("Minigun Shutdown")
 		
 		weapon_id = value
 		weapon = Weapons.weapons[weapon_id]
 		
-		$Weapon/Sprite2D.texture = weapon.texture
+		if weapon.texture != null:
+			$Weapon/Sprite2D.texture = weapon.texture
 		
 		if weapon.stream is AudioStreamInteractive:
 			$ShootInteractive.stream = weapon.stream
@@ -49,7 +50,6 @@ var alive: bool = false:
 			var UI = $"../UI"
 			if UI.building:
 				UI.building = false
-				was_placing_building = false
 var was_placing_building = false
 
 const LocalProjectile = preload("res://scenes/local_projectile.tscn")
@@ -69,9 +69,6 @@ func _unhandled_key_input(event) -> void:
 		var UI = $"../UI"
 		
 		UI.building = !UI.building
-		
-		if not UI.building:
-			was_placing_building = false
 
 func _process(delta) -> void:
 	%Weapon.look_at(get_global_mouse_position())

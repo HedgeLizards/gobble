@@ -1,7 +1,7 @@
 extends Control
 
-const CARD_WIDTH = 168.0
-const CARD_SEPARATION = 32.0
+const CARD_WIDTH = 169.0
+const CARD_SEPARATION = 31.0
 const UICard = preload('res://scenes/ui_card.tscn')
 
 var card_sets = []

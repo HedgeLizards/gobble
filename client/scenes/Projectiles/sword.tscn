@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c0xjeyg5gywjf"]
 
-[ext_resource type="Texture2D" uid="uid://dn4fj4hunby2v" path="res://assets/Knights/Knight_sword.png" id="1_0dl1d"]
+[ext_resource type="Texture2D" uid="uid://dn4fj4hunby2v" path="res://assets/Knights/sword.png" id="1_0dl1d"]
 
 [node name="Sword" type="Sprite2D"]
 rotation = 1.5708

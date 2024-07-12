@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://cku5amjvoacyw"]
+[gd_scene load_steps=16 format=3 uid="uid://cku5amjvoacyw"]
 
 [ext_resource type="Texture2D" uid="uid://dxua1cs0x5au2" path="res://assets/Buildings/Building_Bank_Spritesheet.png" id="1_7jvit"]
 [ext_resource type="Script" path="res://scripts/bank.gd" id="1_o0kr6"]
+[ext_resource type="PackedScene" uid="uid://bxfouhjhx3jp6" path="res://scenes/healthbar.tscn" id="3_o848g"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3rnil"]
 size = Vector2(16, 16)
@@ -63,10 +64,43 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="Shader" id="Shader_rjj8q"]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_nearest;
+uniform vec2 size;
+
+void fragment() {
+	vec2 pixel = size * UV;
+	float half_height = size.y / 2.0;
+
+	if (pixel.x < half_height && sqrt(pow(pixel.x - half_height, 2.0) + pow(pixel.y - half_height, 2.0)) > half_height) {
+		discard;
+	} else if (pixel.x > size.x - half_height && sqrt(pow(pixel.x - (size.x - half_height), 2.0) + pow(pixel.y - half_height, 2.0)) > half_height) {
+		discard;
+	}
+
+	vec4 c = textureLod(screen_texture, SCREEN_UV, 0.0);
+
+	if (c.a > 0.0001) {
+		c.rgb /= c.a;
+	}
+
+	COLOR *= c;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cdqmr"]
+resource_local_to_scene = true
+shader = SubResource("Shader_rjj8q")
+shader_parameter/size = Vector2(20, 5.875)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5sujt"]
 size = Vector2(24, 24)
 
 [node name="Bank" type="StaticBody2D"]
+input_pickable = true
 script = ExtResource("1_o0kr6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -79,6 +113,11 @@ sprite_frames = SubResource("SpriteFrames_1jeyh")
 frame = 6
 offset = Vector2(0, -8)
 
+[node name="HealthBar" parent="." instance=ExtResource("3_o848g")]
+visible = false
+material = SubResource("ShaderMaterial_cdqmr")
+position = Vector2(-10, -22)
+
 [node name="Area2D" type="Area2D" parent="."]
 input_pickable = false
 monitoring = false
@@ -88,5 +127,7 @@ monitorable = false
 position = Vector2(0, -8)
 shape = SubResource("RectangleShape2D_5sujt")
 
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

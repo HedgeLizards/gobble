@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dc7my5iaglsjc"
-path="res://.godot/imported/Tower_arrow.png-5ad8dc36267526578f253f78beb2eebf.ctex"
+uid="uid://crr2cbddnk7uo"
+path="res://.godot/imported/arrow.png-1162c947a345c354b81e2a9c4ae88bd8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Knights/Tower_arrow.png"
-dest_files=["res://.godot/imported/Tower_arrow.png-5ad8dc36267526578f253f78beb2eebf.ctex"]
+source_file="res://assets/Knights/arrow.png"
+dest_files=["res://.godot/imported/arrow.png-1162c947a345c354b81e2a9c4ae88bd8.ctex"]
 
 [params]
 

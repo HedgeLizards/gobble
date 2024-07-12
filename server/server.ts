@@ -151,13 +151,15 @@ class Serv {
 					};
 					this.broadcast({type: "update", actions: [response]});
 				} else if (data.type === "createBuilding") {
-					if (!this.game.addBuilding(data.cost, data.kind, data.pos)) {
+					const building = this.game.addBuilding(data.cost, data.kind, data.pos);
+					if (building === null) {
 						return;
 					}
 					let response: ActionMessage = {
 						type: "buildingCreated",
 						kind: data.kind,
 						pos: data.pos,
+						health: building.health,
 						gold: this.game.gold,
 					};
 					this.broadcast({type: "update", actions: [response]});

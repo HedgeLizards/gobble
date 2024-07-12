@@ -35,8 +35,8 @@ shader = SubResource("Shader_rjj8q")
 shader_parameter/size = Vector2(20, 5.875)
 
 [node name="HealthBar" type="CanvasGroup"]
+z_index = 2
 material = SubResource("ShaderMaterial_cmwg3")
-position = Vector2(-10, -26)
 fit_margin = 0.0
 clear_margin = 0.0
 script = ExtResource("1_efs5s")

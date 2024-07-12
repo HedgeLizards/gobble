@@ -22,7 +22,7 @@ static var card_set = [
 		'cost': 80,
 		'title': 'Minigun',
 		'texture': preload('res://assets/Gobbles/Weapons/Gobble_Minigun.png'),
-		'description': 'Shoots even faster, but less accurate',
+		'description': 'Shoots even faster, but less accurate.',
 		'id': 'Minigun',
 	},
 	{
@@ -58,8 +58,18 @@ var blocked:
 		blocked = value
 		
 		modulate = Color.RED if blocked else Color.GREEN
+var health:
+	set(value):
+		health = value
+		
+		$HealthBar.ratio = health / 20.0
+		
+		if health == 0:
+			$CollisionShape2D.disabled = true
+			$Area2D.monitoring = false
 
-@onready var ui_cards = $'../../UI/Cards'
+@onready var ui = $'../../UI'
+@onready var ui_cards = ui.get_node('Cards')
 @onready var me = $'../../Me'
 
 func place():
@@ -69,10 +79,15 @@ func place():
 	$AnimatedSprite2D.play()
 	$Area2D.monitoring = true
 
+func _on_mouse_entered():
+	if ui.placing == null:
+		$HealthBar.visible = true
+
+func _on_mouse_exited():
+	$HealthBar.visible = false
+
 func _on_area_2d_body_entered(body):
 	ui_cards.add_card_set(card_set, false, func(index):
-		me.was_placing_building = true # so you don't shoot when clicking the card
-		
 		var card = card_set[index]
 		
 		if card.cost > 0:
@@ -82,6 +97,8 @@ func _on_area_2d_body_entered(body):
 				'buyerId': WebSocket.local_player_id,
 				'weapon': card.id,
 			})
+			
+			# play sound
 		else:
 			me.weapon_id = card.id
 			
@@ -92,6 +109,8 @@ func _on_area_2d_body_entered(body):
 			card.disabled = true
 			
 			ui_cards.update_cards()
+		
+		me.was_placing_building = true # so you don't shoot when clicking the Control
 	)
 
 func _on_area_2d_body_exited(body):
