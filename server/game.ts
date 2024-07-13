@@ -236,6 +236,7 @@ export class Game {
 				} else if (hasGoldenSword) {
 					const enemy = new Enemy("E:" + this.nextEnemyId++, this.center(), Arthur);
 					this.enemies.set(enemy.id, enemy);
+					actions.push(enemy.view());
 				}
 			}
 		}

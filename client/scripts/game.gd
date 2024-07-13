@@ -185,6 +185,8 @@ func update(actions):
 			$Buildings.add_child(instance)
 			$UI.gold = action.gold
 		elif type == "buildingUpdated":
+			if $UI.grid.is_empty():
+				return # fixes the race condition of this message arriving before welcome
 			var instance = $UI.grid[action.pos[1]][action.pos[0]]
 			if action.has("health"):
 				instance.health = action.health
