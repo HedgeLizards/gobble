@@ -78,26 +78,26 @@ export function planWave(waveNum: number) {
 	switch (waveType) {
 		case 0:
 			return new Wave(
-				new Phase([Knight, 5 + waveTypeNum * 8], [Archer, 3 + waveTypeNum * 6]),
+				new Phase([Knight, 5 + waveTypeNum * 14], [Archer, 3 + waveTypeNum * 10]),
 			);
 		case 1:
 			return new Wave(
-				new Phase([Guardian, 3 + waveTypeNum * 6]),
-				new Phase([Archer, 6 + waveTypeNum * 6]),
+				new Phase([Guardian, 3 + waveTypeNum * 10]),
+				new Phase([Archer, 6 + waveTypeNum * 10]),
 			);
 		case 2:
 			return new Wave(
-				new Phase([Tower, 1 + waveTypeNum * 4]),
-				new Phase([Knight, 10 + waveTypeNum * 8], [Archer, 3 + waveTypeNum * 6], [Chest, 1]),
+				new Phase([Tower, 1 + waveTypeNum * 6]),
+				new Phase([Knight, 10 + waveTypeNum * 14], [Archer, 3 + waveTypeNum * 10], [Chest, 1]),
 			);
 		case 3:
 			return new Wave(
-				new Phase([Guardian, 3 + waveTypeNum * 6]),
-				new Phase([Knight, 5 + waveTypeNum * 8], [Tower, 2 + waveTypeNum * 4]),
+				new Phase([Guardian, 3 + waveTypeNum * 10]),
+				new Phase([Knight, 5 + waveTypeNum * 14], [Tower, 2 + waveTypeNum * 6]),
 			);
 		case 4:
 			return new Wave(
-				new Phase([Knight, 5 + waveTypeNum * 8], [Archer, 3 + waveTypeNum * 6], [Guardian, 6 + waveTypeNum * 6], [Tower, 1 + waveTypeNum * 4], [Chest, 2]),
+				new Phase([Knight, 5 + waveTypeNum * 14], [Archer, 3 + waveTypeNum * 10], [Guardian, 6 + waveTypeNum * 10], [Tower, 1 + waveTypeNum * 6], [Chest, 2]),
 			);
 	}
 }

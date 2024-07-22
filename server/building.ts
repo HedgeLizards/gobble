@@ -30,7 +30,7 @@ export class Building {
                 this.interest = cost - this.interest;
             }
 
-            this.interest = Math.min(this.interest * 1.02 ** delta, 1000);
+            this.interest = Math.min(this.interest * 1.015 ** delta, 100);
         }
 
         const flooredInterest = Math.floor(this.interest);
