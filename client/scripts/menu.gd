@@ -161,4 +161,3 @@ func generate_random_name() -> String:
 		if randf() > 0.5:
 			name += consonants.pick_random()
 	return name.capitalize()
-

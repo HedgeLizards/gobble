@@ -169,7 +169,7 @@ func update(actions):
 			if playerId == WebSocket.local_player_id:
 				continue
 			var p = remote_projectiles.get(action["id"])
-			if p:
+			if p && is_instance_valid(p):
 				if action["weapon"] == "GrenadeLauncher":
 					var shockwave = Shockwave.instantiate()
 					shockwave.monitoring = false

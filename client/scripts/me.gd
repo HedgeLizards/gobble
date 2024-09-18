@@ -139,4 +139,3 @@ func shoot() -> void:
 
 func is_alive() -> bool:
 	return alive
-
