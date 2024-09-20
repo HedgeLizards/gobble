@@ -76,9 +76,11 @@ export type ActionMessage =
 	{type: "gunBought", buyerId: string, weapon: string, gold: number} |
 	{type: "waveStart", waveNum: number} |
 	{type: "waveEnd", waveNum: number} |
-	{type: "gameOver"};
+	{type: "gameOver"} |
+	{type: "reset", world: WorldMessage};
 
 export type ServerMessage = {type: "update", actions: ActionMessage[]}
-	| {type: "welcome", tickDuration: number, world: WorldMessage};
+	| {type: "welcome", tickDuration: number, world: WorldMessage}
+	| {type: "reset", tickDuration: number, world: WorldMessage};
 
 export type WorldMessage = {type: "world", size: Vec2, buildings: { kind: string, pos: Vec2, health: number }[], gold: number};

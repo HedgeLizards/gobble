@@ -35,9 +35,9 @@ func _ready():
 		"maxhealth": %Me.maxhealth,
 	})
 
-func _unhandled_key_input(event):
-	if event.keycode == KEY_ESCAPE and event.pressed and not event.echo:
-		WebSocket.socket.close()
+#func _unhandled_key_input(event):
+	#if event.keycode == KEY_ESCAPE and event.pressed and not event.echo:
+		#WebSocket.socket.close()
 
 func _exit_tree():
 	for card in Armory.card_set:

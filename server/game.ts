@@ -14,7 +14,7 @@ enum State {
 	GameOver = "GameOver", // all players dead, some enemies
 };
 
-
+const STARTING_GOLD = 0;
 
 export class Game {
 
@@ -39,7 +39,7 @@ export class Game {
 		this.nextEnemyId = 1000;
 		this.enemies = new Map();
 		this.removed = [];
-		this.gold = 0;
+		this.gold = STARTING_GOLD;
 		this.size = new Vec2(96, 96);
 		this.grid = Array.from({ length: this.size.y }, () => Array(this.size.x).fill(null));
 		this.buildings = [];
@@ -155,7 +155,7 @@ export class Game {
 				for (let i = this.buildings.length - 1; i > 0; i--) {
 					this.removeBuilding(this.buildings[i], i);
 				}
-				this.gold = 0;
+				this.gold = STARTING_GOLD;
 			}
 			return [];
 		}
@@ -168,11 +168,12 @@ export class Game {
 			for (let i = 1; i < this.buildings.length; i++) {
 				this.buildings[i].newHealth = 0;
 			}
-			this.gold = 0;
+			this.gold = STARTING_GOLD;
 			this.removed.push(...this.enemies.keys())
 			this.enemies = new Map();
 			this.state = State.WaveStart;
 			this.timeToWave = 5;
+			actions.push({type: "reset", world: this.viewWorld()});
 		}
 		if (this.state === State.WaveStart) {
 			if (this.timeToWave < 0) {
