@@ -16,6 +16,10 @@ static func _static_init():
 	var file := FileAccess.open("res://default_host.txt", FileAccess.READ)
 	if file != null:
 		default_host = file.get_as_text()
+	else:
+		var location = JavaScriptBridge.get_interface("location")
+		if location:
+			default_host = location.hostname
 
 var skin_index:
 	set(value):
